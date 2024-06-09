@@ -21,21 +21,13 @@ func main() {
 	{
 		user := v1.Group("/user")
 		{
-			user.POST("/", controller.CreateUser)
-			user.GET("/", controller.GetUsers)
+			user.POST("/createUser", controller.CreateUser)
 			user.GET("/:id", controller.GetUser)
-			user.PUT("/:id", controller.UpdateUser)
-			user.DELETE("/:id", controller.DeleteUser)
-			user.POST("/login", controller.Login)
 		}
 
 		report := v1.Group("/report")
 		{
-			report.POST("/", controller.CreateReport)
-			report.GET("/", controller.GetReports)
 			report.GET("/:id", controller.GetReport)
-			report.PUT("/:id", controller.UpdateReport)
-			report.DELETE("/:id", controller.DeleteReport)
 		}
 
 	}

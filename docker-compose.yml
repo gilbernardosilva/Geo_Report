@@ -11,7 +11,7 @@ services:
     depends_on:
       - database
 
- database:
+  database:
     image: postgres:14.5
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}

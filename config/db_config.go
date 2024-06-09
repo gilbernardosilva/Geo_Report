@@ -23,11 +23,11 @@ func ConnectDB() {
 	dbPort := os.Getenv("DB_PORT")
 	dbDatabase := os.Getenv("DB_DATABASE")
 
-	dsn := dbUser + ":" + dbPass + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbDatabase + "?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPass + " dbname=" + dbDatabase + " port=" + dbPort + " sslmode=disable"
 
 	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database!")
+		panic("Failed to connect to database!" + dbDatabase)
 	}
 
 	err = Db.AutoMigrate(&entities.User{}, &entities.Photo{}, &entities.Report{})
