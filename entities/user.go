@@ -2,6 +2,7 @@ package entities
 
 type User struct {
 	ID        uint64 `gorm:"primary_key:auto_increment" json:"id"`
+	RoleID    uint64 `gorm:"int" json:"roleID"`
 	FirstName string `gorm:"type:varchar(255)" json:"first_name"`
 	LastName  string `gorm:"type:varchar(255)" json:"last_name"`
 	UserName  string `gorm:"type:varchar(255)" json:"name"`

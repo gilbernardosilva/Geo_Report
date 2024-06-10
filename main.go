@@ -4,6 +4,7 @@ import (
 	"geo_report_api/config"
 	"geo_report_api/controller"
 	"geo_report_api/entities"
+	"geo_report_api/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,6 +20,8 @@ func main() {
 	router := gin.Default()
 	v1 := router.Group("/api/v1")
 	{
+		adminRoutes := v1.Group("/admin")
+		adminRoutes.Use(utils.JWTAuth())
 		user := v1.Group("/user")
 		{
 			user.POST("/createUser", controller.CreateUser)
