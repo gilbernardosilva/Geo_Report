@@ -22,18 +22,17 @@ func main() {
 	{
 		adminRoutes := v1.Group("/admin")
 		adminRoutes.Use(utils.JWTAuth())
+
 		adminUser := adminRoutes.Group("/user")
+		{
+			adminUser.POST("/createUser", controller.CreateUser)
+			adminUser.GET("/:id", controller.GetUser)
+		}
 
 		user := v1.Group("/user")
 		{
 			user.POST("/createUser", controller.CreateUser)
 			user.GET("/:id", controller.GetUser)
-		}
-
-		adminUser.POST("/create", controller.CreateUser)
-		{
-			adminUser.POST("/createUser", controller.CreateUser)
-			adminUser.GET("/:id", controller.GetUser)
 		}
 
 		report := v1.Group("/report")
