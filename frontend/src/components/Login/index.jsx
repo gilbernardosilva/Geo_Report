@@ -57,12 +57,8 @@ const Login = ({ setToken }) => {
                 <Col
                     md={6}
                     className="d-flex align-items-left justify-content-left flex-column">
-                    <div>
-                        <h2 className="fw-bold text-white" style={{ fontSize: '64px' }}>Helping others</h2>
-                    </div>
-                    <div>
-                        <p className="fw-bold text-white mb-4" style={{ fontSize: '31px', marginTop: '30px' }}>Sign up today</p>
-                    </div>
+                    <h2 className="fw-bold text-white" style={{ fontSize: '64px' }}>Helping others</h2>
+                    <p className="fw-bold text-white mb-4" style={{ fontSize: '31px', marginTop: '30px' }}>Sign up today</p>
                     <Form onSubmit={handleSubmit}>
                         {/* ... your form fields (email, password, etc.) */}
                     </Form>
