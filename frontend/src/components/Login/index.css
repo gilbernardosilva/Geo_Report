@@ -1,0 +1,14 @@
+body { /* Optional: Set background for the whole page */
+    background-color: #f5f5f5;
+  }
+  
+  .img-fluid {
+    max-width: 200px; /* Adjust the maximum width of your logo as needed */
+  }
+  
+  /* Style your login form elements as desired */
+  .login-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+  }

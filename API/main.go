@@ -27,7 +27,6 @@ func main() {
 
 		adminUser := adminRoutes.Group("/user")
 		{
-			adminUser.POST("/createUser", controller.Register)
 			adminUser.GET("/:id", controller.GetUser)
 			adminUser.GET("/", controller.GetAllUsers)
 			adminUser.DELETE("/delete/:id", controller.DeleteUser)
