@@ -1,5 +1,10 @@
 import { useState } from "react";
+import user_icon from './../../img/icons/person.png'
+import email_icon from './../../img/icons/email.png'
+import password_icon from './../../img/icons/password.png'
+import address_icon from './../../img/icons/address.svg'
 import './index.css';
+import logo from './../../img/logo/geo_report_white_text.svg'
 
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
@@ -10,6 +15,8 @@ const Login = ({ setToken }) => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [ok, setOk] = useState("");
+
+    const [action, setAction] = useState("Sign Up");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -52,19 +59,50 @@ const Login = ({ setToken }) => {
         <Container fluid className="vh-100 d-flex align-items-center bg-black">
             <Row className="w-100">
                 <Col md={6} className="d-flex align-items-center justify-content-center">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/X_logo_2023_%28white%29.png/800px-X_logo_2023_%28white%29.png" alt="Your Logo" className="img-fluid" style={{ maxWidth: '400px' }} /> {/* Add maxWidth style */}
+                    <img src={logo} alt="Your Logo" className="img-fluid" style={{ maxWidth: '500px' }} /> {/* Add maxWidth style */}
                 </Col>
-                <Col
-                    md={6}
-                    className="d-flex align-items-left justify-content-left flex-column">
-                    <h2 className="fw-bold text-white" style={{ fontSize: '64px' }}>Helping others</h2>
-                    <p className="fw-bold text-white mb-4" style={{ fontSize: '31px', marginTop: '30px' }}>Sign up today</p>
-                    <Form onSubmit={handleSubmit}>
-                        {/* ... your form fields (email, password, etc.) */}
-                    </Form>
-                    <Button variant="link" className="text-black">
-                        Already got an account?
-                    </Button>
+                <Col md={6} className="d-flex align-items-center justify-content-center flex-column">
+                    <div className="container" style={{display: 'flex', justifyContent: 'center', maxWidth: '650px'}}>
+                        <div className="header">
+                            <div className="text">{action}</div>
+                            <div className="underline"></div>
+                        </div>
+                        <div className="inputs">    
+                            {action==="Login"?<div></div>:
+                                <><div className="input">
+                                    <img className="svg" src={address_icon} alt="Last Name Icon" />
+                                    <input type="text" className="input-text" required />
+                                    <label className="placeholderx">First Name</label>
+                                </div>
+                                <div className="input">
+                                    <img className="svg" src={address_icon} alt="Last Name Icon" />
+                                    <input type="text" className="input-text" required />
+                                    <label className="placeholderx">Last Name</label>
+                                </div>
+                                <div className="input">
+                                    <img src={email_icon} alt="E-mail Icon" />
+                                    <input type="text" className="input-text" required />
+                                    <label className="placeholderx">E-Mail</label>
+                                </div></>}
+                            <div className="input">
+                                <img src={user_icon} alt="User Icon"/>
+                                <input type="text" className="input-text" required />
+                                <label className="placeholderx">Username</label>
+                            </div>
+                            <div className="input">
+                                <img src={password_icon} alt="Password Icon" />
+                                <input type="password" className="input-text" required />
+                                <label className="placeholderx">Password</label>
+
+                            </div>
+                        </div>
+                        {action === "Sign Up" ? <div></div> :
+                        <div className="forgot-password"> Forgot Password? <span>Click Here!</span></div>}
+                        <div className="submit-container">
+                            <div className={action==="Login"?"submit gray":"submit"} onClick={action === "Sign Up" ? handleSubmit : ()=>{setAction("Sign Up")}}>Sign Up</div>
+                            <div className={action === "Sign Up" ? "submit gray" : "submit"} onClick={action === "Login" ? handleSubmit : ()=>{setAction("Login")}} >Login</div>
+                        </div>
+                    </div>
                 </Col>
             </Row>
         </Container>

@@ -1,9 +1,9 @@
 body { /* Optional: Set background for the whole page */
-    background-color: #f5f5f5;
+    background-color: black;
   }
   
   .img-fluid {
-    max-width: 200px; /* Adjust the maximum width of your logo as needed */
+    max-width: 500px; /* Adjust the maximum width of your logo as needed */
   }
   
   /* Style your login form elements as desired */
@@ -12,3 +12,167 @@ body { /* Optional: Set background for the whole page */
     padding: 20px;
     border-radius: 5px;
   }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    margin: auto;
+    width: 600px;
+    align-items: center;
+    background: #fff; 
+    margin-bottom: 50px;
+    margin-top: 50px;
+    border-radius: 30px;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+  }
+
+  .text {
+    color: black;
+    font-size: 48px;
+    font-weight: 700;
+  }
+
+  .underline {
+    width: 61px;
+    height: 6px;
+    background-color: black;
+    border-radius: 9px;
+  }
+
+  .inputs {
+    animation: fade-in 0.3s;
+    margin-top: 55px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    } to {
+      opacity: 100;
+    }
+  }
+
+  .input {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 2vh;
+    width: 380px;
+    height: 50px;
+    background: #eaeaea;
+    border-radius: 6px;
+    position: relative;
+  }
+
+  .input-text {
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+    left: 8px;
+    outline: none;
+    border: 1px solid #04AA6D;
+  }
+    
+  .placeholderx {
+    position: absolute;
+    top: 10px;
+    left: 49px;
+    font-size: 18px;
+    padding: 0px 5px;
+    color: #666;
+    transition: 0.3s;
+    pointer-events: none;
+    width: 300px;
+  }
+
+  .input-text:focus + .placeholderx {
+    top: -30px;
+    left: 0px;
+    font-size: 20px;
+    background-color: transparent;
+  }
+
+  .input-text:focus,
+  .input-text:valid+ .placeholderx {
+    top: -30px;
+    left: 0px;
+    font-size: 20px;
+    background-color: transparent;
+  }
+
+  .input img {
+    margin: 0px 15px;
+    max-width: 16px;
+  }
+
+  .svg {
+    filter: opacity(40%);
+  }
+
+  .input input {
+    height: 50px;
+    width: 300px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: black;
+    font-size: 19px;
+    box-shadow: none !important;
+    border-radius: unset !important;
+    left: 8px;
+  }
+
+.forgot-password {
+  color: #797979;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  margin: auto;
+  padding-top: 30px;
+}
+
+.forgot-password span {
+  color: #00b8ff;
+  cursor: pointer;
+  padding-left: 5px;
+  text-decoration: underline;
+}
+
+.submit-container {
+  display: flex;
+  gap: 30px;
+  margin: 60px auto;
+}
+
+.submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 170px;
+  height: 59px;
+  color: #fff;
+  background: black;
+  border-radius: 50px;
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gray {
+  background: #fff;
+  color: black;
+  border: 2px solid black;
+}
