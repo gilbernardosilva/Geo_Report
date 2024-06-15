@@ -7,6 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Login godoc
+//
+//	@Summary		Login
+//	@Description	get token
+//	@Tags			login
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		dto.LoginDTO	true	"query params"
+//	@Success		200		{number}	token
+//	@Failure		400
+//	@Failure		404
+//	@Failure		500
+//	@Router			/user/login [post]
 func Login(c *gin.Context) {
 	var userLogin dto.LoginDTO
 	err := c.ShouldBind(&userLogin)
