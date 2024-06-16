@@ -1,9 +1,27 @@
-body { /* Optional: Set background for the whole page */
+body {
     background-color: black;
     width: 100%;
   }
   
-  /* Style your login form elements as desired */
+  .invalid-input {
+    border-color: red;
+  }
+
+  .invalid-input:focus {
+    outline-color: red; 
+  }
+  
+  .invalid-input + .placeholderx {
+    color: red;
+  }
+  
+
+  .bg-black {
+    height: auto;
+    overflow-y: auto;
+  }
+
+
   .login-form {
     background-color: white;
     padding: 20px;
