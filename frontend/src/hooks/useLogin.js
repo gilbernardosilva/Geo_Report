@@ -1,8 +1,10 @@
 import { useState } from "react";
-import bcrypt from "bcryptjs";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function useLogin(setToken) {
+    const { t } = useTranslation();
+
     const navigate = useNavigate(); 
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -42,8 +44,8 @@ function useLogin(setToken) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const apiEndpoint = action === "Login" ? "login" : "register";
-        const requestBody = action === "Login"
+        const apiEndpoint = action === t('login') ? "login" : "register";
+        const requestBody = action === t('login')
             ? { username, password }
             : { email, password, username, firstName, lastName };
 
@@ -59,7 +61,7 @@ function useLogin(setToken) {
                 setToken(data.Token);
                 navigate('/dashboard'); 
             } else if (response.status === 400) {
-               if (action === "Login") {
+               if (action === t('login')) {
                    setShowWrongPasswordModal(true); 
                }
             } else {

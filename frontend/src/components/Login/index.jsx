@@ -21,25 +21,28 @@ const Login = ({ setToken }) => {
         );
     const { t } = useTranslation();
 
-
+    const handleLanguageChange = (newAction) => {
+        console.log(newAction);
+        setAction(newAction); 
+      };
+      
     return (
         <Container fluid className="bg-black">
-            <LanguageSwitcher />
             <Row className="vh-100">
                 <Col sm={12} md={6} className="d-flex align-items-center justify-content-center">
                     <img src={logo} alt="Your Logo" className="img-fluid" />
                 </Col>
                 <Col sm={12} md={6} className="d-flex align-items-center justify-content-center flex-column">
                     <div className="card login-signup-forgot" style={{
-                        display: 'flex', justifyContent: 'center', maxWidth: '650px', minWidth: '400px',
+                        display: 'flex', justifyContent: 'center', maxWidth: '650px', minWidth: '600px',
                     }}>
                         <div className="header">
-                            <div className="text">{t(action)}</div>
+                            <div className="text">{action}</div>
                             <div className="underline"></div>
                         </div>
                         <form>
                             <div className="inputs">
-                                {action === "Login" ? <div></div> :
+                                {action === t('login') ? <div></div> :
                                     <><div className="input">
                                         <img className="svg" src={address_icon} alt="Last Name Icon" />
                                         <input type="text" className="form-control" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
@@ -68,13 +71,13 @@ const Login = ({ setToken }) => {
                                 </div>
 
                                 <div className="input">
-                                    {!isValidPassword && action === "Sign Up" && (
+                                    {!isValidPassword && action === t('signUp') && (
                                         <img src={information_icon} alt="Information Icon" onClick={handleShowPasswordModal} style={{ cursor: 'pointer' }} />
                                     )}
                                     <img src={password_icon} alt="Password Icon" />
                                     <input
                                         type="password"
-                                        className={`form-control ${!isValidPassword && action === "Sign Up" ? "invalid-input" : ""}`}
+                                        className={`form-control ${!isValidPassword && action === t('signUp') ? "invalid-input" : ""}`}
                                         value={password}
                                         onChange={handlePasswordChange}
                                         required
@@ -83,18 +86,19 @@ const Login = ({ setToken }) => {
                                 </div>
                             </div>
                         </form>
-                        {action === "Sign Up" ? <div></div> :
+                        {action === t('signUp') ? <div></div> :
                             <div className="forgot-password"> {t('forgotPassword')} <span> {t('clickHere')} </span></div>}
                         <div className="submit-container">
-                            <div className={action === "Login" ? "submit gray" : "submit"} onClick={action === "Sign Up" ? handleSubmit : () => { setAction("Sign Up") }}>{t('signUp')}</div>
-                            <div className={action === "Sign Up" ? "submit gray" : "submit"} onClick={action === "Login" ? handleSubmit : () => { setAction("Login") }} >{t('login')}</div>
+                            <div className={action === t('login') ? "submit gray" : "submit"} onClick={action === t('signUp') ? handleSubmit : () => { setAction(t('signUp')) }}>{t('signUp')}</div>
+                            <div className={action === t('signUp') ? "submit gray" : "submit"} onClick={action === t('login') ? handleSubmit : () => { setAction(t('login')) }} >{t('login')}</div>
                         </div>
+                        <div className="d-flex justify-content-center mb-4"> <LanguageSwitcher onLanguageChange={handleLanguageChange} /></div>
                     </div>
                 </Col>
             </Row>
             <Modal show={showPasswordModal} onHide={handleClosePasswordModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Password Requirements</Modal.Title>
+                    <Modal.Title>{t('passwordRequirements')}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <p>{t('passwordRequirementsBody')}</p>
@@ -116,7 +120,7 @@ const Login = ({ setToken }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowWrongPasswordModal(false)}>
-                        Close
+                    {t('close')}
                     </Button>
                 </Modal.Footer>
             </Modal>
