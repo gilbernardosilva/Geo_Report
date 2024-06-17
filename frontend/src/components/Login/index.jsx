@@ -7,7 +7,7 @@ import information_icon from './../../img/icons/information.svg'
 import './index.css';
 import logo from './../../img/logo/geo_report_white_text.svg'
 import { useNavigate } from 'react-router-dom';
-
+import bcrypt from 'bcryptjs';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
@@ -55,10 +55,12 @@ const Login = ({ setToken }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const saltRounds = 10; // Adjust the number of salt rounds as needed
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         const apiEndpoint = action === "Login" ? "login" : "register";
         const requestBody = action === "Login"
-            ? { username, password }
-            : { email, password, username, firstName, lastName };
+            ? { username, hashedPassword }
+            : { email, hashedPassword, username, firstName, lastName };
 
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${apiEndpoint}`, {
@@ -71,7 +73,7 @@ const Login = ({ setToken }) => {
                 const data = await response.json();
                 setToken(data.Token);
                 navigate('/dashboard'); 
-            } else if (response.status === 404) {
+            } else if (response.status === 400) {
                 setShowWrongPasswordModal(true); 
             } else {
                 console.log(response);
@@ -169,7 +171,7 @@ const Login = ({ setToken }) => {
                     <Modal.Title>Incorrect Password</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="text-center">
-                    <p className="text-danger">The password you entered is incorrect.</p>
+                    <p className="text-danger">The username/password you entered is incorrect.</p>
                     <p>Please try again.</p>
                 </Modal.Body>
                 <Modal.Footer>
