@@ -70,7 +70,8 @@ const Login = ({ setToken }) => {
             } else if (response.status === 401) {
                 // ... (Handle authentication error)
             } else {
-                // ... (Handle other errors)
+                console.log(response);
+                // ... (Handle other errors))
             }
         } catch (error) {
             // ... (Handle network or other errors)

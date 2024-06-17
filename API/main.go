@@ -5,7 +5,9 @@ import (
 	"geo_report_api/controller"
 	"geo_report_api/entities"
 	"geo_report_api/service"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,6 +21,15 @@ func main() {
 	defer config.CloseDB()
 
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true, // Allow sending cookies or Authorization headers
+		MaxAge:           12 * time.Hour,
+	}))
 
 	v1 := router.Group("/api/v1")
 	{
