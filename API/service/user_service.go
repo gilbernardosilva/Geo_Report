@@ -5,6 +5,7 @@ import (
 	"geo_report_api/dto"
 	"geo_report_api/entities"
 	"geo_report_api/repository"
+	"geo_report_api/utils"
 	"log"
 
 	"github.com/mashingan/smapping"
@@ -22,6 +23,18 @@ func InsertUser(userDTO dto.UserCreatedDTO) (dto.UserResponseDTO, error) {
 	if err != nil {
 		log.Fatal("failed to map ", err)
 		return userResponse, err
+	}
+
+	user.Password, err = utils.CreateFromPassword(user.Password)
+	if err != nil {
+		log.Fatal("error during pwd hash ", err)
+		return userResponse, err
+	}
+
+	errDuplicated := repository.CheckIfUserExists(user.UserName, user.Email)
+
+	if errDuplicated != nil {
+		return userResponse, errDuplicated
 	}
 
 	user = repository.InsertUser(user)

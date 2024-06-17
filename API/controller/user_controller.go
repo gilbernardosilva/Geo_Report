@@ -8,20 +8,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllUsers(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "select users",
-		"users":   service.GetAllUsers(),
-	})
-}
-
+// User	Register User
+//
+//	@Summary	Register
+//	@Schemes
+//	@Description	registers user in database
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		dto.UserCreatedDTO	true "query params"
+//	@Success		200		{object}	dto.UserResponseDTO
+//	@Failure		400		{object}	dto.UserResponseDTO
+//	@Router			/user/register [post]
 func Register(c *gin.Context) {
 	var user dto.UserCreatedDTO
 	err := c.ShouldBind(&user)
 	if err != nil {
 		c.JSON(400, gin.H{
-			"message": "error",
-			"error":   err.Error(),
+			"message": err.Error(),
+			"user":    "",
 		})
 		return
 	}
@@ -34,11 +39,18 @@ func Register(c *gin.Context) {
 		})
 	} else {
 		c.JSON(200, gin.H{
-			"message": "user",
+			"message": "user successfully created",
 			"user":    u,
 		})
 	}
 
+}
+
+func GetAllUsers(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "select users",
+		"users":   service.GetAllUsers(),
+	})
 }
 
 func GetUser(c *gin.Context) {

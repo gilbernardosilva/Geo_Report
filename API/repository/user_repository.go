@@ -2,8 +2,12 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"geo_report_api/config"
 	"geo_report_api/entities"
+
+	_ "github.com/lib/pq"
+	"gorm.io/gorm"
 )
 
 func InsertUser(user entities.User) entities.User {
@@ -11,6 +15,24 @@ func InsertUser(user entities.User) entities.User {
 	config.Db.Find(&user)
 
 	return user
+}
+
+func CheckIfUserExists(username string, email string) error {
+	var user entities.User
+
+	if err := config.Db.Where("user_name = ?", username).First(&user).Error; err == nil {
+		return fmt.Errorf("username already exists")
+	} else if err != gorm.ErrRecordNotFound {
+		return fmt.Errorf("error checking username: %v", err)
+	}
+
+	if err := config.Db.Where("email = ?", email).First(&user).Error; err == nil {
+		return fmt.Errorf("email already exists")
+	} else if err != gorm.ErrRecordNotFound {
+		return fmt.Errorf("error checking email: %v", err)
+	}
+
+	return nil
 }
 
 func GetAllUsers() []entities.User {
@@ -36,15 +58,6 @@ func UpdateUser(user entities.User) (entities.User, error) {
 		return user, nil
 	}
 	return user, errors.New("user doesn't exist")
-}
-
-func UpdateUserToken(userID uint64, token string) (entities.User, error) {
-	if user, err := GetUser(userID); err == nil {
-		user.Token = token
-		config.Db.Save(user)
-		return user, nil
-	}
-	return entities.User{}, errors.New("user doesn't exist")
 }
 
 func DeleteUser(userID uint64) (bool, error) {
