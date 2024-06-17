@@ -23,6 +23,7 @@ const Login = ({ setToken }) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [action, setAction] = useState("Sign Up");
+    const [showWrongPasswordModal, setShowWrongPasswordModal] = useState(false);
 
     const [isValidEmail, setIsValidEmail] = useState(true);
 
@@ -70,9 +71,8 @@ const Login = ({ setToken }) => {
                 const data = await response.json();
                 setToken(data.Token);
                 navigate('/dashboard'); 
-
             } else if (response.status === 404) {
-                // ... (Handle authentication error)
+                setShowWrongPasswordModal(true); 
             } else {
                 console.log(response);
             }
@@ -163,6 +163,20 @@ const Login = ({ setToken }) => {
                         <li>At least one special character (@$!%*?&)</li>
                     </ul>
                 </Modal.Body>
+            </Modal>
+            <Modal show={showWrongPasswordModal} onHide={() => setShowWrongPasswordModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Incorrect Password</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    <p className="text-danger">The password you entered is incorrect.</p>
+                    <p>Please try again.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowWrongPasswordModal(false)}>
+                        Close
+                    </Button>
+                </Modal.Footer>
             </Modal>
         </Container>
     );
