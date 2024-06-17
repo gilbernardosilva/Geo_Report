@@ -6,6 +6,7 @@ import address_icon from './../../img/icons/address.svg'
 import information_icon from './../../img/icons/information.svg'
 import './index.css';
 import logo from './../../img/logo/geo_report_white_text.svg'
+import { useNavigate } from 'react-router-dom';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -15,6 +16,7 @@ import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 
 
 const Login = ({ setToken }) => {
+    const navigate = useNavigate(); 
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -66,15 +68,15 @@ const Login = ({ setToken }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                // ... (Handle successful login/signup: store token, redirect, etc.)
-            } else if (response.status === 401) {
+                setToken(data.Token);
+                navigate('/dashboard'); 
+
+            } else if (response.status === 404) {
                 // ... (Handle authentication error)
             } else {
                 console.log(response);
-                // ... (Handle other errors))
             }
         } catch (error) {
-            // ... (Handle network or other errors)
         }
     };
 
