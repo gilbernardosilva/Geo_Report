@@ -7,33 +7,39 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Login godoc
+// User	Login
 //
-//	@Summary		Login
-//	@Description	get token
-//	@Tags			login
+//	@Summary	Login
+//	@Schemes
+//	@Description	returns token for login
+//	@Tags			User
 //	@Accept			json
 //	@Produce		json
 //	@Param			request	body		dto.LoginDTO	true	"query params"
-//	@Success		200		{number}	token
-//	@Failure		400
-//	@Failure		404
-//	@Failure		500
+//	@Success		200		{object}	dto.LoginResponse
 //	@Router			/user/login [post]
 func Login(c *gin.Context) {
 	var userLogin dto.LoginDTO
 	err := c.ShouldBind(&userLogin)
 	if err != nil {
 		c.JSON(400, gin.H{
-			"message": "error",
-			"error":   err.Error(),
+			"message": err.Error(),
+			"token":   "",
 		})
 		return
 	}
 
 	t, err := service.Login(userLogin)
-	c.JSON(200, gin.H{
-		"message": "login user",
-		"token":   t,
-	})
+	if err != nil {
+		c.JSON(404, gin.H{
+			"message": err.Error(),
+			"token":   "",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"message": "login user",
+			"token":   t,
+		})
+	}
+
 }

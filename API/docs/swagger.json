@@ -20,7 +20,7 @@
     "paths": {
         "/user/login": {
             "post": {
-                "description": "get token",
+                "description": "returns token for login",
                 "consumes": [
                     "application/json"
                 ],
@@ -28,7 +28,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "login"
+                    "User"
                 ],
                 "summary": "Login",
                 "parameters": [
@@ -46,17 +46,8 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "number"
+                            "$ref": "#/definitions/dto.LoginResponse"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -74,6 +65,17 @@
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "token": {
                     "type": "string"
                 }
             }

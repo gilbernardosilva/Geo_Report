@@ -10,6 +10,13 @@ definitions:
     - password
     - username
     type: object
+  dto.LoginResponse:
+    properties:
+      message:
+        type: string
+      token:
+        type: string
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -31,7 +38,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: get token
+      description: returns token for login
       parameters:
       - description: query params
         in: body
@@ -45,16 +52,10 @@ paths:
         "200":
           description: OK
           schema:
-            type: number
-        "400":
-          description: Bad Request
-        "404":
-          description: Not Found
-        "500":
-          description: Internal Server Error
+            $ref: '#/definitions/dto.LoginResponse'
       summary: Login
       tags:
-      - login
+      - User
 securityDefinitions:
   BasicAuth:
     type: basic
