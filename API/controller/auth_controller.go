@@ -31,7 +31,7 @@ func Login(c *gin.Context) {
 
 	t, err := service.Login(userLogin)
 	if err != nil {
-		c.JSON(404, gin.H{
+		c.JSON(400, gin.H{
 			"message": err.Error(),
 			"token":   "",
 		})
@@ -41,5 +41,4 @@ func Login(c *gin.Context) {
 			"token":   t,
 		})
 	}
-
 }
