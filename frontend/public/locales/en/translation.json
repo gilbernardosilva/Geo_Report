@@ -1,0 +1,21 @@
+{
+    "signUp": "Sign Up",
+    "login": "Login",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "E-Mail",
+    "username": "Username",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "clickHere": "Click Here!",
+    "passwordRequirements": "Password Requirements",
+    "passwordRequirementsBody": "Password must be at least 8 characters long and contain:",
+    "lowercaseLetter": "At least one lowercase letter",
+    "uppercaseLetter": "At least one uppercase letter",
+    "number": "At least one number",
+    "specialCharacter": "At least one special character (@$!%*?&)",
+    "incorrectPassword": "Incorrect Password",
+    "incorrectPasswordMessage": "The username/password you entered is incorrect.",
+    "tryAgain": "Please try again.",
+    "close": "Close"
+}

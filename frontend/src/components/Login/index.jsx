@@ -1,4 +1,4 @@
-import { useState } from "react";
+import useLogin from './../../hooks/useLogin.js'
 import user_icon from './../../img/icons/person.png'
 import email_icon from './../../img/icons/email.png'
 import password_icon from './../../img/icons/password.png'
@@ -6,85 +6,25 @@ import address_icon from './../../img/icons/address.svg'
 import information_icon from './../../img/icons/information.svg'
 import './index.css';
 import logo from './../../img/logo/geo_report_white_text.svg'
-import { useNavigate } from 'react-router-dom';
-import bcrypt from 'bcryptjs';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-
 import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../LanguageSwitcher/index.jsx'; 
 
 
 
 const Login = ({ setToken }) => {
-    const navigate = useNavigate(); 
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [action, setAction] = useState("Sign Up");
-    const [showWrongPasswordModal, setShowWrongPasswordModal] = useState(false);
-
-    const [isValidEmail, setIsValidEmail] = useState(true);
-
-    const handleEmailChange = (e) => {
-        const newEmail = e.target.value;
-        setEmail(newEmail);
-
-        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail);
-        setIsValidEmail(isValid);
-    };
-
-    const [isValidPassword, setIsValidPassword] = useState(true);
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    const handlePasswordChange = (e) => {
-        const newPassword = e.target.value;
-        setPassword(newPassword);
-
-        const isValid = passwordRegex.test(newPassword);
-        setIsValidPassword(isValid);
-    };
-
-    const [showPasswordModal, setShowPasswordModal] = useState(false);
-
-    const handleShowPasswordModal = () => setShowPasswordModal(true);
-    const handleClosePasswordModal = () => setShowPasswordModal(false);
-
-    console.log(process.env.REACT_APP_API_URL);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const saltRounds = 10; // Adjust the number of salt rounds as needed
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const apiEndpoint = action === "Login" ? "login" : "register";
-        const requestBody = action === "Login"
-            ? { username, hashedPassword }
-            : { email, hashedPassword, username, firstName, lastName };
-
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${apiEndpoint}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(requestBody),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setToken(data.Token);
-                navigate('/dashboard'); 
-            } else if (response.status === 400) {
-                setShowWrongPasswordModal(true); 
-            } else {
-                console.log(response);
-            }
-        } catch (error) {
-        }
-    };
+    const { email, username, setUsername, handleSubmit, isValidEmail, isValidPassword, password, action, setAction, setFirstName, setLastName, firstName, lastName, handleEmailChange, handlePasswordChange,
+        handleShowPasswordModal, showPasswordModal, handleClosePasswordModal, showWrongPasswordModal, setShowWrongPasswordModal } = useLogin(
+            setToken
+        );
+    const { t } = useTranslation();
 
 
     return (
         <Container fluid className="bg-black">
+            <LanguageSwitcher />
             <Row className="vh-100">
                 <Col sm={12} md={6} className="d-flex align-items-center justify-content-center">
                     <img src={logo} alt="Your Logo" className="img-fluid" />
@@ -94,7 +34,7 @@ const Login = ({ setToken }) => {
                         display: 'flex', justifyContent: 'center', maxWidth: '650px', minWidth: '400px',
                     }}>
                         <div className="header">
-                            <div className="text">{action}</div>
+                            <div className="text">{t(action)}</div>
                             <div className="underline"></div>
                         </div>
                         <form>
@@ -103,12 +43,12 @@ const Login = ({ setToken }) => {
                                     <><div className="input">
                                         <img className="svg" src={address_icon} alt="Last Name Icon" />
                                         <input type="text" className="form-control" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-                                        <label className="placeholderx">First Name</label>
+                                        <label className="placeholderx">{t('firstName')}</label>
                                     </div>
                                         <div className="input">
                                             <img className="svg" src={address_icon} alt="Last Name Icon" />
                                             <input type="text" className="form-control" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-                                            <label className="placeholderx">Last Name</label>
+                                            <label className="placeholderx">{t('lastName')}</label>
                                         </div>
                                         <div className="input">
                                             <img src={email_icon} alt="E-mail Icon" />
@@ -119,12 +59,12 @@ const Login = ({ setToken }) => {
                                                 onChange={handleEmailChange}
                                                 required
                                             />
-                                            <label className="placeholderx">E-Mail</label>
+                                            <label className="placeholderx">{t('email')}</label>
                                         </div></>}
                                 <div className="input">
                                     <img src={user_icon} alt="User Icon" />
                                     <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                                    <label className="placeholderx">Username</label>
+                                    <label className="placeholderx">{t('username')}</label>
                                 </div>
 
                                 <div className="input">
@@ -139,15 +79,15 @@ const Login = ({ setToken }) => {
                                         onChange={handlePasswordChange}
                                         required
                                     />
-                                    <label className="placeholderx">Password</label>
+                                    <label className="placeholderx">{t('password')}</label>
                                 </div>
                             </div>
                         </form>
                         {action === "Sign Up" ? <div></div> :
-                            <div className="forgot-password"> Forgot Password? <span>Click Here!</span></div>}
+                            <div className="forgot-password"> {t('forgotPassword')} <span> {t('clickHere')} </span></div>}
                         <div className="submit-container">
-                            <div className={action === "Login" ? "submit gray" : "submit"} onClick={action === "Sign Up" ? handleSubmit : () => { setAction("Sign Up") }}>Sign Up</div>
-                            <div className={action === "Sign Up" ? "submit gray" : "submit"} onClick={action === "Login" ? handleSubmit : () => { setAction("Login") }} >Login</div>
+                            <div className={action === "Login" ? "submit gray" : "submit"} onClick={action === "Sign Up" ? handleSubmit : () => { setAction("Sign Up") }}>{t('signUp')}</div>
+                            <div className={action === "Sign Up" ? "submit gray" : "submit"} onClick={action === "Login" ? handleSubmit : () => { setAction("Login") }} >{t('login')}</div>
                         </div>
                     </div>
                 </Col>
@@ -157,22 +97,22 @@ const Login = ({ setToken }) => {
                     <Modal.Title>Password Requirements</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Password must be at least 8 characters long and contain:</p>
+                    <p>{t('passwordRequirementsBody')}</p>
                     <ul>
-                        <li>At least one lowercase letter</li>
-                        <li>At least one uppercase letter</li>
-                        <li>At least one number</li>
-                        <li>At least one special character (@$!%*?&)</li>
+                        <li>{t('lowercaseLetter')}</li>
+                        <li>{t('uppercaseLetter')}</li>
+                        <li>{t('number')}</li>
+                        <li>{t('specialCharacter')}</li>
                     </ul>
                 </Modal.Body>
             </Modal>
             <Modal show={showWrongPasswordModal} onHide={() => setShowWrongPasswordModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Incorrect Password</Modal.Title>
+                    <Modal.Title>{t('incorrectPassword')}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="text-center">
-                    <p className="text-danger">The username/password you entered is incorrect.</p>
-                    <p>Please try again.</p>
+                    <p className="text-danger">{t('incorrectPasswordMessage')}</p>
+                    <p>{t('tryAgain')}</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowWrongPasswordModal(false)}>

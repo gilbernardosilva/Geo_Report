@@ -1,0 +1,21 @@
+{
+    "signUp": "Inscreva-se",
+    "login": "Entrar",
+    "firstName": "Primeiro Nome",
+    "lastName": "Sobrenome",
+    "email": "E-mail",
+    "username": "Nome de Utilizador",
+    "password": "Senha",
+    "forgotPassword": "Esqueceu a senha?",
+    "clickHere": "Clique aqui!",
+    "passwordRequirements": "Requisitos de Senha",
+    "passwordRequirementsBody": "A senha deve ter pelo menos 8 caracteres e conter:",
+    "lowercaseLetter": "Pelo menos uma letra minúscula",
+    "uppercaseLetter": "Pelo menos uma letra maiúscula",
+    "number": "Pelo menos um número",
+    "specialCharacter": "Pelo menos um caractere especial (@$!%*?&)",
+    "incorrectPassword": "Senha Incorreta",
+    "incorrectPasswordMessage": "O nome de utilizador/senha que você inseriu está incorreto.",
+    "tryAgain": "Por favor, tente novamente.",
+    "close": "Fechar"
+}
