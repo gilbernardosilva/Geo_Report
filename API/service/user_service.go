@@ -5,7 +5,6 @@ import (
 	"geo_report_api/dto"
 	"geo_report_api/entities"
 	"geo_report_api/repository"
-	"geo_report_api/utils"
 	"log"
 
 	"github.com/mashingan/smapping"
@@ -15,30 +14,25 @@ func GetAllUsers() []entities.User {
 	return repository.GetAllUsers()
 }
 
-func InsertUser(userDTO dto.UserCreatedDTO) dto.UserResponseDTO {
+func InsertUser(userDTO dto.UserCreatedDTO) (dto.UserResponseDTO, error) {
 	user := entities.User{}
 	userResponse := dto.UserResponseDTO{}
 
 	err := smapping.FillStruct(&user, smapping.MapFields(&userDTO))
 	if err != nil {
 		log.Fatal("failed to map ", err)
-		return userResponse
+		return userResponse, err
 	}
 
-	user.Password, err = utils.CreateFromPassword(user.Password)
-	if err != nil {
-		log.Fatal("error during pwd hash ", err)
-		return userResponse
-	}
 	user = repository.InsertUser(user)
 
 	err = smapping.FillStruct(&userResponse, smapping.MapFields(&user))
 	if err != nil {
 		log.Fatal("failed to map response ", err)
-		return userResponse
+		return userResponse, err
 	}
 
-	return userResponse
+	return userResponse, nil
 }
 
 func GetUser(userID uint64) (entities.User, error) {

@@ -26,11 +26,19 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	u := service.InsertUser(user)
-	c.JSON(200, gin.H{
-		"message": "user",
-		"user":    u,
-	})
+	u, err := service.InsertUser(user)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": err.Error(),
+			"user":    "",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"message": "user",
+			"user":    u,
+		})
+	}
+
 }
 
 func GetUser(c *gin.Context) {
