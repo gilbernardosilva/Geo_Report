@@ -13,6 +13,15 @@ require (
 )
 
 require (
+	github.com/getkin/kin-openapi v0.124.0 // indirect
+	github.com/gin-contrib/cors v1.7.2 // indirect
+	github.com/invopop/yaml v0.2.0 // indirect
+	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
+	github.com/perimeterx/marshmallow v1.1.5 // indirect
+	golang.org/x/mod v0.18.0 // indirect
+)
+
+require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.2.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
@@ -45,6 +54,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/oapi-codegen/oapi-codegen/v2 v2.3.1-0.20240614151443-a0f3cdc6beee
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
