@@ -19,8 +19,14 @@ func Login(c *gin.Context) {
 	}
 
 	t, err := service.Login(userLogin)
-	c.JSON(200, gin.H{
-		"message": "login user",
-		"token":   t,
-	})
+	if err != nil {
+		c.JSON(200, gin.H{
+			"message": "login user",
+			"token":   t,
+		})
+	} else {
+		c.JSON(404, gin.H{
+			"message": "user not found",
+		})
+	}
 }
