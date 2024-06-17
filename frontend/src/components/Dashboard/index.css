@@ -1,0 +1,59 @@
+body {
+    background-color: black;
+    width: 100%;
+  }
+
+  
+.sidebar, 
+.map-area,
+.info-sidebar {
+  height: 100vh; 
+}
+
+.logo-icon {
+    width: 40px; 
+    height: 40px; 
+  }
+  .sidebar {
+    height: 100vh; 
+    flex-direction: column; /* Stack items vertically */
+  }
+  
+  .sidebar-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    text-align: left;        /* Align text within the link to the left */
+    display: inline-flex;    /* Make the link content inline-flex for alignment */
+    align-items: center;
+  }
+  
+  .logo-icon {
+    width: 40px;
+    height: 40px; 
+  }
+
+  .sidebar-header:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* White with 10% opacity */
+    transition: background-color 0.3s ease; /* Add a smooth transition (optional) */
+  }
+
+  .sidebar-header h2 {
+    margin-left: auto;        /* Push the text to the right edge of the icon */
+    font-weight: bold;
+    color: white;
+  }
+
+  .row > * {  
+    border-right: 1px solid #ddd; /* Light gray border to the right of each column */
+  }
+  
+  .row > *:last-child { /* Remove the right border from the last column */
+    border-right: none;
+  }
+  
+  .sidebar {
+    width: 300px;
+    border-bottom: 1px solid #ddd;
+  }
+  
