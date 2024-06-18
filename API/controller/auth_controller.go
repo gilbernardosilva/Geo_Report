@@ -37,7 +37,7 @@ func Login(c *gin.Context) {
 		})
 	} else {
 		c.JSON(200, gin.H{
-			"message": "login user",
+			"message": "login successful!",
 			"token":   t,
 		})
 	}

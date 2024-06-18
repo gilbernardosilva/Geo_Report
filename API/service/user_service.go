@@ -7,6 +7,7 @@ import (
 	"geo_report_api/repository"
 	"geo_report_api/utils"
 	"log"
+	"net/mail"
 
 	"github.com/mashingan/smapping"
 )
@@ -15,26 +16,30 @@ func GetAllUsers() []entities.User {
 	return repository.GetAllUsers()
 }
 
-func InsertUser(userDTO dto.UserCreatedDTO) (dto.UserResponseDTO, error) {
+func InsertUser(userDTO dto.UserCreatedDTO) (logintoken string, error error) {
 	user := entities.User{}
 	userResponse := dto.UserResponseDTO{}
 
 	err := smapping.FillStruct(&user, smapping.MapFields(&userDTO))
 	if err != nil {
 		log.Fatal("failed to map ", err)
-		return userResponse, err
+		return "", err
 	}
 
 	user.Password, err = utils.CreateFromPassword(user.Password)
 	if err != nil {
 		log.Fatal("error during pwd hash ", err)
-		return userResponse, err
+		return "", err
 	}
 
 	errDuplicated := repository.CheckIfUserExists(user.UserName, user.Email)
 
 	if errDuplicated != nil {
-		return userResponse, errDuplicated
+		return "", errDuplicated
+	}
+
+	if !valid(user.Email) {
+		return "", err
 	}
 
 	user = repository.InsertUser(user)
@@ -42,10 +47,22 @@ func InsertUser(userDTO dto.UserCreatedDTO) (dto.UserResponseDTO, error) {
 	err = smapping.FillStruct(&userResponse, smapping.MapFields(&user))
 	if err != nil {
 		log.Fatal("failed to map response ", err)
-		return userResponse, err
+		return "", err
 	}
 
-	return userResponse, nil
+	loginDTO := dto.LoginDTO{}
+
+	loginDTO.UserName = user.UserName
+	loginDTO.Password = user.Password
+
+	logintoken, err = Login(loginDTO)
+
+	if err != nil {
+		log.Fatal("failed to log in using the new credentials", err)
+		return "", err
+	}
+
+	return logintoken, nil
 }
 
 func GetUser(userID uint64) (entities.User, error) {
@@ -60,4 +77,9 @@ func DeleteUser(userID uint64) (bool, error) {
 		return deleted, nil
 	}
 	return false, errors.New("user doesn't exist")
+}
+
+func valid(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
 }

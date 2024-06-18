@@ -31,7 +31,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	u, err := service.InsertUser(user)
+	t, err := service.InsertUser(user)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": err.Error(),
@@ -40,7 +40,7 @@ func Register(c *gin.Context) {
 	} else {
 		c.JSON(200, gin.H{
 			"message": "user successfully created",
-			"user":    u,
+			"token":   t,
 		})
 	}
 
