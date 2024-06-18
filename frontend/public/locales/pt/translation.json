@@ -17,5 +17,9 @@
     "incorrectPassword": "Senha Incorreta",
     "incorrectPasswordMessage": "O nome de utilizador/senha que você inseriu está incorreto.",
     "tryAgain": "Por favor, tente novamente.",
-    "close": "Fechar"
+    "close": "Fechar",
+    "home": "Home",
+    "logout": "Sair",
+    "settings": "Configurações",
+    "myIssues": "Meus Problemas"
 }

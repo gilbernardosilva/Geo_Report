@@ -17,5 +17,11 @@
     "incorrectPassword": "Incorrect Password",
     "incorrectPasswordMessage": "The username/password you entered is incorrect.",
     "tryAgain": "Please try again.",
-    "close": "Close"
+    "close": "Close",
+    "home": "Home",
+    "logout": "Logout",
+    "settings": "Settings",
+    "myIssues": "My Issues",
+    "profile": "Profile"
+
 }

@@ -7,7 +7,8 @@ body {
 .sidebar, 
 .map-area,
 .info-sidebar {
-  height: 100vh; 
+  
+  display: flex;
 }
 
 .logo-icon {
@@ -15,10 +16,20 @@ body {
     height: 40px; 
   }
   .sidebar {
-    height: 100vh; 
     flex-direction: column; /* Stack items vertically */
+    padding-bottom: 20px;
   }
   
+  .logout-container {
+    align-items: flex-end;
+  }
+  .dashboard-container {
+    
+    display: flex; /* Enable flexbox on the container */
+    flex-direction: column; /* Stack the rows vertically */
+    min-height: 100vh;
+  }
+
   .sidebar-header {
     display: flex;
     align-items: flex-start;
@@ -40,10 +51,14 @@ body {
 
   .sidebar-header h2 {
     margin-left: auto;        /* Push the text to the right edge of the icon */
-    font-weight: bold;
-    color: white;
   }
 
+  h2{
+    font-weight: bold;
+    color: white;
+    font-size: 25px;
+  }
+  
   .dashboard-row > * {
     border-right: 1px solid #ddd; /* Light gray border to the right of each column */
 }
@@ -53,7 +68,18 @@ body {
 }
   
   .sidebar {
-    width: 300px;
-    border-bottom: 1px solid #ddd;
+        width: 300px;
   }
   
+
+  .map-container {
+    height: 100%; 
+    border: 2px solid #ccc; /* Add a border to create the box */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow (adjust values as needed) */
+
+  }
+
+  .leaflet-container{
+    height: 100vh;
+  }
+
