@@ -10,22 +10,23 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../LanguageSwitcher/index.jsx'; 
+import LanguageSwitcher from '../LanguageSwitcher/index.jsx';
 
 
 
-const Login = ({ setToken }) => {
+function Login ({ setToken }){
     const { email, username, setUsername, handleSubmit, isValidEmail, isValidPassword, password, action, setAction, setFirstName, setLastName, firstName, lastName, handleEmailChange, handlePasswordChange,
         handleShowPasswordModal, showPasswordModal, handleClosePasswordModal, showWrongPasswordModal, setShowWrongPasswordModal } = useLogin(
             setToken
         );
     const { t } = useTranslation();
 
+
     const handleLanguageChange = (newAction) => {
         console.log(newAction);
-        setAction(newAction); 
-      };
-      
+        setAction(newAction);
+    };
+
     return (
         <Container fluid className="bg-black">
             <Row className="vh-100">
@@ -120,7 +121,7 @@ const Login = ({ setToken }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowWrongPasswordModal(false)}>
-                    {t('close')}
+                        {t('close')}
                     </Button>
                 </Modal.Footer>
             </Modal>

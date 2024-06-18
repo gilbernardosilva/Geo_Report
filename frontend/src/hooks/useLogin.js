@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 function useLogin(setToken) {
     const { t } = useTranslation();
 
-    const navigate = useNavigate(); 
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -13,8 +12,16 @@ function useLogin(setToken) {
     const [lastName, setLastName] = useState("");
     const [action, setAction] = useState("Sign Up");
     const [showWrongPasswordModal, setShowWrongPasswordModal] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const [isValidEmail, setIsValidEmail] = useState(true);
+
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/dashboard');
+        }
+    }, [isLoggedIn, navigate]);
 
     const handleEmailChange = (e) => {
         const newEmail = e.target.value;
@@ -40,7 +47,6 @@ function useLogin(setToken) {
     const handleShowPasswordModal = () => setShowPasswordModal(true);
     const handleClosePasswordModal = () => setShowPasswordModal(false);
 
-    console.log(process.env.REACT_APP_API_URL);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,18 +64,33 @@ function useLogin(setToken) {
 
             if (response.ok) {
                 const data = await response.json();
-                setToken(data.Token);
-                navigate('/dashboard'); 
-            } else if (response.status === 400) {
-               if (action === t('login')) {
-                   setShowWrongPasswordModal(true); 
-               }
+                setToken(data.token);
+                setIsLoggedIn(true);
             } else {
-                console.log(response);
+                const errorData = await response.json();
+
+                if (response.status === 400) {
+                    switch (errorData.message) {  // Use a switch statement for cleaner code
+                        case "email already exists":
+                          alert("Email already exists");
+                          break;
+                        case "username already exists":
+                          alert("Username already exists");
+                          break;
+                        default:
+                          if (action === t("login")) {
+                            setShowWrongPasswordModal(true);
+                          } else {
+                            console.error("Registration error:", errorData);
+                          }
+                      }
+                }
             }
         } catch (error) {
+            console.log(error);
         }
     };
+
 
     return {
         email, setEmail,
@@ -87,7 +108,8 @@ function useLogin(setToken) {
         handleEmailChange,
         handlePasswordChange,
         handleSubmit,
-      };
+        isLoggedIn, setIsLoggedIn
+    };
 
 };
 

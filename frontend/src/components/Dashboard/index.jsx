@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React, {  } from 'react';
 import './index.css';
 import logo from './../../img/logo/geo_report_no_text.png'
-import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import home from './../../img/icons/home.svg'
 import issues from './../../img/icons/issues.svg'
 import logout from './../../img/icons/logout.svg'
 import settings from './../../img/icons/settings.svg'
 import { Link } from 'react-router-dom';
+import useLogout from './../../hooks/useLogout.js'
 
-function Dashboard() {
+function Dashboard({setToken}) {
+
+    const { handleLogout } = useLogout(setToken); 
 
     return (
         <Container fluid>
-            <Row className="justify-content-center mt-4">
+            <Row className="justify-content-center mt-4 dashboard-row">
                 <Col xs={12} md={3} className="d-flex justify-content-end" style={{width: 300}}>
                     <Link to="/dashboard" className="sidebar-header text-end btn">
                         <img src={logo} alt="Your Logo" className="img-fluid logo-icon" />
@@ -24,7 +27,7 @@ function Dashboard() {
                 </Col>
             </Row>
 
-            <Row className="justify-content-center">
+            <Row className="justify-content-center dashboard-row" >
 
                 <Col xs={12} md={3} className="sidebar order-md-1 d-flex">
                     <Link to="/dashboard" className="sidebar-header text-end btn">
@@ -39,9 +42,9 @@ function Dashboard() {
                         <img src={settings} alt="" className="img-fluid logo-icon me-2" />
                         <h2>Settings</h2>
                     </Link>
-                    <Link to="/dashboard" className="sidebar-header text-end btn">
+                    <Link to="/" className="sidebar-header text-end btn">
                         <img src={logout} alt="" className="img-fluid logo-icon me-2" />
-                        <h2>Logout</h2>
+                        <h2 onClick={handleLogout}>Logout</h2>
                     </Link>
                 </Col>
                 
