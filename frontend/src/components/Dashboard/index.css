@@ -4,25 +4,11 @@ body {
   }
 
   
-.sidebar, 
-.map-area,
-.info-sidebar {
-  
-  display: flex;
-}
-
 .logo-icon {
     width: 40px; 
     height: 40px; 
   }
-  .sidebar {
-    flex-direction: column; /* Stack items vertically */
-    padding-bottom: 20px;
-  }
-  
-  .logout-container {
-    align-items: flex-end;
-  }
+
   .dashboard-container {
     
     display: flex; /* Enable flexbox on the container */
@@ -30,56 +16,22 @@ body {
     min-height: 100vh;
   }
 
-  .sidebar-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-    text-align: left;        /* Align text within the link to the left */
-    display: inline-flex;    /* Make the link content inline-flex for alignment */
-    align-items: center;
-  }
-  
-  .logo-icon {
-    width: 40px;
-    height: 40px; 
-  }
 
-  .sidebar-header:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* White with 10% opacity */
-    transition: background-color 0.3s ease; /* Add a smooth transition (optional) */
-  }
-
-  .sidebar-header h2 {
-    margin-left: auto;        /* Push the text to the right edge of the icon */
-  }
-
-  h2{
-    font-weight: bold;
-    color: white;
-    font-size: 25px;
-  }
-  
-  .dashboard-row > * {
-    border-right: 1px solid #ddd; /* Light gray border to the right of each column */
-}
-
-.dashboard-row > *:last-child {
-    border-right: none; /* Remove the border from the last column */
-}
-  
-  .sidebar {
-        width: 300px;
-  }
-  
 
   .map-container {
     height: 100%; 
     border: 2px solid #ccc; /* Add a border to create the box */
+    border-radius: 50px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow (adjust values as needed) */
 
   }
 
   .leaflet-container{
     height: 100vh;
+  }
+
+
+  .bottom-links {
+    margin-top: auto; 
   }
 
