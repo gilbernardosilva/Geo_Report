@@ -24,5 +24,10 @@
     "myIssues": "Meus Problemas",
     "profile": "Perfil",
     "aboutGeo":"Sobre o GEO REPORT",
-    "about": "O GEO REPORT é a sua plataforma completa para reportar e acompanhar problemas locais. Seja buracos, postes de luz quebrados ou pichações, identifique facilmente a localização em nosso mapa e forneça detalhes importantes. Nossa equipe dedicada irá analisar seu relatório e trabalhar para resolver o problema prontamente."
+    "about": "O GEO REPORT é a sua plataforma completa para reportar e acompanhar problemas locais. Seja buracos, postes de luz quebrados ou pichações, identifique facilmente a localização em nosso mapa e forneça detalhes importantes. Nossa equipe dedicada irá analisar seu relatório e trabalhar para resolver o problema prontamente.",
+    "authpanel": "Painel de Autoridade",
+    "typesIssues": "Tipos de Problemas",
+    "statusIssues": "Estados dos Problemas",
+    "totalIssues": "Número Total de Problemas",
+    "last7days": "Últimos 7 Dias"
 }

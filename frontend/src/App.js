@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './configurations/i18n.js'
 import Dashboard from './components/Dashboard/index.jsx';
 import { AuthProvider, useAuth } from './hooks/AuthContext.jsx';
+import AuthorityDashboard from './components/AuthorityDashboard/index.jsx';
 
 
 
@@ -25,6 +26,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={!isLoggedIn ? <Login /> : <Navigate to="/dashboard" />} />
       <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" />} />
+      <Route path="/authority" element={isLoggedIn ? <AuthorityDashboard/> : <Navigate to="/" />}/>
     </Routes>
   );
 }
