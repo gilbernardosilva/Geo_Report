@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './configurations/i18n.js'
 import Dashboard from './components/Dashboard/index.jsx';
+import AuthorityDashboard from './components/AuthorityDashboard/index.jsx';
+
 import { useState } from 'react';
 
 
@@ -19,6 +21,7 @@ function App() {
           path="/dashboard"
           element={token ? <Dashboard setToken={setToken}/> : <Navigate to="/" />}
         />
+        <Route path="/authority" element={<AuthorityDashboard/>}/>
       </Routes>
     </BrowserRouter>
   );

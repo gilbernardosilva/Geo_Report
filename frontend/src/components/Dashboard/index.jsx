@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
-import { Container, Col } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from "leaflet";
 import CustomNavbar from './../Navbar';

@@ -1,0 +1,20 @@
+.navbar.bg-dark {
+    background-color: rgb(12, 12, 12) !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: white !important;
+
+}
+
+
+.offcanvas-header,
+.offcanvas-body,
+.offcanvas-body h2 {
+  color: white;
+}
+
+  .sidebar-content {
+    flex-grow: 1; 
+  }
+  

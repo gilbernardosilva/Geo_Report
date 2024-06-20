@@ -7,10 +7,10 @@ import logout from './../../img/icons/logout.svg'
 import profile from './../../img/icons/profile.svg'
 import settings from './../../img/icons/settings.svg'
 import { Link } from 'react-router-dom';
-import useLogout from './../../hooks/useLogout';
+import useLogout from '../../hooks/useLogout.js';
 import LanguageSwitcher from '../LanguageSwitcher/index.jsx';
 
-function CustomNavbar({ setToken, t }) {
+function CustomAuthorityNavbar({ setToken, t }) {
 
     const { handleLogout } = useLogout(setToken);
     const [show, setShow] = useState(false);
@@ -78,4 +78,4 @@ function CustomNavbar({ setToken, t }) {
     )
 };
 
-export default CustomNavbar
+export default CustomAuthorityNavbar;
