@@ -4,23 +4,28 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './configurations/i18n.js'
 import Dashboard from './components/Dashboard/index.jsx';
-import { useState } from 'react';
+import { AuthProvider, useAuth } from './hooks/AuthContext.jsx';
 
 
 
 function App() {
-  const [token, setToken] = useState(null);
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
+
+function AppRoutes() {
+  const { isLoggedIn } = useAuth();
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={token ? <Dashboard setToken={setToken}/> : <Login setToken={setToken} />} />
-        <Route
-          path="/dashboard"
-          element={token ? <Dashboard setToken={setToken}/> : <Navigate to="/" />}
-        />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={!isLoggedIn ? <Login /> : <Navigate to="/dashboard" />} />
+      <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" />} />
+    </Routes>
   );
 }
 

@@ -16,30 +16,30 @@ func GetAllUsers() []entities.User {
 	return repository.GetAllUsers()
 }
 
-func InsertUser(userDTO dto.UserCreatedDTO) (logintoken string, error error) {
-	user := entities.User{}
+func InsertUser(userDTO dto.UserCreatedDTO) (user entities.User, error error) {
+	user = entities.User{}
 	userResponse := dto.UserResponseDTO{}
 
 	err := smapping.FillStruct(&user, smapping.MapFields(&userDTO))
 	if err != nil {
 		log.Fatal("failed to map ", err)
-		return "", err
+		return
 	}
 
 	user.Password, err = utils.CreateFromPassword(user.Password)
 	if err != nil {
 		log.Fatal("error during pwd hash ", err)
-		return "", err
+		return
 	}
 
 	errDuplicated := repository.CheckIfUserExists(user.UserName, user.Email)
 
 	if errDuplicated != nil {
-		return "", errDuplicated
+		return
 	}
 
 	if !valid(user.Email) {
-		return "", err
+		return
 	}
 
 	user = repository.InsertUser(user)
@@ -47,22 +47,10 @@ func InsertUser(userDTO dto.UserCreatedDTO) (logintoken string, error error) {
 	err = smapping.FillStruct(&userResponse, smapping.MapFields(&user))
 	if err != nil {
 		log.Fatal("failed to map response ", err)
-		return "", err
+		return entities.User{}, err
 	}
 
-	loginDTO := dto.LoginDTO{}
-
-	loginDTO.UserName = user.UserName
-	loginDTO.Password = user.Password
-
-	logintoken, err = Login(loginDTO)
-
-	if err != nil {
-		log.Fatal("failed to log in using the new credentials", err)
-		return "", err
-	}
-
-	return logintoken, nil
+	return user, nil
 }
 
 func GetUser(userID uint64) (entities.User, error) {

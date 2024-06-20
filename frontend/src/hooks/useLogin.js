@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-function useLogin(setToken) {
+import { useAuth } from '../hooks/AuthContext';
+
+
+
+function useLogin() {
     const { t } = useTranslation();
 
     const [email, setEmail] = useState("");
@@ -12,11 +16,12 @@ function useLogin(setToken) {
     const [lastName, setLastName] = useState("");
     const [action, setAction] = useState("Sign Up");
     const [showWrongPasswordModal, setShowWrongPasswordModal] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const [isValidEmail, setIsValidEmail] = useState(true);
 
     const navigate = useNavigate();
+    const { login, setLoggedIn, isLoggedIn } = useAuth();
+
     useEffect(() => {
         if (isLoggedIn) {
             navigate('/dashboard');
@@ -49,6 +54,7 @@ function useLogin(setToken) {
 
 
     const handleSubmit = async (e) => {
+        debugger;
         e.preventDefault();
         const apiEndpoint = action === t('login') ? "login" : "register";
         const requestBody = action === t('login')
@@ -63,9 +69,11 @@ function useLogin(setToken) {
             });
 
             if (response.ok) {
+
                 const data = await response.json();
-                setToken(data.token);
-                setIsLoggedIn(true);
+                setLoggedIn(true);
+                login(data.token);
+                navigate("/dashboard"); 
             } else {
                 const errorData = await response.json();
 
@@ -108,7 +116,7 @@ function useLogin(setToken) {
         handleEmailChange,
         handlePasswordChange,
         handleSubmit,
-        isLoggedIn, setIsLoggedIn
+        isLoggedIn, setLoggedIn
     };
 
 };

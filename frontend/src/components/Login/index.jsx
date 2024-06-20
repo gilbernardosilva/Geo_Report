@@ -14,11 +14,9 @@ import LanguageSwitcher from '../LanguageSwitcher/index.jsx';
 
 
 
-function Login ({ setToken }){
+function Login (){
     const { email, username, setUsername, handleSubmit, isValidEmail, isValidPassword, password, action, setAction, setFirstName, setLastName, firstName, lastName, handleEmailChange, handlePasswordChange,
-        handleShowPasswordModal, showPasswordModal, handleClosePasswordModal, showWrongPasswordModal, setShowWrongPasswordModal } = useLogin(
-            setToken
-        );
+        handleShowPasswordModal, showPasswordModal, handleClosePasswordModal, showWrongPasswordModal, setShowWrongPasswordModal } = useLogin();
     const { t } = useTranslation();
 
 

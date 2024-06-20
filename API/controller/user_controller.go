@@ -31,18 +31,26 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	t, err := service.InsertUser(user)
+	userCreated, err := service.InsertUser(user)
+
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": err.Error(),
 			"user":    "",
 		})
-	} else {
-		c.JSON(200, gin.H{
-			"message": "user successfully created",
-			"token":   t,
-		})
 	}
+	logintoken, err := service.GenerateJWT(userCreated)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "Error generating token",
+			"user":    user.UserName,
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "User created successfully",
+		"token":   logintoken})
 
 }
 

@@ -16,8 +16,6 @@ body {
     min-height: 100vh;
   }
 
-
-
   .map-container {
     height: 100%; 
     border: 2px solid #ccc; /* Add a border to create the box */
