@@ -3,7 +3,7 @@ package main
 import (
 	"geo_report_api/config"
 	"geo_report_api/controller"
-	"geo_report_api/entities"
+	"geo_report_api/model"
 	"geo_report_api/service"
 	"time"
 
@@ -15,8 +15,8 @@ import (
 	_ "geo_report_api/docs"
 )
 
-var Users []entities.User
-var Reports []entities.Report
+var Users []model.User
+var Reports []model.Report
 
 //	@title			Swagger Example API
 //	@version		1.0

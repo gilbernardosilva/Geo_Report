@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"geo_report_api/dto"
-	"geo_report_api/entities"
+	"geo_report_api/model"
 	"geo_report_api/repository"
 	"geo_report_api/utils"
 	"log"
@@ -12,12 +12,12 @@ import (
 	"github.com/mashingan/smapping"
 )
 
-func GetAllUsers() []entities.User {
+func GetAllUsers() []model.User {
 	return repository.GetAllUsers()
 }
 
-func InsertUser(userDTO dto.UserCreatedDTO) (user entities.User, error error) {
-	user = entities.User{}
+func InsertUser(userDTO dto.UserCreatedDTO) (user model.User, error error) {
+	user = model.User{}
 	userResponse := dto.UserResponseDTO{}
 
 	err := smapping.FillStruct(&user, smapping.MapFields(&userDTO))
@@ -47,17 +47,17 @@ func InsertUser(userDTO dto.UserCreatedDTO) (user entities.User, error error) {
 	err = smapping.FillStruct(&userResponse, smapping.MapFields(&user))
 	if err != nil {
 		log.Fatal("failed to map response ", err)
-		return entities.User{}, err
+		return model.User{}, err
 	}
 
 	return user, nil
 }
 
-func GetUser(userID uint64) (entities.User, error) {
+func GetUser(userID uint64) (model.User, error) {
 	if user, err := repository.GetUser(userID); err == nil {
 		return user, nil
 	}
-	return entities.User{}, errors.New("user doesn't exist")
+	return model.User{}, errors.New("user doesn't exist")
 }
 
 func DeleteUser(userID uint64) (bool, error) {

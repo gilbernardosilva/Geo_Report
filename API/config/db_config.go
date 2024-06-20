@@ -1,12 +1,13 @@
 package config
 
 import (
-	"geo_report_api/entities"
 	"os"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"geo_report_api/model"
 )
 
 var Db *gorm.DB
@@ -30,7 +31,8 @@ func ConnectDB() {
 		panic("Failed to connect to database!" + dbDatabase)
 	}
 
-	err = Db.AutoMigrate(&entities.User{}, &entities.Photo{}, &entities.Report{})
+	err = Db.AutoMigrate(&model.User{}, &model.Photo{}, &model.Report{}, &model.Area{}, &model.Authority{}, &model.Comment{},
+		&model.Log{}, &model.Point{}, &model.ReportUpdate{})
 	if err != nil {
 		panic("Failed to migrate database!")
 	}

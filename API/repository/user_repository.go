@@ -4,13 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"geo_report_api/config"
-	"geo_report_api/entities"
+	"geo_report_api/model"
 
 	_ "github.com/lib/pq"
 	"gorm.io/gorm"
 )
 
-func InsertUser(user entities.User) entities.User {
+func InsertUser(user model.User) model.User {
 	config.Db.Save(&user)
 	config.Db.Find(&user)
 
@@ -18,7 +18,7 @@ func InsertUser(user entities.User) entities.User {
 }
 
 func CheckIfUserExists(username string, email string) error {
-	var user entities.User
+	var user model.User
 
 	if err := config.Db.Where("user_name = ?", username).First(&user).Error; err == nil {
 		return fmt.Errorf("username already exists")
@@ -35,15 +35,15 @@ func CheckIfUserExists(username string, email string) error {
 	return nil
 }
 
-func GetAllUsers() []entities.User {
-	var users []entities.User
+func GetAllUsers() []model.User {
+	var users []model.User
 	config.Db.Find(&users)
 
 	return users
 }
 
-func GetUser(userID uint64) (entities.User, error) {
-	var user entities.User
+func GetUser(userID uint64) (model.User, error) {
+	var user model.User
 	config.Db.First(&user, userID)
 	if user.ID != 0 {
 		return user, nil
@@ -51,7 +51,7 @@ func GetUser(userID uint64) (entities.User, error) {
 	return user, errors.New("user doesn't exist")
 }
 
-func UpdateUser(user entities.User) (entities.User, error) {
+func UpdateUser(user model.User) (model.User, error) {
 	if _, err := GetUser(user.ID); err == nil {
 		config.Db.Save(&user)
 		config.Db.Find(&user)

@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
-	"geo_report_api/entities"
+	"geo_report_api/model"
 	"os"
 	"strconv"
 	"strings"
@@ -15,11 +15,11 @@ import (
 
 var privateKey = []byte(os.Getenv("JWT_PRIVATE_KEY"))
 
-func GenerateJWT(user entities.User) (string, error) {
+func GenerateJWT(user model.User) (string, error) {
 	tokenTTL, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":        user.ID,
-		"role":      user.RoleID,
+		"role":      user.Role,
 		"username":  user.UserName,
 		"firstName": user.FirstName,
 		"lastName":  user.LastName,
@@ -68,10 +68,10 @@ func ValidateCustomerRoleJWT(context *gin.Context) error {
 	return errors.New("invalid author token provided")
 }
 
-func CurrentUser(context *gin.Context) entities.User {
+func CurrentUser(context *gin.Context) model.User {
 	err := ValidateJWT(context)
 	if err != nil {
-		return entities.User{}
+		return model.User{}
 	}
 	token, _ := getToken(context)
 	claims, _ := token.Claims.(jwt.MapClaims)
@@ -79,7 +79,7 @@ func CurrentUser(context *gin.Context) entities.User {
 
 	user, err := GetUser(userId)
 	if err != nil {
-		return entities.User{}
+		return model.User{}
 	}
 	return user
 }

@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"geo_report_api/config"
 	"geo_report_api/dto"
-	"geo_report_api/entities"
+	"geo_report_api/model"
 )
 
-func Login(loginDTO dto.LoginDTO) (entities.User, error) {
-	var user entities.User
+func Login(loginDTO dto.LoginDTO) (model.User, error) {
+	var user model.User
 	err := config.Db.Where("user_name = ?", loginDTO.UserName).First(&user).Error
 	if err != nil {
-		return entities.User{}, err
+		return model.User{}, err
 	}
-	if !entities.VerifyPassword(user.Password, loginDTO.Password) {
-		return entities.User{}, fmt.Errorf("invalid username or password")
+	if !model.VerifyPassword(user.Password, loginDTO.Password) {
+		return model.User{}, fmt.Errorf("invalid username or password")
 	}
-	return entities.User{}, nil
+	return model.User{}, nil
 }
