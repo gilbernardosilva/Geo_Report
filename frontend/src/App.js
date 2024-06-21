@@ -1,7 +1,8 @@
 import './App.css';
 import Login from './components/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate  } from 'react-router-dom';
 import './configurations/i18n.js'
 import Dashboard from './components/Dashboard/index.jsx';
 import { AuthProvider, useAuth } from './hooks/AuthContext.jsx';
@@ -21,6 +22,13 @@ function App() {
 
 function AppRoutes() {
   const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/dashboard');
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <Routes>

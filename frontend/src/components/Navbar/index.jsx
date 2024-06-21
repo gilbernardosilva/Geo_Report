@@ -3,16 +3,17 @@ import { Container, Navbar, Offcanvas } from 'react-bootstrap';
 import React, { useState } from 'react';
 import home from './../../img/icons/home.svg'
 import issues from './../../img/icons/issues.svg'
-import logout from './../../img/icons/logout.svg'
+import logoutIcon from './../../img/icons/logout.svg'
 import profile from './../../img/icons/profile.svg'
 import settings from './../../img/icons/settings.svg'
 import { Link } from 'react-router-dom';
-import useLogout from './../../hooks/useLogout';
 import LanguageSwitcher from '../LanguageSwitcher/index.jsx';
+import { useAuth } from '../../hooks/AuthContext';
 
-function CustomNavbar({ setToken, t }) {
 
-    const { handleLogout } = useLogout(setToken);
+function CustomNavbar({t}) {
+
+    const { logout, userInfo } = useAuth();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -38,7 +39,7 @@ function CustomNavbar({ setToken, t }) {
                 >
                     <Offcanvas.Header closeButton className="bg-dark">
                         <Offcanvas.Title style={{ color: 'white', fontSize: '2rem' }} id={`offcanvasNavbarLabel-expand-lg`}>
-                            Menu
+                            {t("Welcome")} {userInfo?.firstName} 
                         </Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body className="bg-dark d-flex flex-column">
@@ -67,7 +68,7 @@ function CustomNavbar({ setToken, t }) {
                             </Link>
                             <LanguageSwitcher onLanguageChange={handleLanguageChange}></LanguageSwitcher>
                             <Link to="/" className="sidebar-header">
-                                <img src={logout} alt="" className="img-fluid logo-icon me-2" onClick={handleLogout} />
+                                <img src={logoutIcon} alt="" className="img-fluid logo-icon me-2" onClick={logout} />
                             </Link>
                         </div>
                     </Offcanvas.Body>

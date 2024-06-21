@@ -54,7 +54,6 @@ function useLogin() {
 
 
     const handleSubmit = async (e) => {
-        debugger;
         e.preventDefault();
         const apiEndpoint = action === t('login') ? "login" : "register";
         const requestBody = action === t('login')

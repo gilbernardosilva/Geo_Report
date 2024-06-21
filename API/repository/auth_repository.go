@@ -16,5 +16,5 @@ func Login(loginDTO dto.LoginDTO) (model.User, error) {
 	if !model.VerifyPassword(user.Password, loginDTO.Password) {
 		return model.User{}, fmt.Errorf("invalid username or password")
 	}
-	return model.User{}, nil
+	return user, nil
 }

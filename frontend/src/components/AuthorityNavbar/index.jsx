@@ -3,16 +3,16 @@ import { Container, Navbar, Offcanvas } from 'react-bootstrap';
 import React, { useState } from 'react';
 import home from './../../img/icons/home.svg'
 import issues from './../../img/icons/issues.svg'
-import logout from './../../img/icons/logout.svg'
+import logoutIcon from './../../img/icons/logout.svg'
 import profile from './../../img/icons/profile.svg'
 import settings from './../../img/icons/settings.svg'
 import { Link } from 'react-router-dom';
-import useLogout from '../../hooks/useLogout.js';
 import LanguageSwitcher from '../LanguageSwitcher/index.jsx';
+import { useAuth } from '../../hooks/AuthContext';
 
 function CustomAuthorityNavbar({ setToken, t }) {
 
-    const { handleLogout } = useLogout(setToken);
+    const { logout } = useAuth();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -67,7 +67,7 @@ function CustomAuthorityNavbar({ setToken, t }) {
                             </Link>
                             <LanguageSwitcher onLanguageChange={handleLanguageChange}></LanguageSwitcher>
                             <Link to="/" className="sidebar-header">
-                                <img src={logout} alt="" className="img-fluid logo-icon me-2" onClick={handleLogout} />
+                                <img src={logoutIcon} alt="" className="img-fluid logo-icon me-2" onClick={logout} />
                             </Link>
                         </div>
                     </Offcanvas.Body>

@@ -29,5 +29,6 @@
     "typesIssues": "Types of Issues",
     "statusIssues": "Issues' Status",
     "totalIssues": "Total Number of Issues",
-    "last7days": "Last 7 Days"
+    "last7days": "Last 7 Days",
+    "welcome" : "Welcome"
 }

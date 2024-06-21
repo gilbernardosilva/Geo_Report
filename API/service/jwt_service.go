@@ -19,7 +19,7 @@ func GenerateJWT(user model.User) (string, error) {
 	tokenTTL, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":        user.ID,
-		"role":      user.Role,
+		"role":      user.RoleID,
 		"username":  user.UserName,
 		"firstName": user.FirstName,
 		"lastName":  user.LastName,
