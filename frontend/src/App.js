@@ -21,11 +21,12 @@ function App() {
 }
 
 function AppRoutes() {
+  const { isLoggedIn } = useAuth();
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/authority" element={<AuthorityDashboard />} />
+      <Route path="/" element={!isLoggedIn ? < Login/> : <Dashboard />} />
+      <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Login />} />
+      <Route path="/authority" element={isLoggedIn ? <AuthorityDashboard /> : <Login />} />
     </Routes>
   );
 }

@@ -25,9 +25,14 @@ export const AuthProvider = ({ children }) => {
     if (storedToken) {
       try {
         const decodedToken = jwtDecode(storedToken);
-        setToken(storedToken);
-        setUserInfo(decodedToken);
-        setIsLoggedIn(true);
+        debugger;
+        if (decodedToken.eat < Date.now() / 1000) {
+          logoutHandler();
+        } else {
+          setToken(storedToken);
+          setUserInfo(decodedToken);
+          setIsLoggedIn(true);
+        }
       } catch (error) {
         console.error("Invalid token:", error);
         localStorage.removeItem("token");
