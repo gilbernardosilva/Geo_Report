@@ -13,12 +13,13 @@ Geo Report API is a backend system for managing and tracking location-based issu
 - **Image Uploads:**  Allows users to attach images to their reports.
 - **Issue Tracking:**  Keeps track of the status of reported issues.
 - **Authority Dashboard:** Provides a dashboard for authorities to manage and resolve reported issues.
-- **Frontend:** React application for reporting issues, checking their status, and managing the system. (optional)
 
 ## Installation and Setup
 
 1.  **Clone the repository:**
 
+
+2.  **Set up the .env variables:**
 ```bash
 DB_HOST=
 DB_PORT=
