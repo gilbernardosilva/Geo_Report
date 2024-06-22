@@ -33,3 +33,18 @@ body {
     margin-top: auto; 
   }
 
+
+  .carousel-item img {
+    max-width: 100%;  
+    max-height: 300px; 
+    object-fit: cover;
+  }
+
+.modal-content {
+  background-color: rgb(33, 37, 41)  !important;
+  color: white;
+}
+
+.btn-close {
+  filter: invert(1);  
+}

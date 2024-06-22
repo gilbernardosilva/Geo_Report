@@ -70,7 +70,6 @@ function useLogin() {
             if (response.ok) {
 
                 const data = await response.json();
-                setLoggedIn(true);
                 login(data.token);
                 navigate("/dashboard"); 
             } else {

@@ -1,12 +1,12 @@
 import './App.css';
 import Login from './components/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate  } from 'react-router-dom';
+import { BrowserRouter, Routes, Route  } from 'react-router-dom';
 import './configurations/i18n.js'
 import Dashboard from './components/Dashboard/index.jsx';
 import { AuthProvider, useAuth } from './hooks/AuthContext.jsx';
 import AuthorityDashboard from './components/AuthorityDashboard/index.jsx';
+
 
 
 
@@ -21,20 +21,11 @@ function App() {
 }
 
 function AppRoutes() {
-  const { isLoggedIn } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/dashboard');
-    }
-  }, [isLoggedIn, navigate]);
-
   return (
     <Routes>
-      <Route path="/" element={!isLoggedIn ? <Login /> : <Navigate to="/dashboard" />} />
-      <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" />} />
-      <Route path="/authority" element={isLoggedIn ? <AuthorityDashboard/> : <Navigate to="/" />}/>
+      <Route path="/" element={<Login />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/authority" element={<AuthorityDashboard />} />
     </Routes>
   );
 }

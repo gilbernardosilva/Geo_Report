@@ -12,7 +12,7 @@ import { useAuth } from '../../hooks/AuthContext';
 
 function CustomAuthorityNavbar({ setToken, t }) {
 
-    const { logout } = useAuth();
+    const { logout, userInfo } = useAuth();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -38,7 +38,7 @@ function CustomAuthorityNavbar({ setToken, t }) {
                 >
                     <Offcanvas.Header closeButton className="bg-dark">
                         <Offcanvas.Title style={{ color: 'white', fontSize: '2rem' }} id={`offcanvasNavbarLabel-expand-lg`}>
-                            Menu
+                            {t("Welcome")} {userInfo?.firstName} 
                         </Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body className="bg-dark d-flex flex-column">

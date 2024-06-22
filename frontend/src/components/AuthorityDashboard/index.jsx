@@ -1,4 +1,4 @@
-import React, { } from 'react';
+import React, { useEffect, useState } from 'react';
 import './index.css';
 import { Container, Row, Col } from 'react-bootstrap';
 import Typography from '@mui/material/Typography';
@@ -17,8 +17,13 @@ import {
     Title
 } from 'chart.js'
 import { Doughnut, Line } from 'react-chartjs-2'
-
+import { useAuth } from "./../../hooks/AuthContext.jsx";
+import { useAxiosWithToken } from "./../../utils/api.js";
 import CustomAuthorityNavbar from './../AuthorityNavbar';
+import { useNavigate } from 'react-router-dom';
+import ErrorHandler from './../ErrorHandler/index.jsx';
+
+
 
 ChartJS.register(
     ArcElement,
@@ -32,9 +37,32 @@ ChartJS.register(
 )
 
 function AuthorityDashboard({ setToken }) {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+    const { token } = useAuth();
+    const api = useAxiosWithToken();
+    useEffect(() => {
+        
+        const fetchData = async () => {
+            if(token !== null){
+            try {
+                const response = await api.get("authority");
+                console.log(response);
+                if (response.status === 200) {
+                    console.log("has authorization");
+                } else {
+                    setError(response);
+                }
+            } catch (error) {
+                setError(error);
+            }
+        }
+        };
+        fetchData();
+    }, [token]);
 
-    //this will all be obtained via api later
+
     const donutChartData1 = {
         labels: [
             'Potholes',
@@ -108,90 +136,97 @@ function AuthorityDashboard({ setToken }) {
 
     return (
         <>
-        <CustomAuthorityNavbar setToken={setToken} t={t}></CustomAuthorityNavbar>
-        <Row className="justify-content-center mt-4 dashboard-row row">    
-            <Col md={12} className='justify-content-center'>
-                <h1 className='text-center' style={{color: 'white'}}>
-                    {t('authpanel')}
-                </h1>
-            </Col>       
-        </Row>
-        <Container fluid className="dashboard-container">
-            <Row className="justify-content-center mt-4 dashboard-row">
-                    <Col xs={12} md={5} >
-                        <Container className='h-auto'>
-                            <Typography sx={{ fontSize: 20, marginTop: 3 }} color="text.primary" gutterBottom>
-                                {t('totalIssues')}
-                            </Typography>
-                            <Line
-                                data={lineData}
-                                options={{
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true
-                                        }
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: t('typesIssues')
-                                    },
-                                    legend: {
-                                        position: 'bottom',
-                                    },
-                                    responsive: true,
-                                    
-                                }}
-                            />
-                        </Container>
-                    </Col>
-                </Row>
-                <Row className="justify-content-center mt-4 dashboard-row">
-                    <Col xs={12} md={4}>
-                        <Container>
-                            <Typography sx={{ fontSize: 20, marginTop: 3 }} color="text.primary" gutterBottom>
-                                {t('typesIssues')}
-                            </Typography>
-                            <Doughnut
-                                data={donutChartData1}
-                                options={{
-                                    plugins: {
-                                        title: {
-                                            display: true,
-                                            text: t('last7days')
-                                        },
-                                        legend: {
-                                            position: 'bottom',
-                                        }
-                                    },
-                                    responsive: true,
-                                }}
-                            />    
-                        </Container>
-                    </Col>
-                    <Col xs={12} md={4}>
-                        <Container>
-                            <Typography sx={{ fontSize: 20, marginTop: 3 }} color="text.primary" gutterBottom>
-                                    {t('statusIssues')}
-                            </Typography>
-                            <Doughnut
-                                data={donutChartData2}
-                                options={{
-                                    plugins: {
-                                        title: {
-                                            display: true,
-                                            text: t('last7days')
-                                        },
-                                        legend: {
-                                            position: 'bottom',
-                                        }
-                                    },
-                                    responsive: true,
-                                }}
-                            />        
-                        </Container>
-                    </Col>
-                </Row>
-        </Container>
+            {error ? (
+                <ErrorHandler error={error} />
+            ) : (
+                <>
+                    <CustomAuthorityNavbar setToken={setToken} t={t}></CustomAuthorityNavbar>
+                    <Row className="justify-content-center mt-4 dashboard-row row">
+                        <Col md={12} className='justify-content-center'>
+                            <h1 className='text-center' style={{ color: 'white' }}>
+                                {t('authpanel')}
+                            </h1>
+                        </Col>
+                    </Row>
+                    <Container fluid className="dashboard-container">
+                        <Row className="justify-content-center mt-4 dashboard-row">
+                            <Col xs={12} md={5} >
+                                <Container className='h-auto'>
+                                    <Typography sx={{ fontSize: 20, marginTop: 3 }} color="text.primary" gutterBottom>
+                                        {t('totalIssues')}
+                                    </Typography>
+                                    <Line
+                                        data={lineData}
+                                        options={{
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true
+                                                }
+                                            },
+                                            title: {
+                                                display: true,
+                                                text: t('typesIssues')
+                                            },
+                                            legend: {
+                                                position: 'bottom',
+                                            },
+                                            responsive: true,
+
+                                        }}
+                                    />
+                                </Container>
+                            </Col>
+                        </Row>
+                        <Row className="justify-content-center mt-4 dashboard-row">
+                            <Col xs={12} md={4}>
+                                <Container>
+                                    <Typography sx={{ fontSize: 20, marginTop: 3 }} color="text.primary" gutterBottom>
+                                        {t('typesIssues')}
+                                    </Typography>
+                                    <Doughnut
+                                        data={donutChartData1}
+                                        options={{
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: t('last7days')
+                                                },
+                                                legend: {
+                                                    position: 'bottom',
+                                                }
+                                            },
+                                            responsive: true,
+                                        }}
+                                    />
+                                </Container>
+                            </Col>
+                            <Col xs={12} md={4}>
+                                <Container>
+                                    <Typography sx={{ fontSize: 20, marginTop: 3 }} color="text.primary" gutterBottom>
+                                        {t('statusIssues')}
+                                    </Typography>
+                                    <Doughnut
+                                        data={donutChartData2}
+                                        options={{
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: t('last7days')
+                                                },
+                                                legend: {
+                                                    position: 'bottom',
+                                                }
+                                            },
+                                            responsive: true,
+                                        }}
+                                    />
+                                </Container>
+                            </Col>
+                        </Row>
+                    </Container>
+                </>
+
+            )}
         </>
     );
 }

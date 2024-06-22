@@ -30,5 +30,6 @@
     "statusIssues": "Issues' Status",
     "totalIssues": "Total Number of Issues",
     "last7days": "Last 7 Days",
-    "welcome" : "Welcome"
+    "welcome" : "Welcome",
+    "youAreHere": "You are here!"
 }

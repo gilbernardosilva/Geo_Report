@@ -3,8 +3,8 @@ package main
 import (
 	"geo_report_api/config"
 	"geo_report_api/controller"
+	"geo_report_api/middleware"
 	"geo_report_api/model"
-	"geo_report_api/service"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -57,25 +57,34 @@ func main() {
 
 	v1 := router.Group("/api/v1")
 	{
-		adminRoutes := v1.Group("/admin")
-		adminRoutes.Use(service.JWTAuth())
-
-		adminUser := adminRoutes.Group("/user")
+		protected := v1.Group("")
+		protected.Use(middleware.AuthMiddleware())
 		{
-			adminUser.GET("/:id", controller.GetUser)
-			adminUser.GET("/", controller.GetAllUsers)
-			adminUser.DELETE("/delete/:id", controller.DeleteUser)
+			protected.GET("/dashboard", controller.Dashboard)
+			protected.GET("/authority", controller.AuthorityDashboard)
+
+			// admin routes
+			adminRoutes := v1.Group("/admin")
+			adminUser := adminRoutes.Group("/user")
+			{
+				adminUser.GET("/:id", controller.GetUser)
+				adminUser.GET("/", controller.GetAllUsers)
+				adminUser.DELETE("/delete/:id", controller.DeleteUser)
+			}
+
+			//authority routes
+
+			// report routes
+			report := v1.Group("/report")
+			{
+				report.GET("/:id", controller.GetReport)
+			}
 		}
 
-		user := v1.Group("/user")
+		public := v1.Group("/user")
 		{
-			user.POST("/register", controller.Register)
-			user.POST("/login", controller.Login)
-		}
-
-		report := v1.Group("/report")
-		{
-			report.GET("/:id", controller.GetReport)
+			public.POST("/register", controller.Register)
+			public.POST("/login", controller.Login)
 		}
 
 	}
