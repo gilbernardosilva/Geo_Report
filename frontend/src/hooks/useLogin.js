@@ -76,7 +76,7 @@ function useLogin() {
                 const errorData = await response.json();
 
                 if (response.status === 400) {
-                    switch (errorData.message) {  // Use a switch statement for cleaner code
+                    switch (errorData.message) {  
                         case "email already exists":
                           alert("Email already exists");
                           break;
