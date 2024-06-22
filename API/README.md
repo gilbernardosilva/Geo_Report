@@ -1,2 +1,11 @@
 # Geo_Report_API
  
+## Setting up the .env file
+
+DB_HOST=
+DB_PORT=
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+JWT_PRIVATE_KEY= 
+TOKEN_TTL= 

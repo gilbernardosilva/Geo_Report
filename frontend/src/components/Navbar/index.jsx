@@ -21,7 +21,7 @@ function CustomNavbar({t}) {
         console.log(newAction);
     };
     return (
-        <Navbar expand={false} bg="dark" variant="dark" className="mb-3">
+        <Navbar expand={false} bg="dark" variant="dark">
             <Container fluid>
 
                 <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-false`} onClick={handleShow} />

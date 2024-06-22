@@ -6,6 +6,7 @@ import './configurations/i18n.js'
 import Dashboard from './components/Dashboard/index.jsx';
 import { AuthProvider, useAuth } from './hooks/AuthContext.jsx';
 import AuthorityDashboard from './components/AuthorityDashboard/index.jsx';
+import Profile from './components/Profile/index.jsx';
 
 
 
@@ -27,6 +28,7 @@ function AppRoutes() {
       <Route path="/" element={!isLoggedIn ? < Login/> : <Dashboard />} />
       <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Login />} />
       <Route path="/authority" element={isLoggedIn ? <AuthorityDashboard /> : <Login />} />
+      <Route path="/profile" element={isLoggedIn ? <Profile /> : <Login />} />
     </Routes>
   );
 }
