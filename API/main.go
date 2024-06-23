@@ -44,6 +44,8 @@ func main() {
 
 	defer config.CloseDB()
 
+	model.InitRoles(config.Db)
+
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -79,6 +81,12 @@ func main() {
 			{
 				report.GET("/:id", controller.GetReport)
 			}
+
+			//user routes
+			user := v1.Group("/user")
+			{
+				user.PUT("/edit", controller.EditUser)
+			}
 		}
 
 		public := v1.Group("/user")
@@ -93,4 +101,5 @@ func main() {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.Run(":8080")
+
 }

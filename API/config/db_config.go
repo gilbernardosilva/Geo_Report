@@ -32,7 +32,7 @@ func ConnectDB() {
 	}
 
 	err = Db.AutoMigrate(&model.User{}, &model.Photo{}, &model.Report{}, &model.Area{}, &model.Authority{}, &model.Comment{},
-		&model.Log{}, &model.Point{}, &model.ReportUpdate{})
+		&model.Log{}, &model.Point{}, &model.ReportUpdate{}, &model.Role{}, &model.ReportStatus{})
 	if err != nil {
 		panic("Failed to migrate database!")
 	}

@@ -9,14 +9,14 @@ import (
 )
 
 // Dashboard godoc
-// @Summary User dashboard
-// @Description Returns the user dashboard
-// @Tags users
-// @Security ApiKeyAuth
-// @Accept  json
-// @Produce  json
-// @Success 200 {object} model.User
-// @Router /dashboard [get]
+//	@Summary		User dashboard
+//	@Description	Returns the user dashboard
+//	@Tags			users
+//	@Security		ApiKeyAuth
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	model.User
+//	@Router			/dashboard [get]
 func Dashboard(c *gin.Context) {
 	userValue, exists := c.Get("user") // Get user from context
 	if !exists {

@@ -16,38 +16,33 @@ func GetAllUsers() []model.User {
 	return repository.GetAllUsers()
 }
 
-func InsertUser(userDTO dto.UserCreatedDTO) (user model.User, error error) {
-	user = model.User{}
-	userResponse := dto.UserResponseDTO{}
+func InsertUser(userDTO dto.UserCreatedDTO) (new model.User, error error) {
+	var user model.User
 
 	err := smapping.FillStruct(&user, smapping.MapFields(&userDTO))
 	if err != nil {
-		log.Fatal("failed to map ", err)
-		return
+		log.Printf("Failed to map user DTO to user struct: %v", err)
+		return model.User{}, errors.New("failed to map user")
 	}
 
 	user.Password, err = utils.CreateFromPassword(user.Password)
 	if err != nil {
-		log.Fatal("error during pwd hash ", err)
-		return
+		log.Printf("Error hashing password: %v", err)
+		return model.User{}, errors.New("error hashing password")
 	}
 
-	errDuplicated := repository.CheckIfUserExists(user.UserName, user.Email)
-
-	if errDuplicated != nil {
-		return
+	if err := repository.CheckIfUserExists(user.UserName, user.Email); err != nil {
+		return model.User{}, errors.New("username or email already exists")
 	}
 
-	if !valid(user.Email) {
-		return
+	if err := valid(user.Email); err != nil {
+		log.Printf("Invalid email format: %v", err)
+		return model.User{}, errors.New("invalid email format")
 	}
 
-	user = repository.InsertUser(user)
-
-	err = smapping.FillStruct(&userResponse, smapping.MapFields(&user))
-	if err != nil {
-		log.Fatal("failed to map response ", err)
-		return model.User{}, err
+	if err := repository.CreateUser(user); err != nil {
+		log.Printf("Failed to save user to database: %v", err)
+		return model.User{}, errors.New("failed to save user")
 	}
 
 	return user, nil
@@ -67,7 +62,14 @@ func DeleteUser(userID uint64) (bool, error) {
 	return false, errors.New("user doesn't exist")
 }
 
-func valid(email string) bool {
+func EditUser(user model.User) (model.User, error) {
+	if user, err := repository.UpdateUser(user); err == nil {
+		return user, nil
+	}
+	return model.User{}, errors.New("error editing user")
+}
+
+func valid(email string) error {
 	_, err := mail.ParseAddress(email)
-	return err == nil
+	return err
 }

@@ -10,11 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func InsertUser(user model.User) model.User {
-	config.Db.Save(&user)
-	config.Db.Find(&user)
-
-	return user
+func CreateUser(user model.User) error {
+	return config.Db.Create(&user).Error
 }
 
 func CheckIfUserExists(username string, email string) error {

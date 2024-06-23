@@ -6,6 +6,7 @@ type UserCreatedDTO struct {
 	Email     string `json:"email" form:"email" binding:"required"`
 	UserName  string `json:"username" form:"username" binding:"required"`
 	Password  string `json:"password" form:"password" binding:"required"`
+	RoleID    uint   `json:"role" form:"role" gorm:"default:0"`
 }
 
 type UserResponseDTO struct {
@@ -13,4 +14,17 @@ type UserResponseDTO struct {
 	Email     string `json:"email" form:"email" binding:"required"`
 	FirstName string `json:"firstname" form:"firstname" binding:"required"`
 	LastName  string `json:"lastname" form:"lastname" binding:"required"`
+}
+
+type UserUpdateDTO struct {
+	UserID    string `json:"userid" form:"userid" binding:"required"`
+	UserName  string `json:"username" form:"username"`
+	Email     string `json:"email" form:"email"`
+	FirstName string `json:"firstname" form:"firstname"`
+	LastName  string `json:"lastname" form:"lastname"`
+}
+
+type UserUpdateResponseDTO struct {
+	Message string `json:"message"`
+	Token   string `json:"token"`
 }

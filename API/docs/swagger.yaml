@@ -27,6 +27,8 @@ definitions:
         type: string
       password:
         type: string
+      role:
+        type: integer
       username:
         type: string
     required:
@@ -52,6 +54,142 @@ definitions:
     - lastname
     - username
     type: object
+  dto.UserUpdateDTO:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      userid:
+        type: string
+      username:
+        type: string
+    required:
+    - userid
+    type: object
+  model.Comment:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      report_id:
+        type: integer
+      user:
+        $ref: '#/definitions/model.User'
+      user_id:
+        type: integer
+    type: object
+  model.Photo:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      report:
+        $ref: '#/definitions/model.Report'
+      report_id:
+        type: integer
+      url:
+        type: string
+    type: object
+  model.Report:
+    properties:
+      comments:
+        items:
+          $ref: '#/definitions/model.Comment'
+        type: array
+      description:
+        type: string
+      id:
+        type: integer
+      issue_type:
+        type: string
+      last_update:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      photos:
+        items:
+          $ref: '#/definitions/model.Photo'
+        type: array
+      report_date:
+        type: string
+      report_status:
+        $ref: '#/definitions/model.ReportStatus'
+      report_status_id:
+        type: integer
+      updates:
+        items:
+          $ref: '#/definitions/model.ReportUpdate'
+        type: array
+      user:
+        $ref: '#/definitions/model.User'
+      user_id:
+        type: integer
+    type: object
+  model.ReportStatus:
+    properties:
+      id:
+        type: integer
+      status:
+        type: string
+    type: object
+  model.ReportUpdate:
+    properties:
+      id:
+        type: integer
+      report:
+        $ref: '#/definitions/model.Report'
+      report_id:
+        type: integer
+      report_status:
+        $ref: '#/definitions/model.ReportStatus'
+      report_status_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  model.Role:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.User:
+    properties:
+      creationDate:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      issues:
+        items:
+          $ref: '#/definitions/model.Report'
+        type: array
+      last_name:
+        type: string
+      password:
+        type: string
+      role:
+        $ref: '#/definitions/model.Role'
+      role_id:
+        type: integer
+      username:
+        type: string
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -69,6 +207,49 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /dashboard:
+    get:
+      consumes:
+      - application/json
+      description: Returns the user dashboard
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      security:
+      - ApiKeyAuth: []
+      summary: User dashboard
+      tags:
+      - users
+  /user/edit:
+    put:
+      consumes:
+      - application/json
+      description: edits user information in database
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserUpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.UserResponseDTO'
+      summary: Edit User
+      tags:
+      - User
   /user/login:
     post:
       consumes:
