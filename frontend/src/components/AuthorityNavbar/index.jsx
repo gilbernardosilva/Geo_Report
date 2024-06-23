@@ -26,7 +26,7 @@ function CustomAuthorityNavbar({ setToken, t }) {
                 <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-false`} onClick={handleShow} />
 
                 <Navbar.Brand href="#">
-                    <Link to="/dashboard"   >
+                    <Link to="/authority"   >
                         <img src={logo} alt="Your Logo" className="img-fluid logo-icon" />
                     </Link>
                 </Navbar.Brand>
@@ -43,11 +43,11 @@ function CustomAuthorityNavbar({ setToken, t }) {
                     </Offcanvas.Header>
                     <Offcanvas.Body className="bg-dark d-flex flex-column">
                         <div className="sidebar-content flex-column align-items-start flex-grow-1">
-                            <Link to="/dashboard" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/authority" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
                                 <img src={home} alt="" className="img-fluid logo-icon me-2" />
                                 <p style={{ fontSize: "1.5rem" }}>{t('home')}</p>
                             </Link>
-                            <Link to="/dashboard" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/authority" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
                                 <img src={issues} alt="" className="img-fluid logo-icon me-2" />
                                 <p style={{ fontSize: "1.5rem" }}>{t('myIssues')}</p>
                             </Link>
@@ -62,7 +62,7 @@ function CustomAuthorityNavbar({ setToken, t }) {
                         </div>
                         <div className="d-flex align-items-center justify-content-between w-100">
 
-                            <Link to="/dashboard" className="sidebar-header">
+                            <Link to="/authority" className="sidebar-header">
                                 <img src={settings} alt="" className="img-fluid logo-icon me-2" />
                             </Link>
                             <LanguageSwitcher onLanguageChange={handleLanguageChange}></LanguageSwitcher>

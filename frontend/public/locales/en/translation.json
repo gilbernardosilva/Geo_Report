@@ -31,5 +31,10 @@
     "totalIssues": "Total Number of Issues",
     "last7days": "Last 7 Days",
     "welcome" : "Welcome",
-    "youAreHere": "You are here!"
+    "youAreHere": "You are here!",
+    "editProfile" : "Edit Profile",
+    "saveChanges" : "Save Changes",
+    "name" : "Name",
+    "type" : "Type"
+
 }

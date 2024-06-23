@@ -31,5 +31,8 @@
     "totalIssues": "Número Total de Problemas",
     "last7days": "Últimos 7 Dias",
     "welcome": "Bem vindo",
-    "youAreHere": "Estás aqui!"
+    "youAreHere": "Estás aqui!",
+    "editProfile" : "Editar Perfil",
+    "saveChanges" : "Guardar Alterações"
+
 }

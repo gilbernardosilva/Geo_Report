@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard/index.jsx';
 import { AuthProvider, useAuth } from './hooks/AuthContext.jsx';
 import AuthorityDashboard from './components/AuthorityDashboard/index.jsx';
 import Profile from './components/Profile/index.jsx';
+import MyIssues from './components/Issues/index.jsx';
 
 
 
@@ -29,6 +30,7 @@ function AppRoutes() {
       <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Login />} />
       <Route path="/authority" element={isLoggedIn ? <AuthorityDashboard /> : <Login />} />
       <Route path="/profile" element={isLoggedIn ? <Profile /> : <Login />} />
+      <Route path="/issues" element={isLoggedIn ? <MyIssues /> : <Login />} />
     </Routes>
   );
 }
