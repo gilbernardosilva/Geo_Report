@@ -19,6 +19,8 @@ var allowedRoles = map[string][]uint64{
 	"/api/v1/reports/:id":      {0, 1},    // Both users and authorities can view a specific report
 	"/api/v1/reports/:id/edit": {2},       // Only admin can edit
 	"/api/v1/authority":        {1, 2},    // Only authorities can access this endpoint
+	"/api/v1/user/edit/:id":    {0, 1, 2}, // Regular users can edit their own profile
+	"/api/v1/user/delete":      {2},       // Only admin can access this endpoint
 }
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -68,7 +70,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("user", user)
+		c.Set("userID", claims["id"])
 		c.Next()
 	}
 
@@ -76,13 +78,27 @@ func AuthMiddleware() gin.HandlerFunc {
 
 func isAuthorized(roleID uint64, path string) bool {
 	allowed, exists := allowedRoles[path]
-	if !exists {
-		return false
-	}
-	for _, r := range allowed {
-		if r == roleID {
-			return true
+	if exists {
+		for _, r := range allowed {
+			if r == roleID {
+				return true
+			}
 		}
 	}
+
+	// If not, try to match a wildcard route
+	for route, roles := range allowedRoles {
+		if strings.HasSuffix(route, "/:id") { // Check for wildcard pattern
+			baseRoute := strings.TrimSuffix(route, "/:id") // Get base route
+			if strings.HasPrefix(path, baseRoute) {        // If path starts with the base route
+				for _, r := range roles {
+					if r == roleID {
+						return true // Role allowed for this wildcard route
+					}
+				}
+			}
+		}
+	}
+
 	return false
 }

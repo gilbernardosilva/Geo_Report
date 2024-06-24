@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"geo_report_api/dto"
 	"geo_report_api/service"
 	"log"
@@ -96,7 +97,7 @@ func GetUser(c *gin.Context) {
 //	@Failure		400		{object}	dto.UserResponseDTO
 //	@Router			/user/edit [put]
 func EditUser(c *gin.Context) {
-	userID, err := strconv.ParseUint(c.Param("userid"), 10, 64)
+	userID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	user, err := service.GetUser(userID)
 	if err != nil {
 		c.JSON(404, gin.H{
@@ -105,6 +106,28 @@ func EditUser(c *gin.Context) {
 		})
 		return
 	}
+
+	userValue, exists := c.Get("userID")
+	fmt.Println(userValue)
+	if !exists {
+		c.JSON(500, gin.H{"error": "Failed to retrieve user from context"})
+		return
+	}
+
+	if userID != uint64(userValue.(float64)) {
+		c.JSON(404, gin.H{"error": "You are not authorized to edit this profile"})
+		return
+	}
+	var updatedUserData dto.UserUpdateDTO
+	if err := c.ShouldBindJSON(&updatedUserData); err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	user.FirstName = updatedUserData.FirstName
+	user.LastName = updatedUserData.LastName
+	user.UserName = updatedUserData.UserName
+	user.Email = updatedUserData.Email
 
 	user, err = service.EditUser(user)
 	if err != nil {

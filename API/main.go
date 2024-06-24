@@ -65,6 +65,10 @@ func main() {
 			protected.GET("/dashboard", controller.Dashboard)
 			protected.GET("/authority", controller.AuthorityDashboard)
 
+			userProtected := protected.Group("/user")
+			{
+				userProtected.PUT("/edit/:id", controller.EditUser)
+			}
 			// admin routes
 			adminRoutes := v1.Group("/admin")
 			adminUser := adminRoutes.Group("/user")
@@ -82,11 +86,6 @@ func main() {
 				report.GET("/:id", controller.GetReport)
 			}
 
-			//user routes
-			user := v1.Group("/user")
-			{
-				user.PUT("/edit", controller.EditUser)
-			}
 		}
 
 		public := v1.Group("/user")
