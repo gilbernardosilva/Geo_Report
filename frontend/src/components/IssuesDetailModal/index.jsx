@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
+import PropTypes from 'prop-types';
 
 function IssueDetailsModal({ issue, show, handleClose }) {
     return (
@@ -28,5 +29,11 @@ function IssueDetailsModal({ issue, show, handleClose }) {
       </Modal>
     );
   }
+
+  IssueDetailsModal.propTypes = {
+    issue: PropTypes.object,
+    show: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired,
+  };
 
 export default IssueDetailsModal;

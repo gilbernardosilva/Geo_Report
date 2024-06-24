@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Container, Row, Col, Button, Carousel } from "react-bootstrap";
-import { useAuth } from "../../hooks/AuthContext";
+import { Card, Row, Col, Button } from "react-bootstrap";
 import { useAxiosWithToken } from "../../utils/api.js";
 import CustomNavbar from './../Navbar';
 import { useTranslation } from "react-i18next";
@@ -10,9 +9,7 @@ import "./index.css";
 
 
 function MyIssues() {
-    const { userInfo } = useAuth();
     const [issues, setIssues] = useState([]);
-    const [error, setError] = useState(null);
     const api = useAxiosWithToken();
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [showModal, setShowModal] = useState(false);

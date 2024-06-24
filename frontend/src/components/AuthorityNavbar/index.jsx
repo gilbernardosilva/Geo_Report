@@ -9,6 +9,8 @@ import settings from './../../img/icons/settings.svg'
 import { Link } from 'react-router-dom';
 import LanguageSwitcher from '../LanguageSwitcher/index.jsx';
 import { useAuth } from '../../hooks/AuthContext';
+import PropTypes from 'prop-types';
+
 
 function CustomAuthorityNavbar({ setToken, t }) {
 
@@ -62,12 +64,12 @@ function CustomAuthorityNavbar({ setToken, t }) {
                         </div>
                         <div className="d-flex align-items-center justify-content-between w-100">
 
-                            <Link to="/authority" className="sidebar-header">
+                            <Link to="/authority    " className="sidebar-header">
                                 <img src={settings} alt="" className="img-fluid logo-icon me-2" />
                             </Link>
                             <LanguageSwitcher onLanguageChange={handleLanguageChange}></LanguageSwitcher>
-                            <Link to="/" className="sidebar-header">
-                                <img src={logoutIcon} alt="" className="img-fluid logo-icon me-2" onClick={logout} />
+                            <Link to="/" className="sidebar-header" onClick={logout}>
+                                <img src={logoutIcon} alt="" className="img-fluid logo-icon me-2"  />
                             </Link>
                         </div>
                     </Offcanvas.Body>
@@ -77,5 +79,11 @@ function CustomAuthorityNavbar({ setToken, t }) {
         </Navbar>
     )
 };
+
+CustomAuthorityNavbar.propTypes = {
+    setToken: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired
+};
+
 
 export default CustomAuthorityNavbar;

@@ -98,6 +98,14 @@ func GetUser(c *gin.Context) {
 //	@Router			/user/edit [put]
 func EditUser(c *gin.Context) {
 	userID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "Invalid user ID",
+			"error":   err.Error(),
+		})
+		return
+	}
+
 	user, err := service.GetUser(userID)
 	if err != nil {
 		c.JSON(404, gin.H{

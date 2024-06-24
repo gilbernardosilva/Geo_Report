@@ -20,8 +20,8 @@ import { Doughnut, Line } from 'react-chartjs-2'
 import { useAuth } from "./../../hooks/AuthContext.jsx";
 import { useAxiosWithToken } from "./../../utils/api.js";
 import CustomAuthorityNavbar from './../AuthorityNavbar';
-import { useNavigate } from 'react-router-dom';
 import ErrorHandler from './../ErrorHandler/index.jsx';
+import PropTypes from 'prop-types';
 
 
 
@@ -39,7 +39,6 @@ ChartJS.register(
 function AuthorityDashboard({ setToken }) {
     const { t } = useTranslation();
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
     const { token } = useAuth();
     const api = useAxiosWithToken();
     useEffect(() => {
@@ -229,6 +228,10 @@ function AuthorityDashboard({ setToken }) {
             )}
         </>
     );
+}
+
+AuthorityDashboard.propTypes = {
+    setToken: PropTypes.func.isRequired,
 }
 
 export default AuthorityDashboard;
