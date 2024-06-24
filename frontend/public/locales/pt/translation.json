@@ -33,6 +33,10 @@
     "welcome": "Bem vindo",
     "youAreHere": "Estás aqui!",
     "editProfile" : "Editar Perfil",
-    "saveChanges" : "Guardar Alterações"
+    "saveChanges" : "Guardar Alterações",
+    "name" : "Nome",
+    "type" : "Tipo",
+    "viewDetails": "Ver Detalhes"
+
 
 }

@@ -35,6 +35,7 @@
     "editProfile" : "Edit Profile",
     "saveChanges" : "Save Changes",
     "name" : "Name",
-    "type" : "Type"
+    "type" : "Type",
+    "viewDetails": "View Details"
 
 }

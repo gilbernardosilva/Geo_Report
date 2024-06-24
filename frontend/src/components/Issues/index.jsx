@@ -33,6 +33,18 @@ function MyIssues() {
                 description: "Streetlight not working at the corner of Elm and Oak Street.",
                 status: "In Progress",
             },
+            {
+                id: 3,
+                title: "Broken Streetlight on Elm Street",
+                description: "Streetlight not working at the corner of Elm and Oak Street.",
+                status: "In Progress",
+            },
+            {
+                id: 4,
+                title: "Broken Streetlight on Elm Street",
+                description: "Streetlight not working at the corner of Elm and Oak Street.",
+                status: "In Progress",
+            },
         ];
 
         setIssues(mockIssues); // Update the state with the mock data
@@ -50,9 +62,11 @@ function MyIssues() {
         <>
             <CustomNavbar t={t}></CustomNavbar>
             <h2 className="text-center mt-2" style={{ color: 'white', fontSize: '2rem' }}>My Issues</h2>
-            <div className="align-items-center">
-                {issues.map((issue) => (
-                    <Card key={issue.id} className="dark-card">
+            <div className="d-flex flex-column align-items-center vh-100"> 
+
+            <div className="d-flex justify-content-center flex-wrap gap-3">  
+            {issues.map((issue) => (
+                    <Card key={issue.id} className="dark-card" style={{ maxWidth: "80%" }}>
                         <Card.Header className="d-flex justify-content-between align-items-center">
                             <img src={cardIcon} alt="" className="img-fluid logo-icon" />
                             <Button disabled variant="info">
@@ -62,7 +76,6 @@ function MyIssues() {
                         <Card.Body>
                             <Row>
                                 <Col>
-                                    {/* Issue Details */}
                                     <Card.Title>
                                         {t("name")}: {issue.title || "Not provided"}
                                     </Card.Title>
@@ -86,6 +99,8 @@ function MyIssues() {
                 ))}
 
             </div>
+            </div>
+
             <IssueDetailsModal
                 issue={selectedIssue}
                 show={showModal}
