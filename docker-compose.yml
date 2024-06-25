@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    restart: always
+    environment:
+      DATABASE_URL: postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:${DB_PORT}/${DB_DATABASE}?sslmode=disable
+      JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY}
+      TOKEN_TTL: ${TOKEN_TTL}
+    env_file: .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    
+  frontend:
+    build:
+      context: ./frontend
+    restart: always
+    ports:
+      - "8000:8000"  
+
+volumes:
+  postgres_data:

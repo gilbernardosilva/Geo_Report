@@ -70,25 +70,25 @@ function useLogin() {
 
                 const data = await response.json();
                 login(data.token);
-                navigate("/dashboard"); 
+                navigate("/dashboard");
             } else {
                 const errorData = await response.json();
 
                 if (response.status === 400) {
-                    switch (errorData.message) {  
+                    switch (errorData.message) {
                         case "email already exists":
-                          alert("Email already exists");
-                          break;
+                            alert("Email already exists");
+                            break;
                         case "username already exists":
-                          alert("Username already exists");
-                          break;
+                            alert("Username already exists");
+                            break;
                         default:
-                          if (action === t("login")) {
-                            setShowWrongPasswordModal(true);
-                          } else {
-                            console.error("Registration error:", errorData);
-                          }
-                      }
+                            if (action === t("login")) {
+                                setShowWrongPasswordModal(true);
+                            } else {
+                                console.error("Registration error:", errorData);
+                            }
+                    }
                 }
             }
         } catch (error) {
