@@ -10,6 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var userNotFound = "user doesn't exist"
+
 func CreateUser(user model.User) error {
 	return config.Db.Create(&user).Error
 }
@@ -45,7 +47,7 @@ func GetUser(userID uint64) (model.User, error) {
 	if user.ID != 0 {
 		return user, nil
 	}
-	return user, errors.New("user doesn't exist")
+	return user, errors.New(userNotFound)
 }
 
 func UpdateUser(user model.User) (model.User, error) {
@@ -54,7 +56,7 @@ func UpdateUser(user model.User) (model.User, error) {
 		config.Db.Find(&user)
 		return user, nil
 	}
-	return user, errors.New("user doesn't exist")
+	return user, errors.New(userNotFound)
 }
 
 func DeleteUser(userID uint64) (bool, error) {
@@ -62,5 +64,5 @@ func DeleteUser(userID uint64) (bool, error) {
 		config.Db.Delete(&user)
 		return true, err
 	}
-	return false, errors.New("user doesn't exist")
+	return false, errors.New(userNotFound)
 }

@@ -9,7 +9,8 @@ type Report struct {
 	User           User           `gorm:"foreignKey:UserID;constraint:onUpdate:CASCADE,onDelete:CASCADE" json:"user"`
 	Photos         []Photo        `gorm:"foreignKey:ReportID;constraint:onUpdate:CASCADE,onDelete:CASCADE" json:"photos"`
 	Description    string         `gorm:"type:text;not null" json:"description"`
-	IssueType      string         `gorm:"type:varchar(50);not null" json:"issue_type"`
+	ReportTypeID   uint64         `gorm:"not null" json:"report_type_id"`
+	ReportType     ReportType     `gorm:"foreignKey:ReportTypeID;constraint:onUpdate:CASCADE,onDelete:RESTRICT" json:"report_type"`
 	Latitude       float64        `gorm:"type:decimal(10,8);not null" json:"latitude"`
 	Longitude      float64        `gorm:"type:decimal(11,8);not null" json:"longitude"`
 	ReportStatusID uint           `gorm:"not null" json:"report_status_id"`

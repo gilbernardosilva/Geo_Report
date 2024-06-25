@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Report](https://github.com/keisaki/Geo_Report_API/actions/workflows/go.yml/badge.svg)](https://github.com/keisaki/Geo_Report_API/actions/workflows/go.yml)  
- 
+
 Geo Report API is a backend system for managing and tracking location-based issue reports. It provides a RESTful API for users to report problems, attach images, and view the status of their reports.
 
 ## Features
@@ -16,10 +16,10 @@ Geo Report API is a backend system for managing and tracking location-based issu
 
 ## Installation and Setup
 
-1.  **Clone the repository:**
+1. **Clone the repository:**
 
+2. **Set up the .env variables:**
 
-2.  **Set up the .env variables:**
 ```bash
 DB_HOST=
 DB_PORT=

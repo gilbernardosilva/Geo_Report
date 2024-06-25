@@ -6,10 +6,10 @@ import (
 	"geo_report_api/model"
 )
 
-func InsertReport(report model.Report) model.Report {
-	config.Db.Save(&report)
+func InsertReport(report model.Report) error {
+	err := config.Db.Create(&report).Error
 	config.Db.Preload("User").Find(&report)
-	return report
+	return err
 }
 
 func DeleteReport(report model.Report) {
@@ -27,10 +27,32 @@ func GetReport(reportID uint64) (model.Report, error) {
 	return report, errors.New("report does not exist")
 }
 
-func UpdateReport() {
-
+func UpdateReport(report model.Report) error {
+	return config.Db.Save(&report).Error
 }
 
-func SelectReport() {
+func AddPhotos(reportID uint64, photos []model.Photo) error {
+	for _, photo := range photos {
+		photo.ReportID = reportID
+		if err := config.Db.Create(&photo).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
+func UpdatePhotos(reportID uint64, photos []model.Photo) error {
+	if err := config.Db.Where("report_id = ?", reportID).Delete(&model.Photo{}).Error; err != nil {
+		return err
+	}
+
+	for _, photo := range photos {
+		photo.ReportID = reportID
+
+		if err := config.Db.Create(&photo).Error; err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

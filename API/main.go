@@ -65,6 +65,8 @@ func main() {
 			protected.GET("/dashboard", controller.Dashboard)
 			protected.GET("/authority", controller.AuthorityDashboard)
 
+			protected.GET("/reportTypes", controller.GetAllReportTypes)
+
 			userProtected := protected.Group("/user")
 			{
 				userProtected.PUT("/edit/:id", controller.EditUser)
@@ -76,6 +78,7 @@ func main() {
 				adminUser.GET("/:id", controller.GetUser)
 				adminUser.GET("/", controller.GetAllUsers)
 				adminUser.DELETE("/delete/:id", controller.DeleteUser)
+				adminUser.POST("/reportType", controller.CreateReportType)
 			}
 
 			//authority routes
@@ -84,6 +87,9 @@ func main() {
 			report := v1.Group("/report")
 			{
 				report.GET("/:id", controller.GetReport)
+				report.POST("/", controller.InsertReport)
+				//TBD
+				//report.PUT("/:id", controller.EditReport)
 			}
 
 		}
