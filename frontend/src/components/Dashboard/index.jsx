@@ -8,33 +8,36 @@ import "leaflet/dist/leaflet.css";
 import { useTranslation } from "react-i18next";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
-
-
+import { useAuth } from '../../hooks/AuthContext';
+import { useAxiosWithToken } from '../../utils/api'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 function Dashboard({ }) {
 
     const [previewImages, setPreviewImages] = useState([]);
+    const { userInfo, token } = useAuth();
     const [userPosition, setUserPosition] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [clickedCoords, setClickedCoords] = useState(null);
-
+    const [options, setOptions] = useState([]);
+    const [error, setError] = useState(null);
+    const api = useAxiosWithToken();
+    console.log(previewImages);
 
     const handleCloseModal = () => {
         setShowModal(false);
         setPreviewImages([]);
-        setFormData({
-            latitude: "",
-            longitude: "",
-            image: "",
-            type: "",
-        });
     };
 
     const [formData, setFormData] = useState({
-        latitude: '',
-        longitude: '',
-        type: '',
-        image: [],
+        name: "",
+        latitude: 0,
+        longitude: 0,
+        user_id: userInfo?.id || 0,
+        description: "",
+        issue_type_id: 0,
+        photos: [],
     });
 
     function MapEvents() {
@@ -52,6 +55,27 @@ function Dashboard({ }) {
     }
 
     useEffect(() => {
+        const storedOptions = JSON.parse(localStorage.getItem("reportTypes"));
+        if (storedOptions && storedOptions.length > 0) {
+            setOptions(storedOptions);
+        } else {
+            const fetchOptions = async () => {
+                try {
+                    const response = await api.get("reportTypes");
+                    if (response.status === 200) {
+                        setOptions(response.data.report_types);
+                        localStorage.setItem("reportTypes", JSON.stringify(response.data.report_types));
+                    } else {
+                        setError("Error fetching options");
+                    }
+                } catch (err) {
+                    setError("Error fetching options");
+                }
+            };
+
+            fetchOptions();
+        }
+
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.watchPosition(showPosition, showError);
@@ -78,27 +102,53 @@ function Dashboard({ }) {
         iconAnchor: [12, 41],
     });
 
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            // Send formData to your backend here
-            const response = await fetch('your_api_endpoint', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-
-            if (response.ok) {
-                // Handle success (e.g., close modal, update map)
-                setShowModal(false);
-            } else {
-                // Handle error
-            }
-        } catch (error) {
-            console.error('Error submitting form:', error);
+    const handleChange = (event) => {
+        if (event.target.files) {
+          const selectedFiles = Array.from(event.target.files);
+    
+          const imageUrls = [];
+          selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              imageUrls.push(e.target.result);
+    
+              if (imageUrls.length === selectedFiles.length) {
+                setPreviewImages(imageUrls);
+    
+                setFormData({
+                  ...formData,
+                  photos: imageUrls, 
+                });
+              }
+            };
+            reader.readAsDataURL(file); 
+          });
+        } else {
+          // Handling for text inputs
+          setFormData({
+            ...formData,
+            [event.target.id]: event.target.value,
+            user_id : userInfo?.id || 0
+          });
         }
-    };
+      };
+    
+
+    const handleSubmit = async (event) => {
+        debugger;
+        event.preventDefault();
+        try {
+          const response = await api.post("/report", formData); 
+          if (response.status === 200) {
+            toast.success(t("reportSentSuccessfully")); 
+            setShowModal(false);
+          } else {
+            toast.error(t("errorSendingReport"));
+        }
+        } catch (error) {
+            toast.error(t("errorSendingReport"));
+        }
+      };
 
     const { t } = useTranslation();
     return (
@@ -122,52 +172,65 @@ function Dashboard({ }) {
                 </MapContainer>
                 <Modal className="modal-container" show={showModal} onHide={handleCloseModal}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Report Issue</Modal.Title> {/* Or customize the title */}
+                        <Modal.Title>{t("reportIssue")}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form onSubmit={handleSubmit}>
-
-                            <Form.Group controlId="problem">
-                                <Form.Label>Type of problem</Form.Label>
-                                <Form.Select
+                            <Form.Group controlId="name" className="mb-3">
+                                <Form.Label>{t("title")}</Form.Label>
+                                <Form.Control required
                                     type="text"
-                                    value={formData.type}
-                                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                                    value={formData.name}
+                                    onChange={handleChange}
                                 />
                             </Form.Group>
+                            <Form.Group controlId="issue_type_id" className="mb-3">
+                                <Form.Label>{t("typeProblem")}</Form.Label>
+                                <Form.Select required
+                                    value={formData.issue_type_id}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">{t("selectAnOption")}</option>
+                                    {options.map((option) => (
+                                        <option key={option.id} value={option.id}>
+                                            {option.name}
+                                        </option>
+                                    ))}
+                                </Form.Select>
+                            </Form.Group>
 
-                            <Form.Group controlId="latitude">
+                            <Form.Group controlId="latitude" className='mb-3'>
                                 <Form.Label>Latitude</Form.Label>
-                                <Form.Control disabled
+                                <Form.Control disabled required
                                     type="text"
                                     value={formData.latitude}
-                                    onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
+                                    onChange={handleChange}
                                 />
                             </Form.Group>
 
-                            <Form.Group controlId="longitude">
+                            <Form.Group controlId="longitude" className="mb-3">
                                 <Form.Label>Longitude</Form.Label>
-                                <Form.Control disabled
+                                <Form.Control disabled required
                                     type="text"
                                     value={formData.longitude}
-                                    onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
+
+                            <Form.Group controlId="description" className="mb-3">
+                                <Form.Label>{t("description")}</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3} 
+                                    value={formData.description}
+                                    onChange={handleChange}
                                 />
                             </Form.Group>
 
                             <Form.Group controlId="formFileMultiple" className="mb-3">
                                 <Form.Label>Images</Form.Label>
                                 <Form.Control type="file" multiple capture="camera" accept="image/*"
-                                    onChange={(e) => {
-                                        const files = e.target.files;
-                                        const images = [];
-
-                                        for (let i = 0; i < files.length; i++) {
-                                            images.push(URL.createObjectURL(files[i]));
-                                        }
-
-                                        setPreviewImages(images);
-                                        setFormData({ ...formData, image: e.target.value });
-                                    }} />
+                                    onChange={handleChange} />
                             </Form.Group>
 
                             {previewImages.length > 0 && (

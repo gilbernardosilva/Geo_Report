@@ -11,15 +11,15 @@ export function useAxiosWithToken() {
   const { token } = useAuth();
 
   useEffect(() => {
-    // Function to update the interceptor
     const updateInterceptor = () => {
-      // Remove the previous interceptor if it exists
-      instance.interceptors.request.eject(instance.interceptors.request.handlers.length - 1);
+      // Remove any existing interceptor before adding a new one
+      instance.interceptors.request.handlers = []; // Clear the handlers array
+
       // Add the new interceptor
       instance.interceptors.request.use(
         (config) => {
           if (token) {
-            config.headers["Authorization"] = `Bearer ${token}`;
+            config.headers['Authorization'] = `Bearer ${token}`;
           }
           return config;
         },
@@ -27,14 +27,9 @@ export function useAxiosWithToken() {
       );
     };
 
-    // Update the interceptor whenever the token changes
     updateInterceptor();
 
-    return () => {
-      // Remove the last interceptor on unmount
-      instance.interceptors.request.eject(instance.interceptors.request.handlers.length - 1);
-    };
-  }, [token]); 
+  }, [token]);
 
   return instance;
 }

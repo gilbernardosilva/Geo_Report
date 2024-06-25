@@ -8,6 +8,8 @@ import { AuthProvider, useAuth } from './hooks/AuthContext.jsx';
 import AuthorityDashboard from './components/AuthorityDashboard/index.jsx';
 import Profile from './components/Profile/index.jsx';
 import MyIssues from './components/Issues/index.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -18,6 +20,7 @@ function App() {
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
+      <ToastContainer/>
     </AuthProvider>
   );
 }

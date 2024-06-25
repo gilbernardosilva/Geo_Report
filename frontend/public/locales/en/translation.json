@@ -36,6 +36,16 @@
     "saveChanges" : "Save Changes",
     "name" : "Name",
     "type" : "Type",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "selectAnOption" : "Select an option",
+    "reportIssue" : "Report an Issue",
+    "title": "Title",
+    "description": "Description",
+    "location": "Location",
+    "submit": "Submit",
+    "typeProblem": "Type of Problem",
+    "errorSendingReport": "There was an error sending the report",
+    "reportSentSuccessfully": "Report sent successfully"
+
 
 }

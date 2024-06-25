@@ -72,7 +72,7 @@ func main() {
 				userProtected.PUT("/edit/:id", controller.EditUser)
 			}
 			// admin routes
-			adminRoutes := v1.Group("/admin")
+			adminRoutes := protected.Group("/admin")
 			adminUser := adminRoutes.Group("/user")
 			{
 				adminUser.GET("/:id", controller.GetUser)
@@ -84,10 +84,10 @@ func main() {
 			//authority routes
 
 			// report routes
-			report := v1.Group("/report")
+			report := protected.Group("/report")
 			{
 				report.GET("/:id", controller.GetReport)
-				report.POST("/", controller.InsertReport)
+				report.POST("", controller.InsertReport)
 				//TBD
 				//report.PUT("/:id", controller.EditReport)
 			}

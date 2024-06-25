@@ -36,7 +36,17 @@
     "saveChanges" : "Guardar Alterações",
     "name" : "Nome",
     "type" : "Tipo",
-    "viewDetails": "Ver Detalhes"
+    "viewDetails": "Ver Detalhes",
+    "selectAnOption" : "Selecione uma opção",
+    "reportIssue" : "Denuncie um Problema",
+    "title": "Título",
+    "description": "Descrição",
+    "location": "Localização",
+    "submit": "Enviar",
+    "typeProblem": "Tipo de Problema",
+    "errorSendingReport" : "Erro ao enviar a denúncia",
+    "reportSentSuccessfully" : "Denuncia enviada com sucesso"
+
 
 
 }

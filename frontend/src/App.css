@@ -36,3 +36,51 @@
     transform: rotate(360deg);
   }
 }
+
+.Toastify__toast-container {
+  z-index: 9999; /* Ensure toasts appear above other elements */
+  position: fixed;
+  top: 1rem; /* Adjust distance from top as needed */
+  right: 1rem; /* Adjust distance from right as needed */
+}
+
+/* Individual Toast Styling */
+.Toastify__toast {
+  background-color: #343a40; /* Dark gray background */
+  color: white;          
+  min-height: 60px;      /* Ensure minimum height for content */
+  padding: 1rem;        /* Add padding around the toast content */
+  border-radius: 5px;       /* Rounded corners */
+}
+
+.Toastify__toast-body {
+  font-size: 1rem;  /* Adjust as needed */
+}
+
+/* Progress Bar */
+.Toastify__progress-bar {
+  background: linear-gradient(to right, #007bff, #0069d9); /* Blue gradient */
+  height: 4px;         /* Adjust height as needed */
+}
+
+/* Close Button */
+.Toastify__close-button {
+  color: white;       
+}
+
+/* Toast Variants (Success, Error, etc.) */
+.Toastify__toast--success {
+  background-color: #28a745; /* Green */
+}
+
+.Toastify__toast--error {
+  background-color: #dc3545; /* Red */
+}
+
+.Toastify__toast--info {
+  background-color: #17a2b8; /* Blue */
+}
+
+.Toastify__toast--warning {
+  background-color: #ffc107; /* Yellow */
+}
