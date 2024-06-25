@@ -6,10 +6,17 @@ import (
 	"geo_report_api/model"
 )
 
-func InsertReport(report model.Report) error {
-	err := config.Db.Create(&report).Error
-	config.Db.Preload("User").Find(&report)
-	return err
+func InsertReport(report model.Report) (model.Report, error) {
+	result := config.Db.Create(&report)
+	if result.Error != nil {
+		return model.Report{}, result.Error
+	}
+
+	err := config.Db.Preload("User.Role").Preload("Photos.Report").Preload("ReportType").Preload("ReportStatus").First(&report, report.ID).Error
+	if err != nil {
+		return model.Report{}, err
+	}
+	return report, nil
 }
 
 func DeleteReport(report model.Report) {
@@ -55,4 +62,16 @@ func UpdatePhotos(reportID uint64, photos []model.Photo) error {
 	}
 
 	return nil
+}
+
+func GetReportsByUserID(userID uint64) ([]model.Report, error) {
+	var reports []model.Report
+	err := config.Db.Preload("User.Role").Preload("Photo").Preload("ReportType").Preload("ReportStatus").
+		Where("user_id = ?", userID).Find(&reports).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return reports, nil
 }

@@ -17,6 +17,62 @@ definitions:
       token:
         type: string
     type: object
+  dto.PhotoDTO:
+    properties:
+      url:
+        type: string
+    type: object
+  dto.ReportCreatedDTO:
+    properties:
+      description:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      photos:
+        items:
+          $ref: '#/definitions/dto.PhotoDTO'
+        type: array
+      report_status_id:
+        type: integer
+      report_type_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  dto.ReportResponseDTO:
+    properties:
+      message:
+        type: string
+      report:
+        $ref: '#/definitions/model.Report'
+    type: object
+  dto.ReportUpdateDTO:
+    properties:
+      description:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      photos:
+        items:
+          $ref: '#/definitions/dto.PhotoDTO'
+        type: array
+      report_id:
+        type: integer
+      report_status_id:
+        type: integer
+      report_type_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
   dto.UserCreatedDTO:
     properties:
       email:
@@ -107,8 +163,6 @@ definitions:
         type: string
       id:
         type: integer
-      issue_type:
-        type: string
       last_update:
         type: string
       latitude:
@@ -127,6 +181,10 @@ definitions:
         $ref: '#/definitions/model.ReportStatus'
       report_status_id:
         type: integer
+      report_type:
+        $ref: '#/definitions/model.ReportType'
+      report_type_id:
+        type: integer
       updates:
         items:
           $ref: '#/definitions/model.ReportUpdate'
@@ -141,6 +199,13 @@ definitions:
       id:
         type: integer
       status:
+        type: string
+    type: object
+  model.ReportType:
+    properties:
+      id:
+        type: integer
+      name:
         type: string
     type: object
   model.ReportUpdate:
@@ -175,10 +240,6 @@ definitions:
         type: string
       id:
         type: integer
-      issues:
-        items:
-          $ref: '#/definitions/model.Report'
-        type: array
       last_name:
         type: string
       password:
@@ -224,6 +285,109 @@ paths:
       summary: User dashboard
       tags:
       - users
+  /report/:
+    post:
+      consumes:
+      - application/json
+      description: creates report in database
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ReportCreatedDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ReportResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ReportResponseDTO'
+      summary: Create Report
+      tags:
+      - Report
+    put:
+      consumes:
+      - application/json
+      description: updates report in database
+      parameters:
+      - description: Report Update Params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ReportUpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ReportResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ReportResponseDTO'
+      summary: Update Report
+      tags:
+      - Report
+  /report/{id}:
+    get:
+      consumes:
+      - application/json
+      description: gets report from database
+      parameters:
+      - description: report ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ReportResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ReportResponseDTO'
+      summary: Get Report
+      tags:
+      - Report
+  /report/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all reports from a user by user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Report'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ReportResponseDTO'
+      summary: Get Reports by User ID
+      tags:
+      - Report
   /user/edit:
     put:
       consumes:

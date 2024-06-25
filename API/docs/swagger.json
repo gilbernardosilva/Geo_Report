@@ -46,6 +46,163 @@
                 }
             }
         },
+        "/report/": {
+            "put": {
+                "description": "updates report in database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Update Report",
+                "parameters": [
+                    {
+                        "description": "Report Update Params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReportUpdateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReportResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReportResponseDTO"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "creates report in database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Create Report",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReportCreatedDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReportResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReportResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/report/user/{id}": {
+            "get": {
+                "description": "Get all reports from a user by user ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Get Reports by User ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Report"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReportResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/report/{id}": {
+            "get": {
+                "description": "gets report from database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Get Report",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "report ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReportResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReportResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/user/edit": {
             "put": {
                 "description": "edits user information in database",
@@ -188,6 +345,92 @@
                 }
             }
         },
+        "dto.PhotoDTO": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ReportCreatedDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.PhotoDTO"
+                    }
+                },
+                "report_status_id": {
+                    "type": "integer"
+                },
+                "report_type_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.ReportResponseDTO": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "report": {
+                    "$ref": "#/definitions/model.Report"
+                }
+            }
+        },
+        "dto.ReportUpdateDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.PhotoDTO"
+                    }
+                },
+                "report_id": {
+                    "type": "integer"
+                },
+                "report_status_id": {
+                    "type": "integer"
+                },
+                "report_type_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.UserCreatedDTO": {
             "type": "object",
             "required": [
@@ -322,9 +565,6 @@
                 "id": {
                     "type": "integer"
                 },
-                "issue_type": {
-                    "type": "string"
-                },
                 "last_update": {
                     "type": "string"
                 },
@@ -352,6 +592,12 @@
                 "report_status_id": {
                     "type": "integer"
                 },
+                "report_type": {
+                    "$ref": "#/definitions/model.ReportType"
+                },
+                "report_type_id": {
+                    "type": "integer"
+                },
                 "updates": {
                     "type": "array",
                     "items": {
@@ -373,6 +619,17 @@
                     "type": "integer"
                 },
                 "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ReportType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -425,12 +682,6 @@
                 },
                 "id": {
                     "type": "integer"
-                },
-                "issues": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Report"
-                    }
                 },
                 "last_name": {
                     "type": "string"

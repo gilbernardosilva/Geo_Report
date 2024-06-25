@@ -1,10 +1,12 @@
 package dto
 
+import "geo_report_api/model"
+
 type ReportCreatedDTO struct {
 	Name           string     `json:"name"`
 	UserID         uint64     `json:"user_id"`
 	Description    string     `json:"description"`
-	ReportTypeID   uint64     `json:"issue_type_id"`
+	ReportTypeID   uint64     `json:"report_type_id"`
 	Latitude       float64    `json:"latitude"`
 	Longitude      float64    `json:"longitude"`
 	ReportStatusID uint       `json:"report_status_id"`
@@ -16,7 +18,7 @@ type ReportUpdateDTO struct {
 	Name           string     `json:"name"`
 	UserID         uint64     `json:"user_id"`
 	Description    string     `json:"description"`
-	ReportTypeID   uint64     `json:"issue_type_id"`
+	ReportTypeID   uint64     `json:"report_type_id"`
 	Latitude       float64    `json:"latitude"`
 	Longitude      float64    `json:"longitude"`
 	ReportStatusID uint       `json:"report_status_id"`
@@ -24,6 +26,10 @@ type ReportUpdateDTO struct {
 }
 
 type PhotoDTO struct {
-	URL      string `json:"url"`
-	ReportID uint64 `json:"report_id"`
+	URL string `json:"url"`
+}
+
+type ReportResponseDTO struct {
+	Message string       `json:"message"`
+	Report  model.Report `json:"report"`
 }

@@ -15,7 +15,6 @@ type User struct {
 	Password     string    `gorm:"not null" json:"password"`
 	Email        string    `gorm:"uniqueIndex;type:varchar(255);not null" json:"email"`
 	CreationDate time.Time `gorm:"autoCreateTime"`
-	Reports      []Report  `gorm:"foreignKey:UserID" json:"issues"`
 }
 
 func Hash(password string) (string, error) {

@@ -21,6 +21,8 @@ var allowedRoles = map[string][]uint64{
 	"/api/v1/user/edit/:id":    {0, 1, 2}, // Regular users can edit their own profile
 	"/api/v1/user/delete":      {2},       // Only admin can access this endpoint
 	"/api/v1/reportTypes":      {0, 1, 2}, // Regular users can access
+	"/api/v1/reportStatus":     {0, 1, 2}, // Regular users can access
+	"/api/v1/reports/user/:id": {0, 1, 2}, // Regular users can access
 }
 
 func AuthMiddleware() gin.HandlerFunc {

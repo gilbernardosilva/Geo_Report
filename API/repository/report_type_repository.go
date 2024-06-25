@@ -9,21 +9,21 @@ import (
 	"gorm.io/gorm"
 )
 
-func ReportTypeExists(reportTypeID uint64) (bool, error) {
+func GetReportType(reportTypeID uint64) (model.ReportType, error) {
 	var reportType model.ReportType
 	if err := config.Db.First(&reportType, reportTypeID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
+			return model.ReportType{}, nil
 		}
-		return false, err
+		return model.ReportType{}, err
 	}
-	return true, nil
+	return reportType, nil
 }
 
 func CreateReportType(name string) (model.ReportType, error) {
 	reportType := model.ReportType{Name: name}
 
-	if err := config.Db.Where("name- = ?", name).First(&reportType).Error; err == nil {
+	if err := config.Db.Where("name = ?", name).First(&reportType).Error; err == nil {
 		return model.ReportType{}, errors.New("report type already exists")
 	}
 
