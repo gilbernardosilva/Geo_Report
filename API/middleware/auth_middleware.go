@@ -15,7 +15,8 @@ import (
 var allowedRoles = map[string][]uint64{
 	"/api/v1/dashboard":        {0, 1, 2}, // Regular users can access
 	"/api/v1/report":           {0, 1, 2}, // Regular users can access
-	"/api/v1/reports/:id":      {0, 1},    // Both users and authorities can view a specific report
+	"/api/v1/admin":            {2},       // Only admin can access
+	"/api/v1/reports/:id":      {0, 1, 2}, // Both users and authorities can view a specific report
 	"/api/v1/reports/:id/edit": {2},       // Only admin can edit
 	"/api/v1/authority":        {1, 2},    // Only authorities can access this endpoint
 	"/api/v1/user/edit/:id":    {0, 1, 2}, // Regular users can edit their own profile

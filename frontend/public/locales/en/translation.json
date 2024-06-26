@@ -50,7 +50,12 @@
     "photos" : "Photos",
     "createdBy" : "Created by",
     "ago" : "ago",
-    "noPhotos" : "No photos"
+    "noPhotos" : "No photos",
+    "types" : "Types",
+    "areas" : "Areas",
+    "users" : "Users",
+    "reports" : "Reports",
+    "statuses" : "Status"
 
 
 

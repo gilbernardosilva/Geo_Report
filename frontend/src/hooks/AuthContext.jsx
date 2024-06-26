@@ -6,6 +6,7 @@ const AuthContext = createContext({
   token: null,
   isLoggedIn: false,
   userInfo: null,
+  userRole: -1,
   login: (token) => { },
   logout: () => { },
   setLoggedIn: (value) => { },
@@ -14,6 +15,8 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const storedToken = localStorage.getItem("token");
     return !!storedToken;
@@ -32,12 +35,14 @@ export const AuthProvider = ({ children }) => {
         } else {
           setToken(storedToken);
           setUserInfo(decodedToken);
+          setUserRole(decodedToken.role);
           setIsLoggedIn(true);
         }
       } catch (error) {
         console.error("Invalid token:", error);
         localStorage.removeItem("token");
         localStorage.removeItem("userInfo");
+        setUserRole(-1);
         setIsLoggedIn(false);
       }
     }
@@ -48,15 +53,18 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", token);
     const decodedToken = jwtDecode(token);
     setUserInfo(decodedToken);
+    setUserRole(decodedToken.role);
     localStorage.setItem("userInfo", JSON.stringify(decodedToken));
     setIsLoggedIn(true);
   };
 
   const logoutHandler = () => {
+    debugger;
     setToken(null);
     localStorage.removeItem("token");
     setUserInfo(null);
     localStorage.removeItem("userInfo");
+    setUserRole(-1);
     setIsLoggedIn(false);
   };
 
@@ -64,6 +72,7 @@ export const AuthProvider = ({ children }) => {
     token,
     isLoggedIn,
     userInfo,
+    userRole,
     login: loginHandler,
     logout: logoutHandler,
     setLoggedIn: setIsLoggedIn,

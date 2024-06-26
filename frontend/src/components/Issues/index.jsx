@@ -143,7 +143,7 @@ function MyIssues() {
 
                     ))}
 
-<Pagination className="mt-3">
+            <Pagination className="mt-3">
                 {Array.from({ length: totalPages }, (_, index) => (
                     <Pagination.Item
                         key={index + 1}

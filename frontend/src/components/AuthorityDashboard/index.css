@@ -23,11 +23,8 @@ body {
 .map-container {
     height: 100%;
     border: 2px solid #ccc;
-    /* Add a border to create the box */
     border-radius: 50px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    /* Add a subtle shadow (adjust values as needed) */
-
 }
 
 .leaflet-container {

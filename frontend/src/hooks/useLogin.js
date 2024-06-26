@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../hooks/AuthContext';
+import { jwtDecode } from "jwt-decode";
+
 
 
 
@@ -19,13 +21,8 @@ function useLogin() {
     const [isValidEmail, setIsValidEmail] = useState(true);
 
     const navigate = useNavigate();
-    const { login, setLoggedIn, isLoggedIn } = useAuth();
+    const { login, setLoggedIn, isLoggedIn, userInfo } = useAuth();
 
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate('/dashboard');
-        }
-    }, [isLoggedIn, navigate]);
 
     const handleEmailChange = (e) => {
         const newEmail = e.target.value;
@@ -66,29 +63,37 @@ function useLogin() {
                 body: JSON.stringify(requestBody),
             });
 
-            if (response.ok) {
-
+            if (response.ok) {                
                 const data = await response.json();
                 login(data.token);
-                navigate("/dashboard"); 
+                const decodedToken = jwtDecode(data.token);
+                if(decodedToken.role === 0)
+                    navigate("/dashboard");
+                else if(decodedToken.role === 1)
+                    navigate("/authority");
+                else if(decodedToken.role === 2)
+                    navigate("/admin");
+                else
+                    navigate("/");
+
             } else {
                 const errorData = await response.json();
 
                 if (response.status === 400) {
-                    switch (errorData.message) {  
+                    switch (errorData.message) {
                         case "email already exists":
-                          alert("Email already exists");
-                          break;
+                            alert("Email already exists");
+                            break;
                         case "username already exists":
-                          alert("Username already exists");
-                          break;
+                            alert("Username already exists");
+                            break;
                         default:
-                          if (action === t("login")) {
-                            setShowWrongPasswordModal(true);
-                          } else {
-                            console.error("Registration error:", errorData);
-                          }
-                      }
+                            if (action === t("login")) {
+                                setShowWrongPasswordModal(true);
+                            } else {
+                                console.error("Registration error:", errorData);
+                            }
+                    }
                 }
             }
         } catch (error) {
