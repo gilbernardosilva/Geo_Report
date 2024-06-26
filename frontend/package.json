@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.3",
+    "date-fns": "^3.6.0",
     "i18next": "^23.11.5",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-http-backend": "^2.5.2",

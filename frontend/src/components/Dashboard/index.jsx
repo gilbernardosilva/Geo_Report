@@ -36,7 +36,7 @@ function Dashboard({ }) {
         longitude: 0,
         user_id: userInfo?.id || 0,
         description: "",
-        issue_type_id: 0,
+        report_type_id: 0,
         photos: [],
     });
 
@@ -127,8 +127,9 @@ function Dashboard({ }) {
           // Handling for text inputs
           setFormData({
             ...formData,
-            [event.target.id]: event.target.value,
-            user_id : userInfo?.id || 0
+            [event.target.id]: event.target.id === 'report_type_id' ? parseInt(event.target.value) : event.target.value,
+            user_id : userInfo?.id || 0,
+
           });
         }
       };
@@ -184,10 +185,10 @@ function Dashboard({ }) {
                                     onChange={handleChange}
                                 />
                             </Form.Group>
-                            <Form.Group controlId="issue_type_id" className="mb-3">
+                            <Form.Group controlId="report_type_id" className="mb-3">
                                 <Form.Label>{t("typeProblem")}</Form.Label>
                                 <Form.Select required
-                                    value={formData.issue_type_id}
+                                    value={formData.report_type_id}
                                     onChange={handleChange}
                                 >
                                     <option value="">{t("selectAnOption")}</option>

@@ -66,7 +66,7 @@ func UpdatePhotos(reportID uint64, photos []model.Photo) error {
 
 func GetReportsByUserID(userID uint64) ([]model.Report, error) {
 	var reports []model.Report
-	err := config.Db.Preload("User.Role").Preload("Photo").Preload("ReportType").Preload("ReportStatus").
+	err := config.Db.Preload("User.Role").Preload("Photos").Preload("ReportType").Preload("ReportStatus").
 		Where("user_id = ?", userID).Find(&reports).Error
 
 	if err != nil {

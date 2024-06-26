@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"geo_report_api/dto"
 	"geo_report_api/service"
 	"strconv"
@@ -19,7 +20,7 @@ import (
 //	@Param			request	body	dto.ReportCreatedDTO	true	"query params"
 //	@Success		200		object	dto.ReportResponseDTO
 //	@Failure		400		object	dto.ReportResponseDTO
-//	@Router			/report/ [post]
+//	@Router			/report [post]
 func InsertReport(c *gin.Context) {
 	var reportDTO dto.ReportCreatedDTO
 
@@ -30,6 +31,7 @@ func InsertReport(c *gin.Context) {
 		return
 	}
 
+	fmt.Println("im here inserting")
 	report, err := service.InsertReport(reportDTO)
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -38,6 +40,7 @@ func InsertReport(c *gin.Context) {
 		})
 		return
 	}
+	fmt.Println("im here inserted")
 
 	err = service.AddPhotosToReport(reportDTO, report.ID, false)
 	if err != nil {

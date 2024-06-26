@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"geo_report_api/dto"
 	"geo_report_api/model"
 	"geo_report_api/repository"
@@ -13,34 +14,42 @@ import (
 var reportError = "Report Status doesn't exist"
 
 func InsertReport(reportDTO dto.ReportCreatedDTO) (model.Report, error) {
-	var report model.Report
-
-	err := smapping.FillStruct(&report, smapping.MapFields(&reportDTO))
-	if err != nil {
-		log.Printf("Failed to map report DTO to report struct: %v", err)
-		return model.Report{}, errors.New("failed to map report")
+	report := model.Report{
+		Name:           reportDTO.Name,
+		UserID:         reportDTO.UserID,
+		Description:    reportDTO.Description,
+		ReportTypeID:   reportDTO.ReportTypeID,
+		Latitude:       reportDTO.Latitude,
+		Longitude:      reportDTO.Longitude,
+		ReportStatusID: reportDTO.ReportStatusID,
 	}
 
-	_, err = repository.GetReportType(reportDTO.ReportTypeID)
-	if err != nil {
-		log.Printf("Failed to find the Report type: %v", err)
-		return model.Report{}, errors.New("Report Type doesn't exist")
+	if len(reportDTO.Photos) > 0 {
+		report.Photos = make([]model.Photo, len(reportDTO.Photos))
+		for i, photoDTO := range reportDTO.Photos {
+			report.Photos[i] = model.Photo{
+				Image: photoDTO,
+			}
+		}
 	}
 
-	_, err = repository.GetUser(report.UserID)
-	if err != nil {
-		log.Printf("User doesn't exist: %v", err)
-		return model.Report{}, errors.New("User ID doesn't exist")
+	// Check for report type existence
+	if _, err := repository.GetReportType(report.ReportTypeID); err != nil {
+		return model.Report{}, fmt.Errorf("report type doesn't exist: %v", err)
 	}
 
-	_, err = repository.GetReportStatus(reportDTO.ReportStatusID)
-	if err != nil {
-		log.Printf(reportError)
-		return model.Report{}, errors.New(reportError)
+	// Check for user existence
+	if _, err := repository.GetUser(report.UserID); err != nil {
+		return model.Report{}, fmt.Errorf("user doesn't exist: %v", err)
 	}
 
-	if report, err = repository.InsertReport(report); err != nil {
-		log.Printf("Failed to save report to database: %v", err)
+	// Check for report status existence
+	if _, err := repository.GetReportStatus(report.ReportStatusID); err != nil {
+		return model.Report{}, fmt.Errorf("report status doesn't exist: %v", err)
+	}
+
+	if report, _ = repository.InsertReport(report); report.ID == 0 {
+		log.Printf("Failed to save report to database")
 		return model.Report{}, errors.New("failed to save report")
 	}
 
@@ -48,26 +57,23 @@ func InsertReport(reportDTO dto.ReportCreatedDTO) (model.Report, error) {
 }
 
 func AddPhotosToReport(reportDTO dto.ReportCreatedDTO, reportID uint64, update bool) error {
-
 	if len(reportDTO.Photos) > 0 {
-		var photos []model.Photo
-		for _, photoDTO := range reportDTO.Photos {
-			var photo model.Photo
-			err := smapping.FillStruct(&photo, smapping.MapFields(&photoDTO))
-			if err != nil {
-				return errors.New("failed to map photo DTO to photo struct")
+		var newPhotos []model.Photo
+		for _, photoString := range reportDTO.Photos {
+			newPhoto := model.Photo{
+				ReportID: reportID,
+				Image:    photoString,
 			}
-			photo.ReportID = reportID
-			photos = append(photos, photo)
+			newPhotos = append(newPhotos, newPhoto)
 		}
 
 		if update {
-			if err := repository.UpdatePhotos(reportID, photos); err != nil {
+			if err := repository.UpdatePhotos(reportID, newPhotos); err != nil {
 				log.Printf("Failed to update photos for report: %v", err)
 				return errors.New("failed to update photos for report")
 			}
 		} else {
-			err := repository.AddPhotos(reportID, photos)
+			err := repository.AddPhotos(reportID, newPhotos)
 			if err != nil {
 				return errors.New("failed to add photos to report")
 			}

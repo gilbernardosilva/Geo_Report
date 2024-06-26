@@ -5,6 +5,8 @@ import CustomNavbar from './../Navbar';
 import { useTranslation } from "react-i18next";
 import cardIcon from './../../img/icons/cardIssues.svg'
 import IssueDetailsModal from "../IssuesDetailModal/index.jsx";
+import { useAuth } from "../../hooks/AuthContext.jsx";
+import { formatDistanceToNow } from 'date-fns';
 import "./index.css";
 
 
@@ -13,39 +15,29 @@ function MyIssues() {
     const api = useAxiosWithToken();
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    useEffect(() => {
-        // Create some sample issue data
-        const mockIssues = [
-            {
-                id: 1,
-                title: "Pothole on Main Street",
-                description:
-                    "Large pothole causing damage to vehicles. Located near 123 Main Street.",
-                status: "Pending",
-                imageUrls: ["https://via.placeholder.com/300"], // Sample image URL
-            },
-            {
-                id: 2,
-                title: "Broken Streetlight on Elm Street",
-                description: "Streetlight not working at the corner of Elm and Oak Street.",
-                status: "In Progress",
-            },
-            {
-                id: 3,
-                title: "Broken Streetlight on Elm Street",
-                description: "Streetlight not working at the corner of Elm and Oak Street.",
-                status: "In Progress",
-            },
-            {
-                id: 4,
-                title: "Broken Streetlight on Elm Street",
-                description: "Streetlight not working at the corner of Elm and Oak Street.",
-                status: "In Progress",
-            },
-        ];
+    const { userInfo } = useAuth();
+    const [error, setError] = useState(null);
 
-        setIssues(mockIssues); // Update the state with the mock data
-    }, []);
+    useEffect(() => {
+        debugger;
+        const fetchIssues = async () => {
+          try {
+            const response = await api.get("report/user/" + userInfo.id); 
+            if (response.status === 200) {
+              setIssues(response.data.reports);
+              console.log(response.data.reports)
+            } else {
+              setError("Error fetching issues");
+            }
+          } catch (err) {
+            setError("Error fetching issues");
+          }
+        };
+    
+        if (userInfo) {
+          fetchIssues();
+        }
+      }, [userInfo]);
 
     const handleViewDetails = (issue) => {
         setSelectedIssue(issue); // Store the selected issue in state
@@ -67,17 +59,17 @@ function MyIssues() {
                         <Card.Header className="d-flex justify-content-between align-items-center">
                             <img src={cardIcon} alt="" className="img-fluid logo-icon" />
                             <Button disabled variant="info">
-                                {issue.status}
+                                {issue.report_status.status}
                             </Button>
                         </Card.Header>
                         <Card.Body>
                             <Row>
                                 <Col>
                                     <Card.Title>
-                                        {t("name")}: {issue.title || "Not provided"}
+                                        {t("name")}: {issue.name || "Not provided"}
                                     </Card.Title>
                                     <Card.Text>
-                                        {t("type")}: {issue.type || "Not provided"}
+                                        {t("type")}: {issue.report_type.name || "Not provided"}
                                     </Card.Text>
                                 </Col>
 
@@ -89,7 +81,7 @@ function MyIssues() {
                             </Row>
                         </Card.Body>
                         <Card.Footer style={{ color: "grey" }} className="text-center">
-                            {issue.timestamp || "2 days ago"}
+                            {formatDistanceToNow(new Date(issue.report_date))+  " ago" || "2 days ago"}
                         </Card.Footer>
                     </Card>
 
