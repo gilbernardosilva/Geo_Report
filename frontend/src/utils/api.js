@@ -3,8 +3,8 @@ import { useAuth } from "./../hooks/AuthContext";
 import { useEffect } from "react";
 
 const instance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: { "Content-Type": "application/json" },
+  baseURL: process.env.REACT_APP_API_URL,
+  headers: { "Content-Type": "application/json" },
 });
 
 export function useAxiosWithToken() {
@@ -34,7 +34,7 @@ export function useAxiosWithToken() {
       // Remove the last interceptor on unmount
       instance.interceptors.request.eject(instance.interceptors.request.handlers.length - 1);
     };
-  }, [token]); 
+  }, [token]);
 
   return instance;
 }
