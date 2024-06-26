@@ -14,3 +14,20 @@
       height: 200px; /* Adjust image height for mobile */
     }
   }
+
+.inputGroup-issue{
+  background-color: #212529;
+  color: white;
+  border: #212529;
+}
+.pagination-container{
+  background-color: #212529;
+  color: white;
+  border: #212529;
+}
+
+.row{
+  margin-right: 0px;
+  margin-left: 0px;
+;
+}

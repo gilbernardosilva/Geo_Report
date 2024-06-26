@@ -7,6 +7,7 @@ import (
 	"geo_report_api/model"
 	"geo_report_api/repository"
 	"log"
+	"time"
 
 	"github.com/mashingan/smapping"
 )
@@ -128,11 +129,11 @@ func GetReport(id uint64) (model.Report, error) {
 	return model.Report{}, errors.New("report does not exist")
 }
 
-func GetReportsByUserID(userID uint64) ([]model.Report, error) {
+func GetReportsByUserID(userID uint64, page, limit int, startDate, endDate time.Time, offset int) ([]model.Report, error) {
 	_, err := repository.GetUser(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	return repository.GetReportsByUserID(userID)
+	return repository.GetReportsByUserID(userID, page, limit, startDate, endDate, offset)
 }

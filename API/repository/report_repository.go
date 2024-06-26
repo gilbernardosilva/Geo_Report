@@ -4,6 +4,7 @@ import (
 	"errors"
 	"geo_report_api/config"
 	"geo_report_api/model"
+	"time"
 )
 
 func InsertReport(report model.Report) (model.Report, error) {
@@ -64,11 +65,21 @@ func UpdatePhotos(reportID uint64, photos []model.Photo) error {
 	return nil
 }
 
-func GetReportsByUserID(userID uint64) ([]model.Report, error) {
+func GetReportsByUserID(userID uint64, page, limit int, startDate, endDate time.Time, offset int) ([]model.Report, error) {
 	var reports []model.Report
-	err := config.Db.Preload("User.Role").Preload("Photos").Preload("ReportType").Preload("ReportStatus").
-		Where("user_id = ?", userID).Find(&reports).Error
 
+	query := config.Db.Preload("User.Role").Preload("Photos").Preload("ReportType").Preload("ReportStatus").Where("user_id = ?", userID)
+
+	// Filter by date range if provided
+	if !startDate.IsZero() {
+		query = query.Where("report_date >= ?", startDate)
+	}
+	if !endDate.IsZero() {
+		query = query.Where("report_date <= ?", endDate)
+	}
+
+	// Pagination
+	err := query.Offset(offset).Limit(limit).Find(&reports).Error
 	if err != nil {
 		return nil, err
 	}

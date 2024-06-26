@@ -14,10 +14,10 @@ function IssueDetailsModal({ issue, show, handleClose }) {
             </Modal.Header>
             <Modal.Body>
               <p>
-                <b>Description:</b> {issue.description}
+                <b>{t('description')}:</b> {issue.description}
               </p>
               <p>
-                <b>Status:</b> {issue.report_status.name}
+                <b>{t('status')}:</b> {issue.report_status.name}
               </p>
               <p>
                 <b>Latitude:</b> {issue.latitude}
@@ -28,7 +28,7 @@ function IssueDetailsModal({ issue, show, handleClose }) {
               <p style={{ color: 'white' }}>
             <b>{t('photos')}:</b> 
             {issue?.photos && issue.photos.length > 0 ? (
-                <Carousel variant="dark" interval={null}>
+                <Carousel className="mt-3" variant="dark" interval={null}>
                     {issue.photos.map((photo) => (
                         <Carousel.Item key={photo.id}>
                             <img 
@@ -40,15 +40,15 @@ function IssueDetailsModal({ issue, show, handleClose }) {
                     ))}
                 </Carousel>
             ) : (
-                <p>{t('noPhotos')}</p> 
+              <p className="no-photos-message">{t('noPhotos')}</p> 
             )}
         </p>
-              Created by: {issue.user.first_name} {issue.user.last_name}
+          {t('createdBy')}: {issue.user.first_name} {issue.user.last_name}
 
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>
-                Close
+              {t('close')}
               </Button>
             </Modal.Footer>
           </>

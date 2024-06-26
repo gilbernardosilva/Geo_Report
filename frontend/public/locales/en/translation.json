@@ -45,7 +45,14 @@
     "submit": "Submit",
     "typeProblem": "Type of Problem",
     "errorSendingReport": "There was an error sending the report",
-    "reportSentSuccessfully": "Report sent successfully"
+    "reportSentSuccessfully": "Report sent successfully",
+    "status" : "Status",
+    "photos" : "Photos",
+    "createdBy" : "Created by",
+    "ago" : "ago",
+    "noPhotos" : "No photos"
+
+
 
 
 }

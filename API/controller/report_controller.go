@@ -5,6 +5,7 @@ import (
 	"geo_report_api/dto"
 	"geo_report_api/service"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -145,7 +146,39 @@ func GetReportsByUserID(c *gin.Context) {
 		return
 	}
 
-	reports, err := service.GetReportsByUserID(userID)
+	page, err := strconv.Atoi(c.DefaultQuery("page", "1")) // Default page is 1
+	if err != nil || page < 1 {
+		c.JSON(500, gin.H{"error": "Invalid page number"})
+		return
+	}
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10")) // Default limit is 10 reports per page
+	if err != nil || limit < 1 {
+		c.JSON(500, gin.H{"error": "Invalid limit"})
+		return
+	}
+
+	offset := (page - 1) * limit
+
+	startDateStr := c.Query("start_date")
+	endDateStr := c.Query("end_date")
+
+	var startDate, endDate time.Time
+	if startDateStr != "" {
+		startDate, err = time.Parse("2006-01-02", startDateStr)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "Invalid start date format (YYYY-MM-DD)"})
+			return
+		}
+	}
+	if endDateStr != "" {
+		endDate, err = time.Parse("2006-01-02", endDateStr)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "Invalid end date format (YYYY-MM-DD)"})
+			return
+		}
+	}
+
+	reports, err := service.GetReportsByUserID(userID, page, limit, startDate, endDate, offset)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": err.Error(),

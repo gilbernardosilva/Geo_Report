@@ -10,19 +10,22 @@ import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import { useAuth } from '../../hooks/AuthContext';
 import { useAxiosWithToken } from '../../utils/api'
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import IssueDetailsModal from '../IssuesDetailModal';
 
-function Dashboard({ }) {
+function Dashboard() {
 
     const [previewImages, setPreviewImages] = useState([]);
-    const { userInfo, token } = useAuth();
+    const { userInfo } = useAuth();
+    const [issues, setIssues] = useState([]);
     const [userPosition, setUserPosition] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [clickedCoords, setClickedCoords] = useState(null);
     const [options, setOptions] = useState([]);
-    const [error, setError] = useState(null);
     const api = useAxiosWithToken();
+    const [selectedIssue, setSelectedIssue] = useState(null);
+    const [showIssueModal, setIssueShowModal] = useState(false);
+
     console.log(previewImages);
 
     const handleCloseModal = () => {
@@ -43,7 +46,6 @@ function Dashboard({ }) {
     function MapEvents() {
         const map = useMapEvents({
             click: (e) => {
-                setClickedCoords([e.latlng.lat, e.latlng.lng]);
                 setFormData({
                     latitude: e.latlng.lat,
                     longitude: e.latlng.lng,
@@ -55,6 +57,23 @@ function Dashboard({ }) {
     }
 
     useEffect(() => {
+        const fetchIssues = async () => {
+            try {
+                const response = await api.get("report/user/" + userInfo.id);
+                if (response.status === 200) {
+                    setIssues(response.data.reports);
+                } else {
+                    toast.error("Error fetching issues");
+                }
+            } catch (err) {
+                toast.error("Error fetching issues");
+            }
+        };
+
+        if (userInfo) {
+            fetchIssues();
+        }
+
         const storedOptions = JSON.parse(localStorage.getItem("reportTypes"));
         if (storedOptions && storedOptions.length > 0) {
             setOptions(storedOptions);
@@ -66,10 +85,10 @@ function Dashboard({ }) {
                         setOptions(response.data.report_types);
                         localStorage.setItem("reportTypes", JSON.stringify(response.data.report_types));
                     } else {
-                        setError("Error fetching options");
+                        toast.error("Error fetching options");
                     }
                 } catch (err) {
-                    setError("Error fetching options");
+                    toast.error("Error fetching options");
                 }
             };
 
@@ -93,7 +112,7 @@ function Dashboard({ }) {
         }
 
         getLocation();
-    }, []);
+    }, [userInfo, api]);
 
     const customIcon = new L.Icon({
         iconUrl: icon,
@@ -104,54 +123,62 @@ function Dashboard({ }) {
 
     const handleChange = (event) => {
         if (event.target.files) {
-          const selectedFiles = Array.from(event.target.files);
-    
-          const imageUrls = [];
-          selectedFiles.forEach((file, index) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              imageUrls.push(e.target.result);
-    
-              if (imageUrls.length === selectedFiles.length) {
-                setPreviewImages(imageUrls);
-    
-                setFormData({
-                  ...formData,
-                  photos: imageUrls, 
-                });
-              }
-            };
-            reader.readAsDataURL(file); 
-          });
-        } else {
-          // Handling for text inputs
-          setFormData({
-            ...formData,
-            [event.target.id]: event.target.id === 'report_type_id' ? parseInt(event.target.value) : event.target.value,
-            user_id : userInfo?.id || 0,
+            const selectedFiles = Array.from(event.target.files);
 
-          });
+            const imageUrls = [];
+            selectedFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imageUrls.push(e.target.result);
+
+                    if (imageUrls.length === selectedFiles.length) {
+                        setPreviewImages(imageUrls);
+
+                        setFormData({
+                            ...formData,
+                            photos: imageUrls,
+                        });
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        } else {
+            // Handling for text inputs
+            setFormData({
+                ...formData,
+                [event.target.id]: event.target.id === 'report_type_id' ? parseInt(event.target.value) : event.target.value,
+                user_id: userInfo?.id || 0,
+
+            });
         }
-      };
-    
+    };
+
 
     const handleSubmit = async (event) => {
         debugger;
         event.preventDefault();
         try {
-          const response = await api.post("/report", formData); 
-          if (response.status === 200) {
-            toast.success(t("reportSentSuccessfully")); 
-            setShowModal(false);
-          } else {
-            toast.error(t("errorSendingReport"));
-        }
+            const response = await api.post("/report", formData);
+            if (response.status === 200) {
+                toast.success(t("reportSentSuccessfully"));
+                setShowModal(false);
+            } else {
+                toast.error(t("errorSendingReport"));
+            }
         } catch (error) {
             toast.error(t("errorSendingReport"));
         }
-      };
+    };
 
     const { t } = useTranslation();
+
+    const handleCloseIssueModal = () => {
+        setIssueShowModal(false);
+    };
+    const handleViewDetails = (issue) => {
+        setSelectedIssue(issue);
+        setIssueShowModal(true);
+    };
     return (
         <>
             <CustomNavbar t={t}></CustomNavbar>
@@ -169,8 +196,26 @@ function Dashboard({ }) {
                             </Popup>
                         </Marker>
                     )}
+                    {issues.map((issue) => (
+                        <Marker
+                            key={issue.id} // Make sure to provide unique keys for each marker
+                            position={[issue.latitude, issue.longitude]} // Use the issue's coordinates
+                            icon={customIcon}
+                            eventHandlers={{
+                                click: (e) => {
+                                    handleViewDetails(issue)
+                                }
+                            }}
+                        >
+                        </Marker>
+                    ))}
                     <MapEvents />
                 </MapContainer>
+                <IssueDetailsModal
+                    issue={selectedIssue}
+                    show={showIssueModal}
+                    handleClose={handleCloseIssueModal}
+                />
                 <Modal className="modal-container" show={showModal} onHide={handleCloseModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>{t("reportIssue")}</Modal.Title>
@@ -222,7 +267,7 @@ function Dashboard({ }) {
                                 <Form.Label>{t("description")}</Form.Label>
                                 <Form.Control
                                     as="textarea"
-                                    rows={3} 
+                                    rows={3}
                                     value={formData.description}
                                     onChange={handleChange}
                                 />

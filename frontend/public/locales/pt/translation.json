@@ -45,7 +45,13 @@
     "submit": "Enviar",
     "typeProblem": "Tipo de Problema",
     "errorSendingReport" : "Erro ao enviar a denúncia",
-    "reportSentSuccessfully" : "Denuncia enviada com sucesso"
+    "reportSentSuccessfully" : "Denuncia enviada com sucesso",
+    "status" : "Estado",
+    "photos" : "Fotos",
+    "createdBy" : "Criado por",
+    "ago" : "atrás",
+    "noPhotos" : "Sem Fotos"
+
 
 
 
