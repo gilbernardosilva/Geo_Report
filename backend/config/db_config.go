@@ -15,23 +15,19 @@ var Db *gorm.DB
 func ConnectDB() {
 
 	err := godotenv.Load()
-	fmt.Println(os.Getenv("DB_USERNAME"))
-	// if os.Getenv("DB_USERNAME") == "" {
-	// 	// Load from .env file (local development)
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// }
+
+	if os.Getenv("DB_USERNAME") == "" {
+		// Load from .env file (local development)
+		if err != nil {
+			return err
+		}
+	}
 
 	dbUser := os.Getenv("DB_USERNAME")
 	dbPass := os.Getenv("DB_PASSWORD")
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbDatabase := os.Getenv("DB_DATABASE")
-
-	fmt.Println("DB_HOST:", dbHost)
-    fmt.Println("DB_PORT:", dbPort)
-    fmt.Println("DB_USER:", dbUser)
 
 
 	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPass + " dbname=" + dbDatabase + " port=" + dbPort + " sslmode=disable"
