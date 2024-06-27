@@ -4,7 +4,7 @@ import { useAuth } from '../../../hooks/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { useAxiosWithToken } from '../../../utils/api';
 import "react-toastify/dist/ReactToastify.css";
-import CustomAdminNavbar from './AdminNavbar';
+import CustomAdminNavbar from '../AdminNavbar/index';
 
 function AdminDashboard({ setToken }) {
 

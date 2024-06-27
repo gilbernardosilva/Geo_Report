@@ -1,14 +1,14 @@
-import logo from './../../img/logo/geo_report_no_text.png'
+import logo from './../../../img/logo/geo_report_no_text.png'
 import { Container, Navbar, Offcanvas } from 'react-bootstrap';
 import React, { useState } from 'react';
-import home from './../../img/icons/home.svg'
-import issues from './../../img/icons/issues.svg'
-import logoutIcon from './../../img/icons/logout.svg'
-import profile from './../../img/icons/profile.svg'
-import settings from './../../img/icons/settings.svg'
+import home from './../../../img/icons/home.svg'
+import issues from './../../../img/icons/issues.svg'
+import logoutIcon from './../../../img/icons/logout.svg'
+import profile from './../../../img/icons/profile.svg'
+import settings from './../../../img/icons/settings.svg'
 import { Link } from 'react-router-dom';
-import LanguageSwitcher from '../../../LanguageSwitcher/index.jsx';
-import { useAuth } from '../../../../hooks/AuthContext.jsx';
+import LanguageSwitcher from './../../LanguageSwitcher/index.jsx';
+import { useAuth } from './../../../hooks/AuthContext.jsx';
 import PropTypes from 'prop-types';
 
 
