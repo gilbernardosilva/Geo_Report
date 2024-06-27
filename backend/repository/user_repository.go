@@ -36,8 +36,7 @@ func CheckIfUserExists(username string, email string) error {
 
 func GetAllUsers() []model.User {
 	var users []model.User
-	config.Db.Find(&users)
-
+	config.Db.Preload("Role").Find(&users)
 	return users
 }
 

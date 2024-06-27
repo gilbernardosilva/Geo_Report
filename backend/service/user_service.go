@@ -12,8 +12,22 @@ import (
 	"github.com/mashingan/smapping"
 )
 
-func GetAllUsers() []model.User {
-	return repository.GetAllUsers()
+func GetAllUsers() []dto.UserResponseDTO {
+	users := repository.GetAllUsers()
+	var userDTOs []dto.UserResponseDTO
+	for _, user := range users {
+		userDTO := dto.UserResponseDTO{
+			ID:        user.ID,
+			UserName:  user.UserName,
+			Email:     user.Email,
+			FirstName: user.FirstName,
+			LastName:  user.LastName,
+			RoleName:  user.Role.Name,
+			CreatedAt: user.CreationDate,
+		}
+		userDTOs = append(userDTOs, userDTO)
+	}
+	return userDTOs
 }
 
 func InsertUser(userDTO dto.UserCreatedDTO) (new model.User, error error) {

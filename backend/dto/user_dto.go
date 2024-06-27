@@ -1,5 +1,9 @@
 package dto
 
+import (
+	"time"
+)
+
 type UserCreatedDTO struct {
 	FirstName string `json:"firstname" form:"firstname" binding:"required"`
 	LastName  string `json:"lastname" form:"lastname" binding:"required"`
@@ -10,10 +14,13 @@ type UserCreatedDTO struct {
 }
 
 type UserResponseDTO struct {
-	UserName  string `json:"username" form:"username" binding:"required"`
-	Email     string `json:"email" form:"email" binding:"required"`
-	FirstName string `json:"firstname" form:"firstname" binding:"required"`
-	LastName  string `json:"lastname" form:"lastname" binding:"required"`
+	ID        uint64    `json:"id" form:"id" binding:"required"`
+	UserName  string    `json:"username" form:"username" binding:"required"`
+	Email     string    `json:"email" form:"email" binding:"required"`
+	FirstName string    `json:"firstname" form:"firstname" binding:"required"`
+	LastName  string    `json:"lastname" form:"lastname" binding:"required"`
+	RoleName  string    `json:"role" form:"role" binding:"required"`
+	CreatedAt time.Time `json:"createdAt" form:"createdAt" binding:"required"`
 }
 
 type UserUpdateDTO struct {

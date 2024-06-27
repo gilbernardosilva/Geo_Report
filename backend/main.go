@@ -82,8 +82,13 @@ func main() {
 				adminUser.GET("/:id", controller.GetUser)
 				adminUser.GET("", controller.GetAllUsers)
 				adminUser.DELETE("/delete/:id", controller.DeleteUser)
+			}
+
+			adminUser = adminRoutes.Group("/report")
+			{
 				adminUser.POST("/reportType", controller.CreateReportType)
 				adminUser.POST("/reportStatus", controller.CreateReportStatus)
+
 			}
 
 			//authority routes
@@ -103,6 +108,23 @@ func main() {
 		{
 			public.POST("/register", controller.Register)
 			public.POST("/login", controller.Login)
+		}
+
+		public = v1.Group("/area")
+		{
+			public.GET("/:id/point", controller.GetPointsByAreaID)
+			public.POST("/:id/point", controller.CreatePoint)
+			public.GET("", controller.GetAllAreas)
+			public.POST("", controller.CreateArea)
+			public.GET("/:id", controller.GetAreaByID)
+			public.PUT("/:id", controller.UpdateArea)
+			public.DELETE("/:id", controller.DeleteArea)
+		}
+
+		public = v1.Group("/point")
+		{
+			public.PUT("/:id", controller.UpdatePoint)
+			public.DELETE("/:id", controller.DeletePoint)
 		}
 
 	}

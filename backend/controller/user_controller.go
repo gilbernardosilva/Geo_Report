@@ -18,7 +18,7 @@ import (
 //	@Tags			User
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		dto.UserCreatedDTO	true "query params"
+//	@Param			request	body		dto.UserCreatedDTO	true	"query params"
 //	@Success		200		{object}	dto.UserResponseDTO
 //	@Failure		400		{object}	dto.UserResponseDTO
 //	@Router			/user/register [post]
@@ -61,6 +61,17 @@ func Register(c *gin.Context) {
 
 }
 
+// User    Get All Users
+//
+//	@Summary	Get All User
+//	@Schemes
+//	@Description	returns all users in db
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		dto.UserResponseDTO
+//	@Failure		400	{object}	dto.UserResponseDTO
+//	@Router			/user [get]
 func GetAllUsers(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "select users",
@@ -68,6 +79,17 @@ func GetAllUsers(c *gin.Context) {
 	})
 }
 
+// GetUser returns a user by ID.
+//
+//	@Summary		Get User by ID
+//	@Description	Returns a user from the database by their ID
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		uint64	true	"User ID"
+//	@Success		200	{object}	dto.UserResponseDTO
+//	@Failure		404	{string}	error
+//	@Router			/user/{id} [get]
 func GetUser(c *gin.Context) {
 	userID, _ := strconv.ParseUint(c.Param("id"), 10, 64)
 	user, err := service.GetUser(userID)
@@ -92,7 +114,7 @@ func GetUser(c *gin.Context) {
 //	@Tags			User
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		dto.UserUpdateDTO	true "query params"
+//	@Param			request	body		dto.UserUpdateDTO	true	"query params"
 //	@Success		200		{object}	dto.UserResponseDTO
 //	@Failure		400		{object}	dto.UserResponseDTO
 //	@Router			/user/edit [put]

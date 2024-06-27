@@ -1,5 +1,35 @@
 basePath: /api/v1
 definitions:
+  dto.AreaCreateDTO:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  dto.AreaResponseDTO:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      points:
+        items:
+          $ref: '#/definitions/dto.PointResponseDTO'
+        type: array
+    type: object
+  dto.AreaUpdateDTO:
+    properties:
+      name:
+        type: string
+    type: object
+  dto.ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+    type: object
   dto.LoginDTO:
     properties:
       password:
@@ -22,6 +52,40 @@ definitions:
       url:
         type: string
     type: object
+  dto.PointDTO:
+    properties:
+      latitude:
+        type: string
+      longitude:
+        type: string
+    required:
+    - latitude
+    - longitude
+    type: object
+  dto.PointResponseDTO:
+    properties:
+      area_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      latitude:
+        type: string
+      longitude:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.PointUpdateDTO:
+    properties:
+      area_id:
+        type: integer
+      latitude:
+        type: string
+      longitude:
+        type: string
+    type: object
   dto.ReportCreatedDTO:
     properties:
       description:
@@ -34,7 +98,7 @@ definitions:
         type: string
       photos:
         items:
-          $ref: '#/definitions/dto.PhotoDTO'
+          type: string
         type: array
       report_status_id:
         type: integer
@@ -73,6 +137,11 @@ definitions:
       user_id:
         type: integer
     type: object
+  dto.SuccessResponse:
+    properties:
+      message:
+        type: string
+    type: object
   dto.UserCreatedDTO:
     properties:
       email:
@@ -96,18 +165,27 @@ definitions:
     type: object
   dto.UserResponseDTO:
     properties:
+      createdAt:
+        type: string
       email:
         type: string
       firstname:
         type: string
+      id:
+        type: integer
       lastname:
+        type: string
+      role:
         type: string
       username:
         type: string
     required:
+    - createdAt
     - email
     - firstname
+    - id
     - lastname
+    - role
     - username
     type: object
   dto.UserUpdateDTO:
@@ -146,12 +224,12 @@ definitions:
         type: string
       id:
         type: integer
+      image:
+        type: string
       report:
         $ref: '#/definitions/model.Report'
-      report_id:
+      reportID:
         type: integer
-      url:
-        type: string
     type: object
   model.Report:
     properties:
@@ -268,6 +346,174 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /area:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.AreaResponseDTO'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Get all areas
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Area data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AreaCreateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AreaResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Create a new area
+  /area/{area_id}/point:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new point associated with an area.
+      parameters:
+      - description: Area ID
+        in: path
+        name: area_id
+        required: true
+        type: integer
+      - description: Point data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PointDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PointResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Create Point
+      tags:
+      - Point
+  /area/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Area ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Delete an area
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Area ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AreaResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Get an area by ID
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Area ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Area data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AreaUpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AreaResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Update an area
+  /area/{id}/point:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all points associated with an area by its ID.
+      parameters:
+      - description: Area ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.PointResponseDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Get Points by Area ID
+      tags:
+      - Point
   /dashboard:
     get:
       consumes:
@@ -285,7 +531,62 @@ paths:
       summary: User dashboard
       tags:
       - users
-  /report/:
+  /point/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a point associated with an area by its ID.
+      parameters:
+      - description: Point ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Delete Point
+      tags:
+      - Point
+    put:
+      consumes:
+      - application/json
+      description: Updates a point associated with an area by its ID.
+      parameters:
+      - description: Point ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated point data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PointUpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PointResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Update Point
+      tags:
+      - Point
+  /report:
     post:
       consumes:
       - application/json
@@ -311,6 +612,7 @@ paths:
       summary: Create Report
       tags:
       - Report
+  /report/:
     put:
       consumes:
       - application/json
@@ -388,6 +690,52 @@ paths:
       summary: Get Reports by User ID
       tags:
       - Report
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: returns all users in db
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserResponseDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.UserResponseDTO'
+      summary: Get All User
+      tags:
+      - User
+  /user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Returns a user from the database by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get User by ID
+      tags:
+      - User
   /user/edit:
     put:
       consumes:
