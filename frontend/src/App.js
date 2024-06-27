@@ -11,6 +11,7 @@ import Profile from './components/Profile/index.jsx';
 import MyIssues from './components/Issues/index.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UserManagement from './components/Admin/Users/index.jsx';
 
 
 
@@ -31,11 +32,12 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={!isLoggedIn ? < Login/> : <AdminDashboard />} />
-      <Route path="/dashboard" element={isLoggedIn && userRole === 0 ? <Dashboard /> : <Login />} />
-      <Route path="/authority" element={isLoggedIn && userRole === 1? <AuthorityDashboard /> : <Login />} />
+      <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Login />} />
+      <Route path="/authority" element={isLoggedIn && userRole === 1 || userRole === 2 ? <AuthorityDashboard /> : <Login />} />
       <Route path="/admin" element={isLoggedIn && userRole === 2 ? <AdminDashboard /> : <Login />} />
       <Route path="/profile" element={isLoggedIn ? <Profile /> : <Login />} />
       <Route path="/issues" element={isLoggedIn ? <MyIssues /> : <Login />} />
+      <Route path="/admin/users" element={isLoggedIn && userRole === 2 ? <UserManagement /> : <Login />} />
     </Routes>
   );
 }

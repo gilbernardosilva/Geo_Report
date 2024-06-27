@@ -55,8 +55,13 @@
     "areas" : "Áreas",
     "users" : "Utilizadores",
     "reports" : "Denúncias",
-    "statuses" : "Estados"
-
+    "statuses" : "Estados",
+    "userManagement" : "Gestão de Utilizadores",
+    "delete" : "Remover",
+    "edit": "Editar",
+    "addUser": "Adicionar Utilizador",
+    "actions" : "Ações",
+    "role": "Função"
 
     
 

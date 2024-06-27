@@ -55,7 +55,17 @@
     "areas" : "Areas",
     "users" : "Users",
     "reports" : "Reports",
-    "statuses" : "Status"
+    "statuses" : "Status",
+    "userManagement" : "User Management",
+    "delete" : "Delete",
+    "edit": "Edit",
+    "addUser": "Add User",
+    "actions" : "Actions",
+    "role" : "Role",
+    "user": "User",
+    "authority": "Authority",
+    "admin": "Administrator"
+
 
 
 

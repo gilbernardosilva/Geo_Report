@@ -74,6 +74,9 @@ func main() {
 			}
 			// admin routes
 			adminRoutes := protected.Group("/admin")
+			{
+				adminRoutes.GET("")
+			}
 			adminUser := adminRoutes.Group("/user")
 			{
 				adminUser.GET("/:id", controller.GetUser)

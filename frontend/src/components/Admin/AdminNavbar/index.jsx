@@ -49,7 +49,7 @@ function CustomAdminNavbar({ setToken, t }) {
                                 <img src={home} alt="" className="img-fluid logo-icon me-2" />
                                 <p style={{ fontSize: "1.5rem" }}>{t('home')}</p>
                             </Link>
-                            <Link to="/authority" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/admin/issues" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
                                 <img src={issues} alt="" className="img-fluid logo-icon me-2" />
                                 <p style={{ fontSize: "1.5rem" }}>{t('reports')}</p>
                             </Link>
@@ -65,7 +65,7 @@ function CustomAdminNavbar({ setToken, t }) {
                                 <img src={profile} alt="" className="img-fluid logo-icon me-2" />
                                 <p style={{ fontSize: "1.5rem" }}>{t("areas")}</p>
                             </Link>
-                            <Link to="/profile" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/admin/users" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
                                 <img src={profile} alt="" className="img-fluid logo-icon me-2" />
                                 <p style={{ fontSize: "1.5rem" }}>{t("users")}</p>
                             </Link>
