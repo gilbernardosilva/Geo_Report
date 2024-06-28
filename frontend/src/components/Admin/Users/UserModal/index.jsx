@@ -42,7 +42,7 @@ function UserModal({ showModal, setShowModal, editMode, existingUserData, setEdi
 
         try {
             if (editMode) {
-                const response = await api.put(`user/edit/${existingUserData.id}`, formData);
+                const response = await api.put(`admin/user`, formData);
                 if (response.status === 200) {
                     toast.success("User updated successfully");
                 } else {
