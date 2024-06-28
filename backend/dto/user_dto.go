@@ -29,7 +29,7 @@ type UserUpdateAdminDTO struct {
 	UserName  string `json:"username" form:"username" binding:"required"`
 	Password  string `json:"password" form:"password"`
 	Email     string `json:"email" form:"email" binding:"required"`
-	RoleID    uint   `json:"role" form:"role" binding:"required"`
+	RoleID    uint   `json:"role" form:"role" gorm:"default:0"`
 }
 
 type UserResponseDTO struct {
@@ -38,7 +38,7 @@ type UserResponseDTO struct {
 	Email     string    `json:"email" form:"email" binding:"required"`
 	FirstName string    `json:"firstname" form:"firstname" binding:"required"`
 	LastName  string    `json:"lastname" form:"lastname" binding:"required"`
-	RoleName  string    `json:"role" form:"role" binding:"required"`
+	RoleID    uint      `json:"role" form:"role" binding:"required"`
 	CreatedAt time.Time `json:"createdAt" form:"createdAt" binding:"required"`
 }
 

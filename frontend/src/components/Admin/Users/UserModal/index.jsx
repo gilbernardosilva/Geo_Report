@@ -22,7 +22,7 @@ function UserModal({ showModal, setShowModal, editMode, existingUserData, setEdi
         debugger;
         if (editMode && existingUserData) {
             setFormData(existingUserData);
-        }else {
+        } else {
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 password: generatePassword(),
@@ -49,7 +49,7 @@ function UserModal({ showModal, setShowModal, editMode, existingUserData, setEdi
                     toast.error("Error updating user:", response.data);
                 }
             } else {
-                const response = await api.post("/user/register", formData);
+                const response = await api.post("admin/user", formData);
                 if (response.status === 200) {
                     window.location.reload(true);
                     toast.success("User added successfully");
@@ -79,6 +79,7 @@ function UserModal({ showModal, setShowModal, editMode, existingUserData, setEdi
                     <Form.Group controlId="username">
                         <Form.Label>{t('username')}</Form.Label>
                         <Form.Control
+                            required
                             type="text"
                             name="username"
                             placeholder={t('username')}
@@ -89,6 +90,7 @@ function UserModal({ showModal, setShowModal, editMode, existingUserData, setEdi
                     <Form.Group controlId="firstname">
                         <Form.Label>{t('firstName')}</Form.Label>
                         <Form.Control
+                            required
                             type="text"
                             name="firstname"
                             placeholder={t('firstName')}
@@ -100,6 +102,7 @@ function UserModal({ showModal, setShowModal, editMode, existingUserData, setEdi
                     <Form.Group controlId="lastName">
                         <Form.Label>{t('lastName')}</Form.Label>
                         <Form.Control
+                            required
                             type="text"
                             name="lastname"
                             placeholder={t('lastName')}
@@ -113,6 +116,7 @@ function UserModal({ showModal, setShowModal, editMode, existingUserData, setEdi
                         <Form.Label>{t('role')}</Form.Label>
 
                         <Form.Select
+                            required
                             value={formData.role.id}
                             onChange={(e) =>
                                 setFormData({
@@ -120,14 +124,15 @@ function UserModal({ showModal, setShowModal, editMode, existingUserData, setEdi
                                     role: parseInt(e.target.value, 10)
                                 })
                             }>
-                            <option value={0} selected={editMode && existingUserData.role.id === 0}>{t('user')}</option>
-                            <option value={1} selected={editMode && existingUserData.role.id === 1}>{t('authority')}</option>
-                            <option value={2} selected={editMode && existingUserData.role.id === 2}>{t('admin')}</option>
+                            <option value={0} selected={editMode && existingUserData.role === 0}>{t('user')}</option>
+                            <option value={1} selected={editMode && existingUserData.role === 1}>{t('authority')}</option>
+                            <option value={2} selected={editMode && existingUserData.role === 2}>{t('admin')}</option>
                         </Form.Select>
                     </Form.Group>
                     <Form.Group controlId="email">
                         <Form.Label>{t('email')}</Form.Label>
                         <Form.Control
+                            required
                             type="email"
                             name="email"
                             placeholder={t('email')}

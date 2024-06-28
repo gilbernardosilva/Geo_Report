@@ -25,11 +25,9 @@ var allowedRoles = map[string][]uint64{
 	"/api/v1/report/user/:id":         {0, 1, 2}, // Regular users can access
 	"/api/v1/admin":                   {2},       // Only admin can access this endpoint
 	"/api/v1/admin/user":              {2},       // Only admin can access this endpoint
-	"/api/v1/area":                    {1, 2},    // Only admin and authorities can access
-	"/api/v1/area/edit/:id":           {2},       // Only admin can edit"
-	"/api/v1/area/:id":                {2},       // Only admin  can access"
-	"/api/v1/area/:id/point":          {1, 2},    // Only admin and authorities can access
-	"/api/v1/point/:id":               {2},       // Only admin and authorities can access
+	"/api/v1/admin/area":              {1, 2},    // Only admin and authorities can access
+	"/api/v1/admin/area/edit/:id":     {2},       // Only admin can edit"
+	"/api/v1/admin/area/:id":          {2},       // Only admin can access"
 	"/api/v1/admin/report/reportType": {2},       // Only admin can access
 }
 

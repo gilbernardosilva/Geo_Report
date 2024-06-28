@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"geo_report_api/dto"
 	"geo_report_api/model"
 	"geo_report_api/repository"
@@ -24,7 +25,7 @@ func GetAllUsers() []dto.UserResponseDTO {
 			Email:     user.Email,
 			FirstName: user.FirstName,
 			LastName:  user.LastName,
-			RoleName:  user.Role.Name,
+			RoleID:    user.RoleID,
 			CreatedAt: user.CreationDate,
 		}
 		userDTOs = append(userDTOs, userDTO)
@@ -101,11 +102,13 @@ func InsertUserAdmin(userDTO dto.UserCreateAdminDTO) (model.User, error) {
 		return model.User{}, errors.New("invalid email format")
 	}
 
+	fmt.Println(userDTO)
 	// check if role exists
 	if err := repository.CheckIfRoleExists(user.RoleID); err != nil {
 		log.Printf("Invalid role: %v", err)
 		return model.User{}, errors.New("invalid role")
 	}
+	fmt.Println("checked role")
 
 	// create user in the database
 	if err := repository.CreateUser(user); err != nil {

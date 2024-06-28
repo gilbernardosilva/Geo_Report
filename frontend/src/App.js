@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import UserManagement from './components/Admin/Users/index.jsx';
 import ReportTypePage from './components/Admin/Types/index.jsx';
 import AdminIssues from './components/Admin/Issues/index.jsx';
+import AdminArea from './components/Admin/Areas/index.jsx';
 
 
 
@@ -42,6 +43,8 @@ function AppRoutes() {
       <Route path="/admin/users" element={isLoggedIn && userRole === 2 ? <UserManagement /> : <Login />} />
       <Route path="/admin/types" element={isLoggedIn && userRole === 2 ? <ReportTypePage /> : <Login />} />
       <Route path="/admin/issues" element={isLoggedIn && userRole === 2 ? <AdminIssues /> : <Login />} />
+      <Route path="/admin/areas" element={isLoggedIn && userRole === 2 ? <AdminArea /> : <Login />} />
+
     </Routes>
   );
 }

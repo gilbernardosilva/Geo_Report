@@ -16,7 +16,7 @@ function UserManagement() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const { t } = useTranslation();
-    // Fetch users on component mount
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -56,7 +56,7 @@ function UserManagement() {
             }
         }
     };
-    
+
     return (
         <>
             <CustomAdminNavbar t={t}></CustomAdminNavbar>
@@ -79,7 +79,9 @@ function UserManagement() {
                                 <td>{user.id}</td>
                                 <td>{user.username}</td>
                                 <td>{user.email}</td>
-                                <td>{user.role.name}</td>
+                                <td>
+                                    {user.role === 1 ? t('authority') : user.role === 2 ? t('admin') : t('user')}
+                                </td>               
                                 <td>
                                     <Button variant="outline-primary" onClick={() => handleEditUser(user)}>{t('edit')}</Button>
                                     <Button variant="outline-danger" className="ms-2" onClick={() => handleDeleteUser(user.id)}>
@@ -90,7 +92,7 @@ function UserManagement() {
                         ))}
                     </tbody>
                 </Table>
-                <UserModal key={selectedUser ? selectedUser.id : "new"}  showModal={showModal} setShowModal={setShowModal} editMode={editMode} existingUserData={selectedUser} setEditMode={setEditMode}></UserModal>
+                <UserModal key={selectedUser ? selectedUser.id : "new"} showModal={showModal} setShowModal={setShowModal} editMode={editMode} existingUserData={selectedUser} setEditMode={setEditMode}></UserModal>
                 <Button variant="primary" onClick={handleAddUser}>{t('addUser')}</Button>
 
             </Container>

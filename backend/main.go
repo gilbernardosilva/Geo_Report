@@ -94,10 +94,8 @@ func main() {
 
 			}
 			// area routes
-			area := protected.Group("/area")
+			area := adminRoutes.Group("/area")
 			{
-				area.GET("/:id/point", controller.GetPointsByAreaID)
-				area.POST("/:id/point", controller.CreatePoint)
 				area.GET("", controller.GetAllAreas)
 				area.POST("", controller.CreateArea)
 				area.GET("/:id", controller.GetAreaByID)

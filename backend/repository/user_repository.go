@@ -13,7 +13,7 @@ import (
 var userNotFound = "user doesn't exist"
 
 func CreateUser(user model.User) error {
-	return config.Db.Create(&user).Error
+	return config.Db.Preload("Role").Create(&user).Error
 }
 
 func GetAllUsers() []model.User {

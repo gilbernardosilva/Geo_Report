@@ -17,39 +17,28 @@ func GetAllAreas() ([]dto.AreaResponseDTO, error) {
 		return nil, err
 	}
 
-	var areaDTOs []dto.AreaResponseDTO
-	for _, area := range areas {
-		var pointDTOs []dto.PointResponseDTO
-		for _, point := range area.Points {
-			pointDTO := dto.PointResponseDTO{
-				ID:        point.ID,
-				Latitude:  point.Latitude,
-				Longitude: point.Longitude,
-			}
-			pointDTOs = append(pointDTOs, pointDTO)
+	areaDTOs := make([]dto.AreaResponseDTO, len(areas))
+	for i, area := range areas {
+		areaDTOs[i] = dto.AreaResponseDTO{
+			ID:        area.ID,
+			Name:      area.Name,
+			Latitude:  area.Latitude,
+			Longitude: area.Longitude,
+			Radius:    area.Radius,
 		}
-
-		areaDTO := dto.AreaResponseDTO{
-			ID:     area.ID,
-			Name:   area.Name,
-			Points: pointDTOs,
-		}
-		areaDTOs = append(areaDTOs, areaDTO)
 	}
+
 	return areaDTOs, nil
 }
 
-// creates an area without points... there's another endpoint to create points
 func CreateArea(areaDTO dto.AreaCreateDTO) error {
 	var area model.Area
+
 	err := smapping.FillStruct(&area, smapping.MapFields(&areaDTO))
 	if err != nil {
 		log.Printf("Failed to map area DTO to area struct: %v", err)
 		return errors.New("failed to map area")
 	}
-
-	// points will just be an empty array since they'll be added later on
-	area.Points = []model.Point{}
 
 	return repository.CreateArea(area)
 }
