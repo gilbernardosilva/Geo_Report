@@ -12,6 +12,8 @@ import MyIssues from './components/Issues/index.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserManagement from './components/Admin/Users/index.jsx';
+import ReportTypePage from './components/Admin/Types/index.jsx';
+import AdminIssues from './components/Admin/Issues/index.jsx';
 
 
 
@@ -38,6 +40,8 @@ function AppRoutes() {
       <Route path="/profile" element={isLoggedIn ? <Profile /> : <Login />} />
       <Route path="/issues" element={isLoggedIn ? <MyIssues /> : <Login />} />
       <Route path="/admin/users" element={isLoggedIn && userRole === 2 ? <UserManagement /> : <Login />} />
+      <Route path="/admin/types" element={isLoggedIn && userRole === 2 ? <ReportTypePage /> : <Login />} />
+      <Route path="/admin/issues" element={isLoggedIn && userRole === 2 ? <AdminIssues /> : <Login />} />
     </Routes>
   );
 }

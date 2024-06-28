@@ -13,18 +13,24 @@ import (
 )
 
 var allowedRoles = map[string][]uint64{
-	"/api/v1/dashboard":        {0, 1, 2}, // Regular users can access
-	"/api/v1/report":           {0, 1, 2}, // Regular users can access
-	"/api/v1/reports/:id":      {0, 1},    // Both users and authorities can view a specific report
-	"/api/v1/reports/:id/edit": {2},       // Only admin can edit
-	"/api/v1/authority":        {1, 2},    // Only authorities can access this endpoint
-	"/api/v1/user/edit/:id":    {0, 1, 2}, // Regular users can edit their own profile
-	"/api/v1/user/delete":      {2},       // Only admin can access this endpoint
-	"/api/v1/reportTypes":      {0, 1, 2}, // Regular users can access
-	"/api/v1/reportStatus":     {0, 1, 2}, // Regular users can access
-	"/api/v1/report/user/:id":  {0, 1, 2}, // Regular users can access
-	"/api/v1/admin":            {2},       // Only admin can access this endpoint
-	"/api/v1/admin/user":       {2},       // Only admin can access this endpoint
+	"/api/v1/dashboard":               {0, 1, 2}, // Regular users can access
+	"/api/v1/report":                  {0, 1, 2}, // Regular users can access
+	"/api/v1/reports/:id":             {0, 1},    // Both users and authorities can view a specific report
+	"/api/v1/reports/:id/edit":        {2},       // Only admin can edit
+	"/api/v1/authority":               {1, 2},    // Only authorities can access this endpoint
+	"/api/v1/user/edit/:id":           {0, 1, 2}, // Regular users can edit their own profile
+	"/api/v1/admin/user/delete/:id":   {2},       // Only admin can access this endpoint
+	"/api/v1/reportTypes":             {0, 1, 2}, // Regular users can access
+	"/api/v1/reportStatus":            {0, 1, 2}, // Regular users can access
+	"/api/v1/report/user/:id":         {0, 1, 2}, // Regular users can access
+	"/api/v1/admin":                   {2},       // Only admin can access this endpoint
+	"/api/v1/admin/user":              {2},       // Only admin can access this endpoint
+	"/api/v1/area":                    {1, 2},    // Only admin and authorities can access
+	"/api/v1/area/edit/:id":           {2},       // Only admin can edit"
+	"/api/v1/area/:id":                {2},       // Only admin  can access"
+	"/api/v1/area/:id/point":          {1, 2},    // Only admin and authorities can access
+	"/api/v1/point/:id":               {2},       // Only admin and authorities can access
+	"/api/v1/admin/report/reportType": {2},       // Only admin can access
 }
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -81,6 +87,7 @@ func AuthMiddleware() gin.HandlerFunc {
 }
 
 func isAuthorized(roleID uint64, path string) bool {
+	fmt.Println(path)
 	allowed, exists := allowedRoles[path]
 	if exists {
 		for _, r := range allowed {
@@ -94,7 +101,8 @@ func isAuthorized(roleID uint64, path string) bool {
 	for route, roles := range allowedRoles {
 		if strings.HasSuffix(route, "/:id") { // Check for wildcard pattern
 			baseRoute := strings.TrimSuffix(route, "/:id") // Get base route
-			if strings.HasPrefix(path, baseRoute) {        // If path starts with the base route
+			fmt.Println(baseRoute)
+			if strings.HasPrefix(path, baseRoute) { // If path starts with the base route
 				for _, r := range roles {
 					if r == roleID {
 						return true // Role allowed for this wildcard route

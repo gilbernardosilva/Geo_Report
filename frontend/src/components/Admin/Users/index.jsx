@@ -5,6 +5,8 @@ import { useAxiosWithToken } from "../../../utils/api.js";
 import CustomAdminNavbar from "../AdminNavbar/index.jsx";
 import { useTranslation } from "react-i18next";
 import UserModal from "./UserModal/index.jsx";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function UserManagement() {
 
     const { userInfo } = useAuth();
@@ -47,10 +49,10 @@ function UserManagement() {
     const handleDeleteUser = async (userId) => {
         if (window.confirm("Are you sure you want to delete this user?")) {
             try {
-                await api.delete(`/api/v1/admin/user/delete/${userId}`);
+                await api.delete(`admin/user/delete/${userId}`);
                 setUsers(users.filter((user) => user.id !== userId));
             } catch (error) {
-                // Handle error
+                toast.error(error);
             }
         }
     };
@@ -88,7 +90,7 @@ function UserManagement() {
                         ))}
                     </tbody>
                 </Table>
-                <UserModal key={selectedUser ? selectedUser.id : "new"}  showModal={showModal} setShowModal={setShowModal} editMode={editMode} existingUserData={selectedUser} setSelectedUser={setEditMode}></UserModal>
+                <UserModal key={selectedUser ? selectedUser.id : "new"}  showModal={showModal} setShowModal={setShowModal} editMode={editMode} existingUserData={selectedUser} setEditMode={setEditMode}></UserModal>
                 <Button variant="primary" onClick={handleAddUser}>{t('addUser')}</Button>
 
             </Container>

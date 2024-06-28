@@ -26,7 +26,6 @@ function Dashboard() {
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [showIssueModal, setIssueShowModal] = useState(false);
 
-    console.log(previewImages);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -198,8 +197,8 @@ function Dashboard() {
                     )}
                     {issues.map((issue) => (
                         <Marker
-                            key={issue.id} // Make sure to provide unique keys for each marker
-                            position={[issue.latitude, issue.longitude]} // Use the issue's coordinates
+                            key={issue.id}
+                            position={[issue.latitude, issue.longitude]}
                             icon={customIcon}
                             eventHandlers={{
                                 click: (e) => {

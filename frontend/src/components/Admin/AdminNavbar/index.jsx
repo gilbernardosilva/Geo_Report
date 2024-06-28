@@ -53,15 +53,11 @@ function CustomAdminNavbar({ setToken, t }) {
                                 <img src={issues} alt="" className="img-fluid logo-icon me-2" />
                                 <p style={{ fontSize: "1.5rem" }}>{t('reports')}</p>
                             </Link>
-                            <Link to="/profile" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/admin/types" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
                                 <img src={profile} alt="" className="img-fluid logo-icon me-2" />
                                 <p style={{ fontSize: "1.5rem" }}>{t("types")}</p>
                             </Link>
-                            <Link to="/profile" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
-                                <img src={profile} alt="" className="img-fluid logo-icon me-2" />
-                                <p style={{ fontSize: "1.5rem" }}>{t("statuses")}</p>
-                            </Link>
-                            <Link to="/profile" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/admin/areas" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
                                 <img src={profile} alt="" className="img-fluid logo-icon me-2" />
                                 <p style={{ fontSize: "1.5rem" }}>{t("areas")}</p>
                             </Link>

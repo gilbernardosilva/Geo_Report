@@ -68,14 +68,15 @@ func main() {
 			protected.GET("/reportTypes", controller.GetAllReportTypes)
 			protected.GET("/reportStatus", controller.GetAllReportStatus)
 
-			userProtected := protected.Group("/user")
-			{
-				userProtected.PUT("/edit/:id", controller.EditUser)
-			}
 			// admin routes
 			adminRoutes := protected.Group("/admin")
 			{
 				adminRoutes.GET("")
+			}
+			userProtected := protected.Group("user")
+			{
+				userProtected.PUT("/edit/:id", controller.EditUser)
+
 			}
 			adminUser := adminRoutes.Group("/user")
 			{
@@ -90,8 +91,22 @@ func main() {
 				adminUser.POST("/reportStatus", controller.CreateReportStatus)
 
 			}
-
-			//authority routes
+			// area routes
+			area := protected.Group("/area")
+			{
+				area.GET("/:id/point", controller.GetPointsByAreaID)
+				area.POST("/:id/point", controller.CreatePoint)
+				area.GET("", controller.GetAllAreas)
+				area.POST("", controller.CreateArea)
+				area.GET("/:id", controller.GetAreaByID)
+				area.PUT("/:id", controller.UpdateArea)
+				area.DELETE("/:id", controller.DeleteArea)
+			}
+			point := protected.Group("/point")
+			{
+				point.PUT("/:id", controller.UpdatePoint)
+				point.DELETE("/:id", controller.DeletePoint)
+			}
 
 			// report routes
 			report := protected.Group("/report")
@@ -108,23 +123,6 @@ func main() {
 		{
 			public.POST("/register", controller.Register)
 			public.POST("/login", controller.Login)
-		}
-
-		public = v1.Group("/area")
-		{
-			public.GET("/:id/point", controller.GetPointsByAreaID)
-			public.POST("/:id/point", controller.CreatePoint)
-			public.GET("", controller.GetAllAreas)
-			public.POST("", controller.CreateArea)
-			public.GET("/:id", controller.GetAreaByID)
-			public.PUT("/:id", controller.UpdateArea)
-			public.DELETE("/:id", controller.DeleteArea)
-		}
-
-		public = v1.Group("/point")
-		{
-			public.PUT("/:id", controller.UpdatePoint)
-			public.DELETE("/:id", controller.DeletePoint)
 		}
 
 	}
