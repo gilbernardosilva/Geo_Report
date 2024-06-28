@@ -16,24 +16,6 @@ func CreateUser(user model.User) error {
 	return config.Db.Create(&user).Error
 }
 
-func CheckIfUserExists(username string, email string) error {
-	var user model.User
-
-	if err := config.Db.Where("user_name = ?", username).First(&user).Error; err == nil {
-		return fmt.Errorf("username already exists")
-	} else if err != gorm.ErrRecordNotFound {
-		return fmt.Errorf("error checking username: %v", err)
-	}
-
-	if err := config.Db.Where("email = ?", email).First(&user).Error; err == nil {
-		return fmt.Errorf("email already exists")
-	} else if err != gorm.ErrRecordNotFound {
-		return fmt.Errorf("error checking email: %v", err)
-	}
-
-	return nil
-}
-
 func GetAllUsers() []model.User {
 	var users []model.User
 	config.Db.Preload("Role").Find(&users)
@@ -42,7 +24,7 @@ func GetAllUsers() []model.User {
 
 func GetUser(userID uint64) (model.User, error) {
 	var user model.User
-	config.Db.First(&user, userID)
+	config.Db.Preload("Role").First(&user, userID)
 	if user.ID != 0 {
 		return user, nil
 	}
@@ -64,4 +46,30 @@ func DeleteUser(userID uint64) (bool, error) {
 		return true, err
 	}
 	return false, errors.New(userNotFound)
+}
+
+func CheckIfUserExists(username string, email string) error {
+	var user model.User
+
+	if err := config.Db.Where("user_name = ?", username).First(&user).Error; err == nil {
+		return fmt.Errorf("username already exists")
+	} else if err != gorm.ErrRecordNotFound {
+		return fmt.Errorf("error checking username: %v", err)
+	}
+
+	if err := config.Db.Where("email = ?", email).First(&user).Error; err == nil {
+		return fmt.Errorf("email already exists")
+	} else if err != gorm.ErrRecordNotFound {
+		return fmt.Errorf("error checking email: %v", err)
+	}
+
+	return nil
+}
+
+func CheckIfRoleExists(roleID uint) error {
+	var role model.Role
+	if err := config.Db.First(&role, roleID).Error; err != nil {
+		return errors.New("role does not exist")
+	}
+	return nil
 }

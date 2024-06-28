@@ -13,6 +13,25 @@ type UserCreatedDTO struct {
 	RoleID    uint   `json:"role" form:"role" gorm:"default:0"`
 }
 
+type UserCreateAdminDTO struct {
+	FirstName string `json:"firstname" form:"firstname" binding:"required"`
+	LastName  string `json:"lastname" form:"lastname" binding:"required"`
+	Email     string `json:"email" form:"email" binding:"required"`
+	UserName  string `json:"username" form:"username" binding:"required"`
+	Password  string `json:"password" form:"password" binding:"required"`
+	RoleID    uint   `json:"role" form:"role" gorm:"default:0"`
+}
+
+type UserUpdateAdminDTO struct {
+	ID        uint64 `json:"id" form:"id" binding:"required"`
+	FirstName string `json:"first_name" form:"firstname" binding:"required"`
+	LastName  string `json:"last_name" form:"lastname" binding:"required"`
+	UserName  string `json:"username" form:"username" binding:"required"`
+	Password  string `json:"password" form:"password"`
+	Email     string `json:"email" form:"email" binding:"required"`
+	RoleID    uint   `json:"role_id" form:"role" binding:"required"`
+}
+
 type UserResponseDTO struct {
 	ID        uint64    `json:"id" form:"id" binding:"required"`
 	UserName  string    `json:"username" form:"username" binding:"required"`

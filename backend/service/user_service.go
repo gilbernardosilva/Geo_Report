@@ -12,6 +12,8 @@ import (
 	"github.com/mashingan/smapping"
 )
 
+var userMappingFail = "Failed to map user DTO to user struct"
+
 func GetAllUsers() []dto.UserResponseDTO {
 	users := repository.GetAllUsers()
 	var userDTOs []dto.UserResponseDTO
@@ -30,29 +32,36 @@ func GetAllUsers() []dto.UserResponseDTO {
 	return userDTOs
 }
 
+// regular user start
 func InsertUser(userDTO dto.UserCreatedDTO) (new model.User, error error) {
 	var user model.User
 
 	err := smapping.FillStruct(&user, smapping.MapFields(&userDTO))
 	if err != nil {
-		log.Printf("Failed to map user DTO to user struct: %v", err)
-		return model.User{}, errors.New("failed to map user")
+		log.Printf(userMappingFail+": %v", err)
+		return model.User{}, errors.New(userMappingFail)
 	}
 
+	// creates password hash
 	user.Password, err = utils.CreateFromPassword(user.Password)
 	if err != nil {
 		log.Printf("Error hashing password: %v", err)
 		return model.User{}, errors.New("error hashing password")
 	}
 
+	// checks if user with unique info is already in db
 	if err := repository.CheckIfUserExists(user.UserName, user.Email); err != nil {
 		return model.User{}, errors.New("username or email already exists")
 	}
 
+	// checks if email is valid
 	if err := valid(user.Email); err != nil {
 		log.Printf("Invalid email format: %v", err)
 		return model.User{}, errors.New("invalid email format")
 	}
+
+	// setting role ID to 0 since only regular users will use this function
+	user.RoleID = 0
 
 	if err := repository.CreateUser(user); err != nil {
 		log.Printf("Failed to save user to database: %v", err)
@@ -61,6 +70,79 @@ func InsertUser(userDTO dto.UserCreatedDTO) (new model.User, error error) {
 
 	return user, nil
 }
+
+// regular user end
+
+// admin user start
+func InsertUserAdmin(userDTO dto.UserCreateAdminDTO) (model.User, error) {
+	var user model.User
+
+	err := smapping.FillStruct(&user, smapping.MapFields(&userDTO))
+	if err != nil {
+		log.Printf(userMappingFail+": %v", err)
+		return model.User{}, errors.New(userMappingFail)
+	}
+
+	// creates password hash
+	user.Password, err = utils.CreateFromPassword(user.Password)
+	if err != nil {
+		log.Printf("Error hashing password: %v", err)
+		return model.User{}, errors.New("error hashing password")
+	}
+
+	// checks if user with unique info is already in db
+	if err := repository.CheckIfUserExists(user.UserName, user.Email); err != nil {
+		return model.User{}, errors.New("username or email already exists")
+	}
+
+	// checks if email is valid
+	if err := valid(user.Email); err != nil {
+		log.Printf("Invalid email format: %v", err)
+		return model.User{}, errors.New("invalid email format")
+	}
+
+	// check if role exists
+	if err := repository.CheckIfRoleExists(user.RoleID); err != nil {
+		log.Printf("Invalid role: %v", err)
+		return model.User{}, errors.New("invalid role")
+	}
+
+	// create user in the database
+	if err := repository.CreateUser(user); err != nil {
+		log.Printf("Failed to save user to database: %v", err)
+		return model.User{}, errors.New("failed to save user")
+	}
+
+	return user, nil
+}
+
+// AdminEditUser allows admins to edit user details, including changing their role
+func AdminEditUser(userDTO dto.UserUpdateAdminDTO) (model.User, error) {
+	var user model.User
+
+	err := smapping.FillStruct(&user, smapping.MapFields(&userDTO))
+	if err != nil {
+		log.Printf(userMappingFail+": %v", err)
+		return model.User{}, errors.New(userMappingFail)
+	}
+
+	// check if role exists
+	if err := repository.CheckIfRoleExists(user.RoleID); err != nil {
+		log.Printf("Invalid role: %v", err)
+		return model.User{}, errors.New("invalid role")
+	}
+
+	// update user in the database
+	updatedUser, err := repository.UpdateUser(user)
+	if err != nil {
+		log.Printf("Failed to update user in database: %v", err)
+		return model.User{}, errors.New("failed to update user")
+	}
+
+	return updatedUser, nil
+}
+
+// admin user end
 
 func GetUser(userID uint64) (model.User, error) {
 	if user, err := repository.GetUser(userID); err == nil {

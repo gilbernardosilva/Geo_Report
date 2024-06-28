@@ -10,6 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var ReqInvalid = "Invalid request body"
+
 // User	Register User
 //
 //	@Summary	Register
@@ -26,7 +28,7 @@ func Register(c *gin.Context) {
 	var user dto.UserCreatedDTO
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(400, gin.H{
-			"message": "Invalid request body",
+			"message": ReqInvalid,
 			"error":   err.Error(),
 		})
 		return
@@ -59,6 +61,80 @@ func Register(c *gin.Context) {
 		"token":   token,
 	})
 
+}
+
+// AdminCreateUser allows an admin to create a new user with a specified role
+//
+// @Summary Admin Create User
+// @Description Allows an admin to create a new user with a specified role
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param request body dto.UserCreateAdminDTO true "Admin User data"
+// @Success 200 {object} dto.UserResponseDTO
+// @Failure 400 {object} dto.ErrorResponse
+// @Router /admin/user [post]
+func AdminRegister(c *gin.Context) {
+	var userDTO dto.UserCreateAdminDTO
+	if err := c.ShouldBindJSON(&userDTO); err != nil {
+		c.JSON(400, gin.H{
+			"message": ReqInvalid,
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	createdUser, err := service.InsertUserAdmin(userDTO)
+	if err != nil {
+		log.Printf("Error creating user: %v", err)
+		c.JSON(400, gin.H{
+			"message": "Failed to create User",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "User created successfully!",
+		"user":    createdUser,
+	})
+}
+
+// AdminEditUser allows an admin to edit user details, including role
+//
+// @Summary Admin Edit User
+// @Description Allows an admin to edit user details, including role
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param request body dto.UserUpdateAdminDTO true "Admin User Update data"
+// @Success 200 {object} dto.UserResponseDTO
+// @Failure 400 {object} dto.ErrorResponse
+// @Router /admin/user [put]
+func AdminEditUser(c *gin.Context) {
+	var userDTO dto.UserUpdateAdminDTO
+	if err := c.ShouldBindJSON(&userDTO); err != nil {
+		c.JSON(400, gin.H{
+			"message": ReqInvalid,
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	updatedUser, err := service.AdminEditUser(userDTO)
+	if err != nil {
+		log.Printf("Error updating user: %v", err)
+		c.JSON(400, gin.H{
+			"message": "failed to update user",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "failed to update user",
+		"user":    updatedUser,
+	})
 }
 
 // User    Get All Users

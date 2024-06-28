@@ -142,6 +142,27 @@ definitions:
       message:
         type: string
     type: object
+  dto.UserCreateAdminDTO:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+      role:
+        type: integer
+      username:
+        type: string
+    required:
+    - email
+    - firstname
+    - lastname
+    - password
+    - username
+    type: object
   dto.UserCreatedDTO:
     properties:
       email:
@@ -186,6 +207,30 @@ definitions:
     - id
     - lastname
     - role
+    - username
+    type: object
+  dto.UserUpdateAdminDTO:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      password:
+        type: string
+      role_id:
+        type: integer
+      username:
+        type: string
+    required:
+    - email
+    - first_name
+    - id
+    - last_name
+    - role_id
     - username
     type: object
   dto.UserUpdateDTO:
@@ -346,6 +391,57 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /admin/user:
+    post:
+      consumes:
+      - application/json
+      description: Allows an admin to create a new user with a specified role
+      parameters:
+      - description: Admin User data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserCreateAdminDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Admin Create User
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Allows an admin to edit user details, including role
+      parameters:
+      - description: Admin User Update data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserUpdateAdminDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Admin Edit User
+      tags:
+      - Admin
   /area:
     get:
       consumes:
