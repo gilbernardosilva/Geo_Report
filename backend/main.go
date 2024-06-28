@@ -82,8 +82,8 @@ func main() {
 			{
 				adminUser.GET("/:id", controller.GetUser)
 				adminUser.GET("", controller.GetAllUsers)
-				adminRoutes.POST("", controller.AdminRegister)
-				adminRoutes.PUT("", controller.AdminEditUser)
+				adminUser.POST("", controller.AdminRegister)
+				adminUser.PUT("", controller.AdminEditUser)
 				adminUser.DELETE("/delete/:id", controller.DeleteUser)
 			}
 
