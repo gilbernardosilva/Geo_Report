@@ -14,6 +14,7 @@ vendor
 # Ignore version control directories
 .git
 .gitignore
+.gitattributes
 .vscode
 .idea
 

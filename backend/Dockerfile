@@ -6,7 +6,17 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY . .
+COPY config ./config
+COPY controller ./controller
+COPY docs ./docs
+COPY dto ./dto
+COPY middleware ./middleware
+COPY model ./model
+COPY repository ./repository
+COPY service ./service
+COPY utils ./utils
+COPY main.go ./
+COPY geo_report_api ./
 
 RUN go build -o main .
 

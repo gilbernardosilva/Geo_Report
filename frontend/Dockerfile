@@ -6,7 +6,8 @@ COPY package*.json ./
 
 RUN npm install --silent
 
-COPY . .
+COPY public ./public
+COPY src ./src
 
 ARG REACT_APP_API_URL
 

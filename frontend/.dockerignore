@@ -1,11 +1,14 @@
-# Ignore node_modules directory to avoid copying it to the Docker image
+*
+!package.json
+!package-lock.json
+!public
+!src
+!.env
+
 node_modules
 build
 dist
-.env.local
-.env.development
-.env.test
-.env.production
+.env
 .DS_Store
 .git
 .gitignore
