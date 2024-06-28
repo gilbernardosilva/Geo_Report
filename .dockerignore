@@ -1,0 +1,13 @@
+*
+
+!frontend
+!backend
+!nginx
+
+!.env
+
+.git
+.gitignore
+
+.vscode
+.idea

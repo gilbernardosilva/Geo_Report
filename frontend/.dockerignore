@@ -1,0 +1,15 @@
+# Ignore node_modules directory to avoid copying it to the Docker image
+node_modules
+build
+dist
+.env.local
+.env.development
+.env.test
+.env.production
+.DS_Store
+.git
+.gitignore
+.vscode
+.idea
+*.log
+*.lock

@@ -1,0 +1,21 @@
+# Ignore Go-specific directories and files
+vendor
+*.log
+*.lock
+*.tmp
+*.test
+*.out
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Ignore version control directories
+.git
+.gitignore
+.vscode
+.idea
+
+# Ignore binaries
+bin

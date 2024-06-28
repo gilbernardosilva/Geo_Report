@@ -1,17 +1,16 @@
-FROM node:14 as build
+FROM node:14 AS build
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --silent  
+RUN npm install --silent
 
 COPY . .
 
 ARG REACT_APP_API_URL
 
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
-
 
 RUN npm run build
 
