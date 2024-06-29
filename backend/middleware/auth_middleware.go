@@ -88,7 +88,6 @@ func AuthMiddleware() gin.HandlerFunc {
 }
 
 func isAuthorized(roleID uint64, path string) bool {
-	fmt.Println(path)
 	allowed, exists := allowedRoles[path]
 	if exists {
 		for _, r := range allowed {
@@ -98,15 +97,13 @@ func isAuthorized(roleID uint64, path string) bool {
 		}
 	}
 
-	// If not, try to match a wildcard route
 	for route, roles := range allowedRoles {
-		if strings.HasSuffix(route, "/:id") { // Check for wildcard pattern
-			baseRoute := strings.TrimSuffix(route, "/:id") // Get base route
-			fmt.Println(baseRoute)
-			if strings.HasPrefix(path, baseRoute) { // If path starts with the base route
+		if strings.HasSuffix(route, "/:id") {
+			baseRoute := strings.TrimSuffix(route, "/:id")
+			if strings.HasPrefix(path, baseRoute) {
 				for _, r := range roles {
 					if r == roleID {
-						return true // Role allowed for this wildcard route
+						return true
 					}
 				}
 			}
