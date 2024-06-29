@@ -18,7 +18,7 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
           POSTGRES_DB: ${{ secrets.DB_DATABASE }}
         ports:
-          - 5432:5432
+          - ${{ secrets.DB_PORT }}:5432
 
     steps:
     - name: Checkout code
@@ -62,5 +62,13 @@ jobs:
 
     - name: Deploy with Docker Compose
       run: |
-        docker-compose down
-        docker-compose up -d
+        echo "DB_HOST=${{ secrets.DB_HOST }}" > .env
+        echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+        echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+        echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" >> .env
+        echo "TOKEN_TTL=${{ secrets.TOKEN_TTL }}" >> .env
+        echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+        docker-compose -f ./docker-compose.yml down
+        docker-compose -f ./docker-compose.yml up -d
