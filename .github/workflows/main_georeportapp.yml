@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://georeportappregistry.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_e2407100ac7c4ef7bac2275b3b71cbb7 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_d757a5425ba74d90a8b6cb27e5e4f723 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_b982e99b187d458396b5b73922ee9d72 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_fa9003ba8c504f0cbd9913daaf8193c1 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: georeportappregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_e2407100ac7c4ef7bac2275b3b71cbb7 }}/georeportappregistry.azurecr.io:${{ github.sha }}
+        tags: georeportappregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_b982e99b187d458396b5b73922ee9d72 }}/georeportappregistry.azurecr.io:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'georeportapp'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_21284fa751994afb93e4c1395469f7f6 }}
-        images: 'georeportappregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_e2407100ac7c4ef7bac2275b3b71cbb7 }}/georeportappregistry.azurecr.io:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_50ccf44d8247443d922aeeea521d8a5c }}
+        images: 'georeportappregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_b982e99b187d458396b5b73922ee9d72 }}/georeportappregistry.azurecr.io:${{ github.sha }}'
