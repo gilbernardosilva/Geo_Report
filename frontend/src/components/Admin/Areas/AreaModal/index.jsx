@@ -40,14 +40,13 @@ function LocationMarker({ position, setPosition }) {
     
   
       useEffect(() => {
-        // Handle both initial form population and mapPosition changes
         if (area) {
           setFormData(area);
           setMapPosition({
             lat: area.latitude,
             lng: area.longitude,
           });
-        } else if (mapPosition) { // Check if mapPosition is not null
+        } else if (mapPosition) {
           setFormData(prevData => ({
             ...prevData,
             latitude: mapPosition.lat,

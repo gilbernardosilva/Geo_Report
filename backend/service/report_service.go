@@ -129,8 +129,8 @@ func GetReport(id uint64) (model.Report, error) {
 	return model.Report{}, errors.New("report does not exist")
 }
 
-func GetAllReports(page, limit int, startDate, endDate time.Time) ([]model.Report, int64, error) {
-	return repository.GetAllReports(page, limit, startDate, endDate)
+func GetAllReports(page, limit int, startDate, endDate time.Time, area model.Area) ([]model.Report, int64, error) {
+	return repository.GetAllReports(page, limit, startDate, endDate, &area)
 }
 
 func GetReportsByUserID(userID uint64) ([]model.Report, error) {

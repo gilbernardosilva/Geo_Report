@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"geo_report_api/config"
 	"geo_report_api/model"
+	"geo_report_api/utils"
+	"math"
 	"time"
 
 	"gorm.io/gorm"
@@ -45,16 +47,18 @@ func GetReport(reportID uint64) (model.Report, error) {
 	return report, nil
 }
 
-func GetAllReports(page, limit int, startDate, endDate time.Time) ([]model.Report, int64, error) {
+func GetAllReports(page, limit int, startDate, endDate time.Time, area *model.Area) ([]model.Report, int64, error) {
 	var reports []model.Report
 	var totalCount int64
 
 	query := config.Db.
 		Preload("User").
+		Preload("ReportStatus").
+		Preload("ReportType").
 		Preload("Photos", func(db *gorm.DB) *gorm.DB {
 			return db.Order("photos.id")
 		}).
-		Where("report_status_id != 5")
+		Where("report_status_id != ?", 5)
 
 	if !startDate.IsZero() {
 		query = query.Where("report_date >= ?", startDate)
@@ -63,15 +67,33 @@ func GetAllReports(page, limit int, startDate, endDate time.Time) ([]model.Repor
 		query = query.Where("report_date <= ?", endDate)
 	}
 
-	if err := query.Model(&model.Report{}).Count(&totalCount).Error; err != nil {
-		return nil, 0, fmt.Errorf("error counting reports: %v", err)
-	}
-
-	if err := query.Offset((page - 1) * limit).Limit(limit).Find(&reports).Error; err != nil {
+	if err := query.Find(&reports).Error; err != nil {
 		return nil, 0, fmt.Errorf("error retrieving reports: %v", err)
 	}
+	filteredReports := make([]model.Report, 0)
+	for _, report := range reports {
+		if area != nil {
+			distance := utils.HaversineDistance(
+				area.Latitude, area.Longitude, report.Latitude, report.Longitude,
+			)
+			if distance <= area.Radius {
+				filteredReports = append(filteredReports, report)
+			}
+		} else {
+			filteredReports = append(filteredReports, report)
+		}
+	}
+	totalCount = int64(len(filteredReports))
 
-	return reports, totalCount, nil
+	startIndex := (page - 1) * limit
+	endIndex := int(math.Min(float64(startIndex+limit), float64(totalCount)))
+
+	if area.ID != 0 {
+		paginatedReports := filteredReports[startIndex:endIndex]
+		return paginatedReports, totalCount, nil
+	} else {
+		return reports, totalCount, nil
+	}
 }
 
 func UpdateReport(report model.Report) error {
@@ -111,8 +133,14 @@ func UpdatePhotos(reportID uint64, photos []model.Photo) error {
 
 func GetReportsByUserID(userID uint64) ([]model.Report, error) {
 	var reports []model.Report
-	err := config.Db.Preload("User.Role").Preload("Photos").Preload("ReportType").Preload("ReportStatus").
-		Where("user_id = ?", userID).Find(&reports).Error
+	err := config.Db.
+		Preload("User.Role").
+		Preload("Photos").
+		Preload("ReportType").
+		Preload("ReportStatus").
+		Where("user_id = ? AND report_status_id != ?", userID, 5).
+		Find(&reports).
+		Error
 
 	if err != nil {
 		return nil, err

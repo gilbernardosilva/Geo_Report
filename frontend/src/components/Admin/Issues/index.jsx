@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button, Pagination, InputGroup, Form } from "react-bootstrap";
+import { Card, Row, Col, Button, Pagination, InputGroup, Form, Dropdown } from "react-bootstrap";
 import { useAxiosWithToken } from "../../../utils/api.js";
 import CustomAdminNavbar from "../AdminNavbar/index.jsx";
 import { useTranslation } from "react-i18next";
@@ -12,11 +12,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
+import NewEditIssueModal from "../../NewEditIssueModal/index.jsx";
 
 
 function AdminIssues() {
     const [issues, setIssues] = useState([]);
     const api = useAxiosWithToken();
+    const [areas, setAreas] = useState([]);
+    const [filterArea, setFilterArea] = useState(null);
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const { userInfo } = useAuth();
@@ -27,47 +30,69 @@ function AdminIssues() {
     const [endDate, setEndDate] = useState(null);
 
     const [showEditModal, setShowEditModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-  
-    const [selectedIssueId, setSelectedIssueId] = useState(null);
-  
+
+
+    const handleCloseEditModal = () => setShowEditModal(false);
     const handleEdit = (issue) => {
-      setSelectedIssue(issue);
-      setShowEditModal(true); // Show the edit modal
-    };
-  
-    const handleDelete = (issueId) => {
-      setSelectedIssueId(issueId); // Set the ID of the issue to delete
-      setShowDeleteModal(true); // Show the delete confirmation modal
+        setSelectedIssue(issue);
+        setShowEditModal(true); 
     };
 
-    
-    useEffect(() => {
-        const fetchIssues = async () => {
-            try {
-                const response = await api.get("admin/report", {
-                    params: {
-                        page: currentPage,
-                        limit: itemsPerPage,
-                        start_date: startDate ? startDate.toISOString().split("T")[0] : "",
-                        end_date: endDate ? endDate.toISOString().split("T")[0] : "",
-                    }
-                });
-                if (response.status === 200) {
-                    setIssues(response.data.reports);
-                    setTotalPages(response.data.total_pages);
-                } else {
-                    toast.error("Error fetching issues");
+    const handleDelete = async (issueId) => {
+        try {
+            const response = await api.put("admin/report/" + issueId)
+            if (response.status === 200) {
+                debugger;
+                await fetchIssues();
+                toast.success("Issue deleted successfully");
+            } else {
+                toast.error("Error deleting issue");
+            }
+        } catch (err) {
+            toast.error("Error deleting issue");
+        }
+    };
+
+    const fetchIssues = async () => {
+        try {
+            const response = await api.get("admin/report", {
+                params: {
+                    page: currentPage,
+                    limit: itemsPerPage,
+                    start_date: startDate ? startDate.toISOString().split("T")[0] : "",
+                    end_date: endDate ? endDate.toISOString().split("T")[0] : "",
+                    area_id: filterArea ? filterArea : "",
                 }
-            } catch (err) {
+            });
+            if (response.status === 200) {
+                setIssues(response.data.reports);
+                setTotalPages(response.data.total_pages);
+            } else {
                 toast.error("Error fetching issues");
             }
-        };
+        } catch (err) {
+            toast.error("Error fetching issues");
+        }
+    };
+
+
+    useEffect(() => {
+        const fetchAreas = async () => {
+            try {
+                const response = await api.get('admin/area');
+                setAreas(response.data.areas);
+            } catch (error) {
+                toast.error("Failed to fetch areas.");
+                console.error("Error fetching areas:", error);
+            }
+        }
+
+        fetchAreas();
 
         if (userInfo) {
             fetchIssues();
         }
-    }, [userInfo, api, currentPage, itemsPerPage, startDate, endDate]);
+    }, [userInfo, api, currentPage, itemsPerPage, startDate, endDate, filterArea]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -76,6 +101,9 @@ function AdminIssues() {
     const handleViewDetails = (issue) => {
         setSelectedIssue(issue);
         setShowModal(true);
+    };
+    const handleAreaFilterChange = (areaId) => {
+        setFilterArea(areaId);
     };
 
     const handleCloseModal = () => setShowModal(false);
@@ -112,8 +140,20 @@ function AdminIssues() {
                         />
                     </InputGroup>
                 </Col>
-
                 <Col xs={12} md={4} className="d-flex justify-content-end align-items-center">
+                    <Dropdown onSelect={handleAreaFilterChange}>
+                        <Dropdown.Toggle variant="secondary" id="area-filter-dropdown">
+                            Filter by Area
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item eventKey={null}>All Areas</Dropdown.Item>
+                            {areas.map((area) => (
+                                <Dropdown.Item key={area.id} eventKey={area.id}>
+                                    {area.name}
+                                </Dropdown.Item>
+                            ))}
+                        </Dropdown.Menu>
+                    </Dropdown>
                     <Form.Group>
                         <Form.Select className="pagination-container" value={itemsPerPage} onChange={(e) => setItemsPerPage(parseInt(e.target.value))}>
                             <option value={5}>5</option>
@@ -163,7 +203,7 @@ function AdminIssues() {
                                     <Button variant="danger" onClick={() => handleDelete(issue.id)}>
                                         {t("delete")}
                                     </Button>
-                                </div>                            
+                                </div>
                             </Card.Footer>
                         </Card>
 
@@ -188,7 +228,12 @@ function AdminIssues() {
                 show={showModal}
                 handleClose={handleCloseModal}
             />
-
+            <NewEditIssueModal
+                editMode={true}
+                issue={selectedIssue}
+                show={showEditModal}
+                handleClose={handleCloseEditModal}
+            />
         </>
     );
 }

@@ -128,7 +128,6 @@ function AdminArea() {
         </tbody>
       </Table>
 
-      {/* Modal Component */}
       <AreaModal
         show={showModal}
         onHide={handleClose}

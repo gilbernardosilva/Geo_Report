@@ -14,7 +14,7 @@ type ReportCreatedDTO struct {
 }
 
 type ReportUpdateDTO struct {
-	ID             uint64     `json:"report_id"`
+	ID             uint64     `json:"id"`
 	Name           string     `json:"name"`
 	UserID         uint64     `json:"user_id"`
 	Description    string     `json:"description"`

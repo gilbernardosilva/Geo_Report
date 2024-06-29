@@ -142,7 +142,6 @@ function Dashboard() {
                 reader.readAsDataURL(file);
             });
         } else {
-            // Handling for text inputs
             setFormData({
                 ...formData,
                 [event.target.id]: event.target.id === 'report_type_id' ? parseInt(event.target.value) : event.target.value,

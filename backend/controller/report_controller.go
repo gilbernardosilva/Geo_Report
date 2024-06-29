@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"geo_report_api/dto"
+	"geo_report_api/model"
 	"geo_report_api/service"
 	"strconv"
 	"time"
@@ -80,7 +81,7 @@ func EditReport(c *gin.Context) {
 		})
 		return
 	}
-
+	fmt.Println(reportDTO)
 	report, err := service.UpdateReport(reportDTO)
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -141,7 +142,23 @@ func GetAllReports(c *gin.Context) {
 	startDate, _ := time.Parse("2006-01-02", startDateStr)
 	endDate, _ := time.Parse("2006-01-02", endDateStr)
 
-	reports, totalCount, err := service.GetAllReports(page, limit, startDate, endDate)
+	areaIDStr := c.Query("area_id")
+	var area model.Area
+	if areaIDStr != "" {
+		areaID, err := strconv.ParseUint(areaIDStr, 10, 64)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "Invalid area ID"})
+			return
+		}
+
+		area, err = service.GetAreaByID(areaID)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "Area not found"})
+			return
+		}
+	}
+
+	reports, totalCount, err := service.GetAllReports(page, limit, startDate, endDate, area)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -160,7 +177,7 @@ func UpdateReportStatus(c *gin.Context) {
 		return
 	}
 
-	err = service.UpdateReportStatus(reportID, 5) // 5 is the ID for "DELETED" status
+	err = service.UpdateReportStatus(reportID, 5)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
