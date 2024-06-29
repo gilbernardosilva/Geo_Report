@@ -60,10 +60,6 @@ jobs:
       run: |
         docker buildx build --push --tag ${{ secrets.DOCKER_USERNAME }}/frontend:latest ./frontend
 
-    - name: Build and push nginx image
-      run: |
-        docker buildx build --push --tag ${{ secrets.DOCKER_USERNAME }}/nginx:latest ./nginx
-
     - name: Deploy with Docker Compose
       run: |
         docker-compose down
