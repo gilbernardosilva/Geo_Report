@@ -45,4 +45,4 @@ jobs:
 
       - name: Deploy to Azure Web App
         run: |
-          az webapp config container set --name georeportapp --resource-group georeportappgroup --multicontainer-config-file docker-compose.yml --docker-custom-image-name ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/geo_report-backend:latest --docker-registry-server-url https://${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }} --docker-registry-server-user ${{ secrets.AZURE_REGISTRY_USERNAME }} --docker-registry-server-password ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+          az webapp create --resource-group georeportappgroup --plan georeportappserviceplan --name georeportapp --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
