@@ -60,11 +60,7 @@ jobs:
           echo "JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}" >> .env
           echo "TOKEN_TTL=${TOKEN_TTL}" >> .env
           echo "REACT_APP_API_URL=${REACT_APP_API_URL}" >> .env
-
-      - name: Stop and remove existing containers
-        run: |
-          docker-compose -f ./docker-compose.yml down --remove-orphans
-
+          
       - name: Build and push backend image
         run: |
           docker buildx build --push --tag ${{ secrets.DOCKER_USERNAME }}/backend:latest ./backend
@@ -75,4 +71,5 @@ jobs:
 
       - name: Deploy with Docker Compose
         run: |
+          docker-compose -f ./docker-compose.yml down --remove-orphans
           docker-compose -f ./docker-compose.yml up -d
