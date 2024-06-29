@@ -64,8 +64,6 @@ jobs:
       - name: Stop and remove existing containers
         run: |
           docker-compose -f ./docker-compose.yml down --remove-orphans
-          # Remove any previously generated .env file to ensure it's recreated
-          rm -f .env
 
       - name: Build and push backend image
         run: |
