@@ -2,8 +2,12 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"geo_report_api/config"
 	"geo_report_api/model"
+	"time"
+
+	"gorm.io/gorm"
 )
 
 func InsertReport(report model.Report) (model.Report, error) {
@@ -25,17 +29,58 @@ func DeleteReport(report model.Report) {
 
 func GetReport(reportID uint64) (model.Report, error) {
 	var report model.Report
-	config.Db.Preload("User").First(&report, reportID)
-	config.Db.Preload("Photo").First(&report, reportID)
-	if report.ID != 0 {
-		return report, nil
+	result := config.Db.Preload("User").Where("report_status_id != ?", 5).First(&report, reportID)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return report, errors.New("report does not exist")
+		}
+		return report, fmt.Errorf("error retrieving report: %v", result.Error)
 	}
 
-	return report, errors.New("report does not exist")
+	if err := config.Db.Preload("Photos").First(&report, reportID).Error; err != nil {
+		return report, fmt.Errorf("error retrieving photos for report %d: %v", reportID, err)
+	}
+
+	return report, nil
+}
+
+func GetAllReports(page, limit int, startDate, endDate time.Time) ([]model.Report, int64, error) {
+	var reports []model.Report
+	var totalCount int64
+
+	query := config.Db.
+		Preload("User").
+		Preload("Photos", func(db *gorm.DB) *gorm.DB {
+			return db.Order("photos.id")
+		}).
+		Where("report_status_id != 5")
+
+	if !startDate.IsZero() {
+		query = query.Where("report_date >= ?", startDate)
+	}
+	if !endDate.IsZero() {
+		query = query.Where("report_date <= ?", endDate)
+	}
+
+	if err := query.Model(&model.Report{}).Count(&totalCount).Error; err != nil {
+		return nil, 0, fmt.Errorf("error counting reports: %v", err)
+	}
+
+	if err := query.Offset((page - 1) * limit).Limit(limit).Find(&reports).Error; err != nil {
+		return nil, 0, fmt.Errorf("error retrieving reports: %v", err)
+	}
+
+	return reports, totalCount, nil
 }
 
 func UpdateReport(report model.Report) error {
 	return config.Db.Save(&report).Error
+}
+
+func UpdateReportStatus(reportID uint64, newStatusID uint) error {
+	result := config.Db.Model(&model.Report{}).Where("id = ?", reportID).Update("report_status_id", newStatusID)
+	return result.Error
 }
 
 func AddPhotos(reportID uint64, photos []model.Photo) error {

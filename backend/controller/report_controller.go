@@ -5,6 +5,7 @@ import (
 	"geo_report_api/dto"
 	"geo_report_api/service"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -121,6 +122,51 @@ func GetReport(c *gin.Context) {
 		"message": "Report found",
 		"report":  report,
 	})
+}
+
+func GetAllReports(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Invalid page parameter"})
+		return
+	}
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Invalid limit parameter"})
+		return
+	}
+	startDateStr := c.Query("start_date")
+	endDateStr := c.Query("end_date")
+
+	startDate, _ := time.Parse("2006-01-02", startDateStr)
+	endDate, _ := time.Parse("2006-01-02", endDateStr)
+
+	reports, totalCount, err := service.GetAllReports(page, limit, startDate, endDate)
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"reports":     reports,
+		"total_pages": int((totalCount + int64(limit) - 1) / int64(limit)),
+	})
+}
+
+func UpdateReportStatus(c *gin.Context) {
+	reportID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Invalid report ID"})
+		return
+	}
+
+	err = service.UpdateReportStatus(reportID, 5) // 5 is the ID for "DELETED" status
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "Report status updated successfully"})
 }
 
 // GetReportsByUserID retrieves all reports for a specific user by user ID.

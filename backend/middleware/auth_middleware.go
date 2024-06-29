@@ -29,6 +29,7 @@ var allowedRoles = map[string][]uint64{
 	"/api/v1/admin/area/edit/:id":     {2},       // Only admin can edit"
 	"/api/v1/admin/area/:id":          {2},       // Only admin can access"
 	"/api/v1/admin/report/reportType": {2},       // Only admin can access
+	"/api/v1/admin/report":            {2},       // Only admin can access
 }
 
 func AuthMiddleware() gin.HandlerFunc {

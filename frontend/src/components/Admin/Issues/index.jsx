@@ -45,7 +45,7 @@ function AdminIssues() {
     useEffect(() => {
         const fetchIssues = async () => {
             try {
-                const response = await api.get("report", {
+                const response = await api.get("admin/report", {
                     params: {
                         page: currentPage,
                         limit: itemsPerPage,

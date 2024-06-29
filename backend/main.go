@@ -91,6 +91,7 @@ func main() {
 			{
 				adminUser.POST("/reportType", controller.CreateReportType)
 				adminUser.POST("/reportStatus", controller.CreateReportStatus)
+				adminUser.GET("", controller.GetAllReports)
 
 			}
 			// area routes
