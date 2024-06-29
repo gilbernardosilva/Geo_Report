@@ -7,8 +7,17 @@ on:
       - master
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_DATABASE: ${{ secrets.DB_DATABASE }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
+      TOKEN_TTL: ${{ secrets.TOKEN_TTL }}
+      REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
     services:
       postgres:
@@ -41,17 +50,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set environment variables
-        run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> $GITHUB_ENV
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" >> $GITHUB_ENV
-          echo "TOKEN_TTL=${{ secrets.TOKEN_TTL }}" >> $GITHUB_ENV
-          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
-
       - name: Stop and remove existing containers
         run: |
           docker-compose -f ./docker-compose.yml down --remove-orphans
@@ -60,14 +58,14 @@ jobs:
 
       - name: Generate .env file
         run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" > .env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" >> .env
-          echo "TOKEN_TTL=${{ secrets.TOKEN_TTL }}" >> .env
-          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+          echo "DB_HOST=${DB_HOST}" > .env
+          echo "DB_PORT=${DB_PORT}" >> .env
+          echo "DB_DATABASE=${DB_DATABASE}" >> .env
+          echo "DB_USERNAME=${DB_USERNAME}" >> .env
+          echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
+          echo "JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}" >> .env
+          echo "TOKEN_TTL=${TOKEN_TTL}" >> .env
+          echo "REACT_APP_API_URL=${REACT_APP_API_URL}" >> .env
 
       - name: Build and push backend image
         run: |
