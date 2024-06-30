@@ -44,7 +44,10 @@ func main() {
 
 	defer config.CloseDB()
 
+	// initializing the db
 	model.InitRoles(config.Db)
+	model.InitReportStatus(config.Db)
+	model.InitReportType(config.Db)
 
 	router := gin.Default()
 

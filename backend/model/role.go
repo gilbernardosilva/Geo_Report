@@ -1,30 +1,23 @@
 package model
 
-import (
-	"log"
-
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 type Role struct {
-	ID   uint   `gorm:"primaryKey" json:"id"`
-	Name string `gorm:"type:varchar(100);not null;unique" json:"name"`
+	ID   uint   `gorm:"primaryKey;autoIncrement:false" json:"id"` // autoIncrement:false allows explicit ID setting
+	Name string `gorm:"type:varchar(255);not null" json:"name"`
 }
 
 func InitRoles(db *gorm.DB) {
 	roles := []Role{
-		{ID: 0, Name: "user"},
-		{ID: 1, Name: "authority"},
-		{ID: 2, Name: "admin"},
+		{ID: 0, Name: "User"},
+		{ID: 1, Name: "Authority"},
+		{ID: 2, Name: "Admin"},
 	}
 
-	// Loop through roles to insert them if they don't already exist
 	for _, role := range roles {
-		result := db.FirstOrCreate(&role, Role{ID: role.ID})
-		if result.Error != nil {
-			log.Fatalf("Failed to initialize role %s: %v", role.Name, result.Error)
+		var existingRole Role
+		if result := db.FirstOrCreate(&existingRole, Role{ID: role.ID, Name: role.Name}); result.Error != nil {
+			db.Create(&role)
 		}
 	}
-
-	log.Println("Roles initialized successfully.")
 }

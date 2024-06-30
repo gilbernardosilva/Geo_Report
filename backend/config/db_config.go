@@ -1,11 +1,12 @@
 package config
 
 import (
+	"geo_report_api/model"
 	"os"
+
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"geo_report_api/model"
 )
 
 var Db *gorm.DB
@@ -26,7 +27,6 @@ func ConnectDB() {
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbDatabase := os.Getenv("DB_DATABASE")
-
 
 	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPass + " dbname=" + dbDatabase + " port=" + dbPort + " sslmode=disable"
 
