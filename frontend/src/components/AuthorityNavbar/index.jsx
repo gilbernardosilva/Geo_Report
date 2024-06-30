@@ -45,17 +45,17 @@ function CustomAuthorityNavbar({ setToken, t }) {
                     </Offcanvas.Header>
                     <Offcanvas.Body className="bg-dark d-flex flex-column">
                         <div className="sidebar-content flex-column align-items-start flex-grow-1">
-                            <Link to="/authority" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/authority" className="navbar-link text-end btn d-flex align-items-center"  >
                                 <img src={home} alt="" className="img-fluid logo-icon me-2" />
-                                <p style={{ fontSize: "1.5rem" }}>{t('home')}</p>
+                                <p  className='navbar-p hover-effect'>{t('home')}</p>
                             </Link>
-                            <Link to="/authority" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/authority" className="navbar-link text-end btn d-flex align-items-center"  >
                                 <img src={issues} alt="" className="img-fluid logo-icon me-2" />
-                                <p style={{ fontSize: "1.5rem" }}>{t('myIssues')}</p>
+                                <p  className='navbar-p hover-effect'>{t('myIssues')}</p>
                             </Link>
-                            <Link to="/profile" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/profile" className="navbar-link text-end btn d-flex align-items-center"  >
                                 <img src={profile} alt="" className="img-fluid logo-icon me-2" />
-                                <p style={{ fontSize: "1.5rem" }}>{t("profile")}</p>
+                                <p  className='navbar-p hover-effect'>{t("profile")}</p>
                             </Link>
                         </div>
                         <div className="text-center text-white mb-3">

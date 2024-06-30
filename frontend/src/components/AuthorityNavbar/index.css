@@ -18,3 +18,35 @@
     flex-grow: 1; 
   }
   
+
+  .navbar-p{
+    font-size: 1.5rem;
+    margin: 0;
+    color: #fff;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.navbar-link{
+    text-decoration: none;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.hover-effect::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    transition: transform 0.5s ease-in-out;
+    height: 2px;
+    width: 100%;
+    background-color: white;
+    color: #fff;
+}
+
+.hover-effect:hover::before {
+    transform: translateX(-50%) scale(1);
+    color: #fff;
+}

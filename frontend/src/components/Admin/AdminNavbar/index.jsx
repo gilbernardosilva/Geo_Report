@@ -6,11 +6,13 @@ import issues from './../../../img/icons/issues.svg'
 import logoutIcon from './../../../img/icons/logout.svg'
 import profile from './../../../img/icons/profile.svg'
 import settings from './../../../img/icons/settings.svg'
+import reportType from './../../../img/icons/reporttype.svg'
+import area from './../../../img/icons/area.svg'
 import { Link } from 'react-router-dom';
 import LanguageSwitcher from './../../LanguageSwitcher/index.jsx';
 import { useAuth } from './../../../hooks/AuthContext.jsx';
 import PropTypes from 'prop-types';
-
+import './index.css'
 
 function CustomAdminNavbar({ setToken, t }) {
 
@@ -28,7 +30,7 @@ function CustomAdminNavbar({ setToken, t }) {
                 <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-false`} onClick={handleShow} />
 
                 <Navbar.Brand href="#">
-                    <Link to="/authority"   >
+                    <Link to="/admin"   >
                         <img src={logo} alt="Your Logo" className="img-fluid logo-icon" />
                     </Link>
                 </Navbar.Brand>
@@ -45,25 +47,25 @@ function CustomAdminNavbar({ setToken, t }) {
                     </Offcanvas.Header>
                     <Offcanvas.Body className="bg-dark d-flex flex-column">
                         <div className="sidebar-content flex-column align-items-start flex-grow-1">
-                            <Link to="/admin" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/admin" className="navbar-link text-end btn d-flex align-items-center">
                                 <img src={home} alt="" className="img-fluid logo-icon me-2" />
-                                <p style={{ fontSize: "1.5rem" }}>{t('home')}</p>
+                                <p className='navbar-p hover-effect'>{t('home')}</p>
                             </Link>
-                            <Link to="/admin/issues" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/admin/issues" className="navbar-link text-end btn d-flex align-items-center"  >
                                 <img src={issues} alt="" className="img-fluid logo-icon me-2" />
-                                <p style={{ fontSize: "1.5rem" }}>{t('reports')}</p>
+                                <p className='navbar-p hover-effect'>{t('reports')}</p>
                             </Link>
-                            <Link to="/admin/types" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
-                                <img src={profile} alt="" className="img-fluid logo-icon me-2" />
-                                <p style={{ fontSize: "1.5rem" }}>{t("types")}</p>
+                            <Link to="/admin/types" className="navbar-link text-end btn d-flex align-items-center"  >
+                                <img src={reportType} alt="" className="img-fluid logo-icon me-2" />
+                                <p className='navbar-p hover-effect'>{t("types")}</p>
                             </Link>
-                            <Link to="/admin/areas" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
-                                <img src={profile} alt="" className="img-fluid logo-icon me-2" />
-                                <p style={{ fontSize: "1.5rem" }}>{t("areas")}</p>
+                            <Link to="/admin/areas" className="navbar-link text-end btn d-flex align-items-center"  >
+                                <img src={area} alt="" className="img-fluid logo-icon me-2" />
+                                <p className='navbar-p hover-effect'>{t("areas")}</p>
                             </Link>
-                            <Link to="/admin/users" className="text-end btn d-flex align-items-center" style={{ textDecoration: 'none', color: 'white' }}>
+                            <Link to="/admin/users" className="navbar-link text-end btn d-flex align-items-center"  >
                                 <img src={profile} alt="" className="img-fluid logo-icon me-2" />
-                                <p style={{ fontSize: "1.5rem" }}>{t("users")}</p>
+                                <p className='navbar-p hover-effect'>{t("users")}</p>
                             </Link>
                         </div>
                         <div className="text-center text-white mb-3">
@@ -72,7 +74,7 @@ function CustomAdminNavbar({ setToken, t }) {
                         </div>
                         <div className="d-flex align-items-center justify-content-between w-100">
 
-                            <Link to="/authority    " className="sidebar-header">
+                            <Link to="/admin" className="sidebar-header">
                                 <img src={settings} alt="" className="img-fluid logo-icon me-2" />
                             </Link>
                             <LanguageSwitcher onLanguageChange={handleLanguageChange}></LanguageSwitcher>
