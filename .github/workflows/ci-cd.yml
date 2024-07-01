@@ -26,6 +26,7 @@ jobs:
           echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" >> .env
           echo "TOKEN_TTL=${{ secrets.TOKEN_TTL }}" >> .env
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
 
       - name: Create temporary SSH key file
         run: |
@@ -46,12 +47,12 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker-compose -f docker-compose-build.yml build
-          docker-compose -f docker-compose-build.yml push
+          docker compose -f docker-compose-build.yml build
+          docker compose -f docker-compose-build.yml push
 
       - name: Deploy and check service health
         run: |
-          ssh -i temp_ssh_key -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} "cd ${{ secrets.DROPLET_PATH }} && docker-compose -f docker-compose-deploy.yml pull && docker-compose -f docker-compose-deploy.yml up -d && docker-compose -f docker-compose-deploy.yml ps"
+          ssh -i temp_ssh_key -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} "cd ${{ secrets.DROPLET_PATH }} && docker compose -f docker-compose-deploy.yml pull && docker compose -f docker-compose-deploy.yml up -d && docker-compose -f docker-compose-deploy.yml ps"
 
       - name: Clean up old images and containers
         run: |
