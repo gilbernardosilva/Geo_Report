@@ -49,9 +49,9 @@ function CustomAuthorityNavbar({ setToken, t }) {
                                 <img src={home} alt="" className="img-fluid logo-icon me-2" />
                                 <p  className='navbar-p hover-effect'>{t('home')}</p>
                             </Link>
-                            <Link to="/authority" className="navbar-link text-end btn d-flex align-items-center"  >
+                            <Link to="/authority/issues" className="navbar-link text-end btn d-flex align-items-center"  >
                                 <img src={issues} alt="" className="img-fluid logo-icon me-2" />
-                                <p  className='navbar-p hover-effect'>{t('myIssues')}</p>
+                                <p  className='navbar-p hover-effect'>{t('allIssues')}</p>
                             </Link>
                             <Link to="/profile" className="navbar-link text-end btn d-flex align-items-center"  >
                                 <img src={profile} alt="" className="img-fluid logo-icon me-2" />

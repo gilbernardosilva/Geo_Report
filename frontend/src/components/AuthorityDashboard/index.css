@@ -1,43 +1,50 @@
 body {
-    background-color: #181b1d;
+    background-color: #191a1d;
     width: 100%;
-}
+  }
 
-
+  
 .logo-icon {
-    width: 40px;
-    height: 40px;
-}
+    width: 40px; 
+    height: 40px; 
+  }
 
-.dashboard-container {
-
-    display: flex;
-    /* Enable flexbox on the container */
-    flex-direction: column;
-    /* Stack the rows vertically */
+  .dashboard-container {
+    
+    display: flex; /* Enable flexbox on the container */
+    flex-direction: column; /* Stack the rows vertically */
     min-height: 100vh;
-}
+  }
 
-
-
-.map-container {
-    height: 100%;
-    border: 2px solid #ccc;
+  .map-container {
+    height: 100%; 
+    border: 2px solid #ccc; /* Add a border to create the box */
     border-radius: 50px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-}
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow (adjust values as needed) */
 
-.leaflet-container {
+  }
+
+  .leaflet-container{
     height: 100vh;
+  }
+
+
+  .bottom-links {
+    margin-top: auto; 
+  }
+
+
+  .carousel-item img {
+    max-width: 100%;  
+    max-height: 300px; 
+    object-fit: cover;
+  }
+
+.modal-content {
+  background-color: rgb(33, 37, 41)  !important;
+  color: white;
 }
 
-
-.bottom-links {
-    margin-top: auto;
-}
-
-.center {
-    display: flex;
-    justify-content: 'center';
-    align-items: 'center';
+.btn-close {
+  filter: invert(1);  
 }

@@ -15,6 +15,7 @@ import UserManagement from './components/Admin/Users/index.jsx';
 import ReportTypePage from './components/Admin/Types/index.jsx';
 import AdminIssues from './components/Admin/Issues/index.jsx';
 import AdminArea from './components/Admin/Areas/index.jsx';
+import AuthorityIssues from './components/AuthorityIssues/index.jsx'
 
 
 
@@ -40,6 +41,7 @@ function AppRoutes() {
       <Route path="/admin" element={isLoggedIn && userRole === 2 ? <AdminDashboard /> : <Login />} />
       <Route path="/profile" element={isLoggedIn ? <Profile /> : <Login />} />
       <Route path="/issues" element={isLoggedIn ? <MyIssues /> : <Login />} />
+      <Route path="/authority/issues" element={isLoggedIn && userRole === 1 ? <AuthorityIssues /> : <Login />} />
       <Route path="/admin/users" element={isLoggedIn && userRole === 2 ? <UserManagement /> : <Login />} />
       <Route path="/admin/types" element={isLoggedIn && userRole === 2 ? <ReportTypePage /> : <Login />} />
       <Route path="/admin/issues" element={isLoggedIn && userRole === 2 ? <AdminIssues /> : <Login />} />
