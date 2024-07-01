@@ -46,19 +46,6 @@ function AuthorityDashboard({ setToken }) {
         photos: [],
     });
 
-    function MapEvents() {
-        const map = useMapEvents({
-            click: (e) => {
-                setFormData({
-                    latitude: e.latlng.lat,
-                    longitude: e.latlng.lng,
-                });
-                setShowModal(true);
-            },
-        });
-        return null;
-    }
-
     useEffect(() => {
 
         const fetchData = async () => {
@@ -228,96 +215,12 @@ function AuthorityDashboard({ setToken }) {
                         >
                         </Marker>
                     ))}
-                    <MapEvents />
                 </MapContainer>
                 <IssueDetailsModal
                     issue={selectedIssue}
                     show={showIssueModal}
                     handleClose={handleCloseIssueModal}
                 />
-                <Modal className="modal-container" show={showModal} onHide={handleCloseModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{t("reportIssue")}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group controlId="name" className="mb-3">
-                                <Form.Label>{t("title")}</Form.Label>
-                                <Form.Control required
-                                    type="text"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="report_type_id" className="mb-3">
-                                <Form.Label>{t("typeProblem")}</Form.Label>
-                                <Form.Select required
-                                    value={formData.report_type_id}
-                                    onChange={handleChange}
-                                >
-                                    <option value="">{t("selectAnOption")}</option>
-                                    {options.map((option) => (
-                                        <option key={option.id} value={option.id}>
-                                            {option.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </Form.Group>
-
-                            <Form.Group controlId="latitude" className='mb-3'>
-                                <Form.Label>Latitude</Form.Label>
-                                <Form.Control disabled required
-                                    type="text"
-                                    value={formData.latitude}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-
-                            <Form.Group controlId="longitude" className="mb-3">
-                                <Form.Label>Longitude</Form.Label>
-                                <Form.Control disabled required
-                                    type="text"
-                                    value={formData.longitude}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-
-                            <Form.Group controlId="description" className="mb-3">
-                                <Form.Label>{t("description")}</Form.Label>
-                                <Form.Control
-                                    as="textarea"
-                                    rows={3}
-                                    value={formData.description}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-
-                            <Form.Group controlId="formFileMultiple" className="mb-3">
-                                <Form.Label>Images</Form.Label>
-                                <Form.Control type="file" multiple capture="camera" accept="image/*"
-                                    onChange={handleChange} />
-                            </Form.Group>
-
-                            {previewImages.length > 0 && (
-                                <Carousel className="mb-2">
-                                    {previewImages.map((image, index) => (
-                                        <Carousel.Item key={index}>
-                                            <img
-                                                className="d-block w-100 img-fluid"
-                                                src={image}
-                                                alt={`Preview ${index + 1}`}
-                                            />
-                                        </Carousel.Item>
-                                    ))}
-                                </Carousel>
-                            )}
-
-                            <Button variant="primary" type="submit">
-                                Submit
-                            </Button>
-                        </Form>
-                    </Modal.Body>
-                </Modal>
             </Container>
     </>
     )

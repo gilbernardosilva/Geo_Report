@@ -50,16 +50,19 @@ export const AuthProvider = ({ children }) => {
 
   const loginHandler = (token) => {
     setToken(token);
+    localStorage.setItem("token", token);
     const decodedToken = jwtDecode(token);
     setUserInfo(decodedToken);
     setUserRole(decodedToken.role);
+    localStorage.setItem("userInfo", JSON.stringify(decodedToken));
     setIsLoggedIn(true);
   };
 
   const logoutHandler = () => {
-    debugger;
     setToken(null);
+    localStorage.removeItem("token");
     setUserInfo(null);
+    localStorage.removeItem("userInfo");
     setUserRole(-1);
     setIsLoggedIn(false);
   };
