@@ -78,6 +78,7 @@ function AuthorityDashboard({ setToken }) {
 
                     const statusResponse = await api.get('report/status/chart');
                     setStatusData(statusResponse.data);
+                    console.log(statusResponse.data)
 
                     const typesResponse = await api.get('report/types/chart');
                     setTypesData(typesResponse.data);

@@ -45,6 +45,8 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	log.Println("", userCreated.ID)
+
 	token, err := service.GenerateJWT(userCreated)
 	if err != nil {
 		// Log the error for debugging purposes

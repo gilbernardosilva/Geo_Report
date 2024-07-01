@@ -34,7 +34,7 @@ func GetAllUsers() []dto.UserResponseDTO {
 }
 
 // regular user start
-func InsertUser(userDTO dto.UserCreatedDTO) (new model.User, error error) {
+func InsertUser(userDTO dto.UserCreatedDTO) (model.User, error) {
 	var user model.User
 
 	err := smapping.FillStruct(&user, smapping.MapFields(&userDTO))
@@ -64,12 +64,13 @@ func InsertUser(userDTO dto.UserCreatedDTO) (new model.User, error error) {
 	// setting role ID to 0 since only regular users will use this function
 	user.RoleID = 0
 
-	if err := repository.CreateUser(user); err != nil {
+	createdUser, err := repository.CreateUser(&user)
+	if err != nil {
 		log.Printf("Failed to save user to database: %v", err)
 		return model.User{}, errors.New("failed to save user")
 	}
 
-	return user, nil
+	return createdUser, nil
 }
 
 // regular user end
@@ -111,12 +112,13 @@ func InsertUserAdmin(userDTO dto.UserCreateAdminDTO) (model.User, error) {
 	fmt.Println("checked role")
 
 	// create user in the database
-	if err := repository.CreateUser(user); err != nil {
+	createdUser, err := repository.CreateUser(&user)
+	if err != nil {
 		log.Printf("Failed to save user to database: %v", err)
 		return model.User{}, errors.New("failed to save user")
 	}
 
-	return user, nil
+	return createdUser, nil
 }
 
 // AdminEditUser allows admins to edit user details, including changing their role

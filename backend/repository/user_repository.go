@@ -12,8 +12,11 @@ import (
 
 var userNotFound = "user doesn't exist"
 
-func CreateUser(user model.User) error {
-	return config.Db.Preload("Role").Create(&user).Error
+func CreateUser(user *model.User) (model.User, error) {
+	if err := config.Db.Create(user).Error; err != nil {
+		return model.User{}, err
+	}
+	return *user, nil
 }
 
 func GetAllUsers() []model.User {
@@ -24,11 +27,10 @@ func GetAllUsers() []model.User {
 
 func GetUser(userID uint64) (model.User, error) {
 	var user model.User
-	config.Db.Preload("Role").First(&user, userID)
-	if user.ID != 0 {
-		return user, nil
+	if err := config.Db.Preload("Role").First(&user, userID).Error; err != nil {
+		return model.User{}, err
 	}
-	return user, errors.New(userNotFound)
+	return user, nil
 }
 
 func UpdateUser(user model.User) (model.User, error) {
