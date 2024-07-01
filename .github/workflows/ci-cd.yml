@@ -36,6 +36,7 @@ jobs:
         run: |
           scp -i temp_ssh_key -o StrictHostKeyChecking=no .env ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:${{ secrets.DROPLET_PATH }}
           scp -i temp_ssh_key -o StrictHostKeyChecking=no docker-compose-deploy.yml ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:${{ secrets.DROPLET_PATH }}
+          scp -i temp_ssh_key -o StrictHostKeyChecking=no nginx/nginx.conf ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:${{ secrets.DROPLET_PATH }}
 
       - name: Login to Docker Hub
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
