@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"geo_report_api/dto"
 	"geo_report_api/model"
 	"geo_report_api/repository"
 	"log"
@@ -28,4 +29,13 @@ func GetAllReportTypes() ([]model.ReportType, error) {
 	}
 
 	return reportTypes, nil
+}
+
+func GetReportTypeCounts() (dto.ChartData, error) {
+	chartData, err := repository.GetReportTypeCounts()
+	if err != nil {
+		return dto.ChartData{}, err
+	}
+
+	return chartData, nil
 }

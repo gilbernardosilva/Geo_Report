@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"geo_report_api/dto"
 	"geo_report_api/model"
 	"geo_report_api/repository"
 	"log"
@@ -28,4 +29,13 @@ func GetAllReportStatus() ([]model.ReportStatus, error) {
 	}
 
 	return reportStatus, nil
+}
+
+func GetStatusCounts() (dto.ChartData, error) {
+	chartData, err := repository.GetStatusCounts()
+	if err != nil {
+		return dto.ChartData{}, err
+	}
+
+	return chartData, nil
 }

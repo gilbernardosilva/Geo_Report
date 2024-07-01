@@ -79,7 +79,6 @@ func main() {
 			userProtected := protected.Group("user")
 			{
 				userProtected.PUT("/edit/:id", controller.EditUser)
-
 			}
 			adminUser := adminRoutes.Group("/user")
 			{
@@ -119,6 +118,8 @@ func main() {
 				report.GET("/user/:id", controller.GetReportsByUserID)
 				report.POST("", controller.InsertReport)
 				report.PUT("", controller.EditReport)
+				report.GET("/status/chart", controller.GetStatusCounts)
+				report.GET("/types/chart", controller.GetReportTypeCounts)
 			}
 
 		}

@@ -44,10 +44,8 @@ func InsertReport(reportDTO dto.ReportCreatedDTO) (model.Report, error) {
 		return model.Report{}, fmt.Errorf("user doesn't exist: %v", err)
 	}
 
-	// Check for report status existence
-	if _, err := repository.GetReportStatus(report.ReportStatusID); err != nil {
-		return model.Report{}, fmt.Errorf("report status doesn't exist: %v", err)
-	}
+	// set report status to the pending one since it's a new report
+	report.ReportStatusID, _ = repository.GetReportStatusByName("Pending")
 
 	if report, _ = repository.InsertReport(report); report.ID == 0 {
 		log.Printf("Failed to save report to database")

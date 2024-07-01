@@ -45,3 +45,19 @@ func GetAllReportStatus(c *gin.Context) {
 		"report_types": reportTypes,
 	})
 }
+
+func GetStatusCounts(c *gin.Context) {
+	chartData, err := service.GetStatusCounts()
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "failed to fetch status counts",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "status data for chart successfully fetched",
+		"data":    chartData,
+	})
+}
