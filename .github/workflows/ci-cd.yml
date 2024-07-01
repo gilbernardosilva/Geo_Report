@@ -32,7 +32,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > temp_ssh_key
           chmod 600 temp_ssh_key
 
-      - name: Copy .env file to droplet
+      - name: Copy necessary files to droplet
         run: |
           scp -i temp_ssh_key -o StrictHostKeyChecking=no .env ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:${{ secrets.DROPLET_PATH }}
           scp -i temp_ssh_key -o StrictHostKeyChecking=no docker-compose-deploy.yml ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:${{ secrets.DROPLET_PATH }}
@@ -47,7 +47,7 @@ jobs:
 
       - name: Deploy and check service health
         run: |
-          ssh -i temp_ssh_key -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} "cd ${{ secrets.DROPLET_PATH }} && docker-compose -f docker-compose-deploy.yaml pull && docker-compose -f docker-compose-deploy.yaml up -d && docker-compose -f docker-compose-deploy.yaml ps"
+          ssh -i temp_ssh_key -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} "cd ${{ secrets.DROPLET_PATH }} && docker-compose -f docker-compose-deploy.yml pull && docker-compose -f docker-compose-deploy.yml up -d && docker-compose -f docker-compose-deploy.yml ps"
 
       - name: Clean up old images and containers
         run: |
