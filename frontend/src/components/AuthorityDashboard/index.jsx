@@ -42,31 +42,31 @@ function AuthorityDashboard({ setToken }) {
     const api = useAxiosWithToken();
 
     const [statusData, setStatusData] = useState({
-    labels: [],
-    datasets: [{
-        label: 'Total',
-        data: [],
-        backgroundColor: [],
-        hoverOffset: 4
-    }]
-});
+        labels: [],
+        datasets: [{
+            label: 'Total',
+            data: [],
+            backgroundColor: [],
+            hoverOffset: 4
+        }]
+    });
 
-const [typesData, setTypesData] = useState({
-    labels: [],
-    datasets: [{
-        label: 'Total',
-        data: [],
-        backgroundColor: [],
-        hoverOffset: 4
-    }]
-});
+    const [typesData, setTypesData] = useState({
+        labels: [],
+        datasets: [{
+            label: 'Total',
+            data: [],
+            backgroundColor: [],
+            hoverOffset: 4
+        }]
+    });
 
     const [loading, setLoading] = useState(true);
-    
+
     useEffect(() => {
 
         const fetchData = async () => {
-            if(token !== null){
+            if (token !== null) {
                 try {
                     const response = await api.get("authority");
                     console.log(response);
@@ -76,10 +76,10 @@ const [typesData, setTypesData] = useState({
                         setError(response);
                     }
 
-                    const statusResponse = await api.get('/report/status/chart');
+                    const statusResponse = await api.get('report/status/chart');
                     setStatusData(statusResponse.data);
 
-                    const typesResponse = await api.get('/report/types/chart');
+                    const typesResponse = await api.get('report/types/chart');
                     setTypesData(typesResponse.data);
                     console.log(typesData)
 
@@ -116,17 +116,19 @@ const [typesData, setTypesData] = useState({
                                     <Typography sx={{ fontSize: 20, marginTop: 3 }} color="text.primary" gutterBottom>
                                         {t('typesIssues')}
                                     </Typography>
-                                    <Doughnut
-                                        data={typesData}
-                                        options={{
-                                            plugins: {
-                                                legend: {
-                                                    position: 'bottom',
-                                                }
-                                            },
-                                            responsive: true,
-                                        }}
-                                    />
+                                    {typesData.length > 0 && (
+                                        <Doughnut
+                                            data={typesData}
+                                            options={{
+                                                plugins: {
+                                                    legend: {
+                                                        position: "bottom",
+                                                    },
+                                                },
+                                                responsive: true,
+                                            }}
+                                        />
+                                    )}
                                 </Container>
                             </Col>
                             <Col xs={12} md={4}>
@@ -134,6 +136,8 @@ const [typesData, setTypesData] = useState({
                                     <Typography sx={{ fontSize: 20, marginTop: 3 }} color="text.primary" gutterBottom>
                                         {t('statusIssues')}
                                     </Typography>
+                                    {statusData.length > 0 && (
+
                                     <Doughnut
                                         data={statusData}
                                         options={{
@@ -143,8 +147,9 @@ const [typesData, setTypesData] = useState({
                                                 }
                                             },
                                             responsive: true,
-                                        }}
+                                    }}
                                     />
+                                )}
                                 </Container>
                             </Col>
                         </Row>
