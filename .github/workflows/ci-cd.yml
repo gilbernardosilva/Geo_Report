@@ -38,7 +38,7 @@ jobs:
 
       - name: Copy docker-compose-deploy.yaml to droplet
         run: |
-          scp -i ${{ secrets.SSH_PRIVATE_KEY }} docker-compose-deploy.yaml ${{ env.DROPLET_USERNAME }}@${{ env.DROPLET_IP }}:${{ env.DROPLET_PATH }}
+          scp -i ${{ secrets.SSH_PRIVATE_KEY }} docker-compose-deploy.yml ${{ env.DROPLET_USERNAME }}@${{ env.DROPLET_IP }}:${{ env.DROPLET_PATH }}
 
       - name: Login to Docker Hub
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
