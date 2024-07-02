@@ -35,7 +35,7 @@ jobs:
 
       - name: Create & Copy necessary files to droplet
         run: |
-          ssh -i temp_ssh_key -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} "mkdir -p ${ secrets.DROPLET_PATH }/nginx"
+          ssh -i temp_ssh_key -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} "mkdir -p ${{ secrets.DROPLET_PATH }}/nginx"
           scp -i temp_ssh_key -o StrictHostKeyChecking=no .env ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:${{ secrets.DROPLET_PATH }}
           scp -i temp_ssh_key -o StrictHostKeyChecking=no docker-compose-deploy.yml ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:${{ secrets.DROPLET_PATH }}
           scp -i temp_ssh_key -o StrictHostKeyChecking=no nginx/nginx.conf ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:${{ secrets.DROPLET_PATH }}/nginx/
