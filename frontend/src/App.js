@@ -52,7 +52,7 @@ function AppRoutes() {
   const { isLoggedIn, userRole } = useAuth();
   return (
     <Routes>
-      <Route path="/" element={<ProtectedRoute/>} />
+      <Route path="/" element={ProtectedRoute()} />
       <Route path="/dashboard" element={isLoggedIn && userRole === 0 ? <Dashboard /> : <Login />} />
       <Route path="/authority" element={isLoggedIn && userRole === 1 || userRole === 2 ? <AuthorityDashboard /> : <Login />} />
       <Route path="/admin" element={isLoggedIn && userRole === 2 ? <AdminDashboard /> : <Login />} />
