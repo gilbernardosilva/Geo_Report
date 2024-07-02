@@ -15,8 +15,8 @@ func InsertReportStatus(status string) (model.ReportStatus, error) {
 
 	reportStatus, err := repository.CreateReportStatus(status)
 	if err != nil {
-		log.Printf("Failed to create report type: %v", err)
-		return model.ReportStatus{}, errors.New("failed to create report type")
+		log.Printf("Failed to create report status: %v", err)
+		return model.ReportStatus{}, errors.New("failed to create report status")
 	}
 
 	return reportStatus, nil

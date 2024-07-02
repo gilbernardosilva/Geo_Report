@@ -33,7 +33,7 @@ func CreateReportStatus(c *gin.Context) {
 }
 
 func GetAllReportStatus(c *gin.Context) {
-	reportTypes, err := service.GetAllReportTypes()
+	reportStatus, err := service.GetAllReportStatus()
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": "Failed to fetch all report types",
@@ -41,8 +41,8 @@ func GetAllReportStatus(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"message":      "report types fetched successfully",
-		"report_types": reportTypes,
+		"message":       "report status fetched successfully",
+		"report_status": reportStatus,
 	})
 }
 

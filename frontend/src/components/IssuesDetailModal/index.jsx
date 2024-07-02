@@ -33,7 +33,7 @@ function IssueDetailsModal({ issue, show, handleClose }) {
     const fetchStatusOptions = async () => {
       try {
         const response = await api.get("reportStatus");
-        setOptions(response.data.report_types);
+        setOptions(response.data.report_status);
       } catch (error) {
         console.error("Error fetching status options:", error);
         toast.error("Failed to fetch status options");
