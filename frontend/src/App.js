@@ -11,6 +11,7 @@ import Profile from './components/Profile/index.jsx';
 import MyIssues from './components/Issues/index.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useLocation, Navigate } from 'react-router-dom';
 import UserManagement from './components/Admin/Users/index.jsx';
 import ReportTypePage from './components/Admin/Types/index.jsx';
 import AdminIssues from './components/Admin/Issues/index.jsx';
@@ -34,6 +35,7 @@ function App() {
 
 function AppRoutes() {
   const { isLoggedIn, userRole } = useAuth();
+  const location = useLocation();
   return (
     <Routes>
       <Route path="/" element={!isLoggedIn ? <Login /> : (
