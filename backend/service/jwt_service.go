@@ -27,6 +27,7 @@ func GenerateJWT(user model.User) (string, error) {
 		"iat":       time.Now().Unix(),
 		"eat":       time.Now().Add(time.Second * time.Duration(tokenTTL)).Unix(),
 	})
+	fmt.Println(privateKey)
 	return token.SignedString(privateKey)
 }
 
