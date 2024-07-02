@@ -91,12 +91,12 @@ function IssueDetailsModal({ issue, show, handleClose }) {
                       <option value={issue.report_status.id}>{issue.report_status.name}</option>
                       {options.map((option) => (
                         <option key={option.id} value={option.id}>
-                          {option.name}
+                          {option.status}
                         </option>
                       ))}
                     </Form.Select>
                   ) : (
-                    <p>Loading status options...</p> 
+                    <p>Loading status options...</p>
                   )}
                 </Form.Group>
               </p>
@@ -129,7 +129,7 @@ function IssueDetailsModal({ issue, show, handleClose }) {
 
           </Modal.Body>
           <Modal.Footer>
-          <Button variant="primary" onClick={handleSubmit}>
+            <Button variant="primary" onClick={handleSubmit}>
               {t('Save')}
             </Button>
             <Button variant="secondary" onClick={handleClose}>
