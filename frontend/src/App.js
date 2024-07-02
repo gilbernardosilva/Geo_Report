@@ -1,7 +1,7 @@
 import './App.css';
 import Login from './components/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Routes, Route  } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './configurations/i18n.js'
 import Dashboard from './components/Dashboard/index.jsx';
 import { AuthProvider, useAuth } from './hooks/AuthContext.jsx';
@@ -26,33 +26,19 @@ function App() {
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
-      <ToastContainer/>
+      <ToastContainer />
     </AuthProvider>
   );
 }
 
-const ProtectedRoute = () => {
-  const { isLoggedIn, userRole } = useAuth();
-
-  if (!isLoggedIn) {
-      return <Login />;
-  }
-
-  switch (userRole) { 
-      case 2:
-          return <AdminDashboard />;
-      case 1:
-          return <AuthorityDashboard />;
-      default:
-          return <Dashboard />;
-  }
-};
 
 function AppRoutes() {
   const { isLoggedIn, userRole } = useAuth();
   return (
     <Routes>
-      <Route path="/" element={ProtectedRoute} />
+      <Route path="/" element={!isLoggedIn ? <Login /> : (
+        <Navigate to={location.pathname} replace />
+      )} />
       <Route path="/dashboard" element={isLoggedIn && userRole === 0 ? <Dashboard /> : <Login />} />
       <Route path="/authority" element={isLoggedIn && userRole === 1 || userRole === 2 ? <AuthorityDashboard /> : <Login />} />
       <Route path="/admin" element={isLoggedIn && userRole === 2 ? <AdminDashboard /> : <Login />} />
