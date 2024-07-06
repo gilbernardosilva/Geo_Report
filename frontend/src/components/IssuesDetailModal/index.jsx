@@ -116,7 +116,7 @@ function IssueDetailsModal({ issue, show, handleClose }) {
                       <img
                         className="d-block w-100"
                         src={photo.Image}
-                        alt={`Issue Photo ${photo.id}`}
+                        alt="Illustration of the issue"
                       />
                     </Carousel.Item>
                   ))}

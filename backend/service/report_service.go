@@ -100,13 +100,13 @@ func UpdateReport(reportDTO dto.ReportUpdateDTO) (model.Report, error) {
 	_, err = repository.GetReportType(reportDTO.ReportTypeID)
 	if err != nil {
 		log.Printf("Failed to find the Report type: %v", err)
-		return model.Report{}, errors.New("Report Type doesn't exist")
+		return model.Report{}, errors.New("report Type doesn't exist")
 	}
 
 	_, err = repository.GetUser(report.UserID)
 	if err != nil {
 		log.Printf("User doesn't exist: %v", err)
-		return model.Report{}, errors.New("User ID doesn't exist")
+		return model.Report{}, errors.New("user ID doesn't exist")
 	}
 
 	_, err = repository.GetReportStatus(reportDTO.ReportStatusID)

@@ -3,7 +3,6 @@ import './index.css';
 import { Container, Form } from 'react-bootstrap';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { useTranslation } from "react-i18next";
 import iconGreen from "../../img/icons/marker_green.svg"
 import iconBlue from "../../img/icons/marker_blue.svg"
@@ -33,32 +32,15 @@ const statusColorMap = {
 function AuthorityDashboard({ setToken }) {
     const [statuses, setStatuses] = useState([]);
     const [filterType, setFilterType] = useState('');
-    const [previewImages, setPreviewImages] = useState([]);
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [setError] = useState(null);
     const { token } = useAuth();
     const api = useAxiosWithToken();
     const [issues, setIssues] = useState([]);
     const [userPosition, setUserPosition] = useState(null);
-    const [showModal, setShowModal] = useState(false);
-    const [options, setOptions] = useState([]);
+    const [setOptions] = useState([]);
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [showIssueModal, setIssueShowModal] = useState(false);
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setPreviewImages([]);
-    };
-
-    const [formData, setFormData] = useState({
-        name: "",
-        latitude: 0,
-        longitude: 0,
-        user_id: token?.id || 0,
-        description: "",
-        report_type_id: 0,
-        photos: [],
-    });
 
     const fetchIssues = async (statusId) => {
         try {
@@ -168,53 +150,6 @@ function AuthorityDashboard({ setToken }) {
         });
       };
 
-    const handleChange = (event) => {
-        if (event.target.files) {
-            const selectedFiles = Array.from(event.target.files);
-
-            const imageUrls = [];
-            selectedFiles.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    imageUrls.push(e.target.result);
-
-                    if (imageUrls.length === selectedFiles.length) {
-                        setPreviewImages(imageUrls);
-
-                        setFormData({
-                            ...formData,
-                            photos: imageUrls,
-                        });
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
-        } else {
-            setFormData({
-                ...formData,
-                [event.target.id]: event.target.id === 'report_type_id' ? parseInt(event.target.value) : event.target.value,
-                user_id: token?.id || 0,
-
-            });
-        }
-    };
-
-
-    const handleSubmit = async (event) => {
-        debugger;
-        event.preventDefault();
-        try {
-            const response = await api.post("/report/", formData);
-            if (response.status === 200) {
-                toast.success(t("reportSentSuccessfully"));
-                setShowModal(false);
-            } else {
-                toast.error(t("errorSendingReport"));
-            }
-        } catch (error) {
-            toast.error(t("errorSendingReport"));
-        }
-    };
 
     const handleCloseIssueModal = () => {
         setIssueShowModal(false);
