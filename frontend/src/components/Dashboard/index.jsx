@@ -6,6 +6,10 @@ import L from "leaflet";
 import CustomNavbar from './../Navbar';
 import "leaflet/dist/leaflet.css";
 import { useTranslation } from "react-i18next";
+import iconGreen from "../../img/icons/marker_green.svg"
+import iconBlue from "../../img/icons/marker_blue.svg"
+import iconRed from "../../img/icons/marker_red.svg"
+import iconOrange from "../../img/icons/marker_orange.svg"
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import { useAuth } from '../../hooks/AuthContext';
@@ -14,14 +18,23 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import IssueDetailsModal from '../IssuesDetailModal';
 
-function Dashboard() {
+const statusColorMap = {
+    0: iconOrange, // Pending
+    1: iconBlue,   // In Progress
+    2: iconGreen,  // Completed
+    3: iconRed,    // Rejected
+  };
 
+  
+function Dashboard() {
+    const [filterType, setFilterType] = useState('');
     const [previewImages, setPreviewImages] = useState([]);
     const { userInfo } = useAuth();
     const [issues, setIssues] = useState([]);
     const [userPosition, setUserPosition] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [options, setOptions] = useState([]);
+    const [statuses, setStatuses] = useState([]);
     const api = useAxiosWithToken();
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [showIssueModal, setIssueShowModal] = useState(false);
@@ -54,20 +67,32 @@ function Dashboard() {
         });
         return null;
     }
+    const handleFilterChange = (event) => {
+        setFilterType(event.target.value);
+        fetchIssues(event.target.value);
+        console.log(event.target.value);
+    };
 
-    useEffect(() => {
-        const fetchIssues = async () => {
-            try {
-                const response = await api.get("report/user/" + userInfo.id);
-                if (response.status === 200) {
-                    setIssues(response.data.reports);
-                } else {
-                    toast.error("Error fetching issues");
-                }
-            } catch (err) {
+    const fetchIssues = async (statusId) => {
+        try {
+            const params = {
+                user_id: userInfo.id,
+                report_status_id : statusId
+
+            };
+
+            const response = await api.get("report/user/" + userInfo.id , {params});
+            if (response.status === 200) {
+                setIssues(response.data.reports);
+            } else {
                 toast.error("Error fetching issues");
             }
-        };
+        } catch (err) {
+            toast.error("Error fetching issues");
+        }
+    };
+
+    useEffect(() => {
 
         if (userInfo) {
             fetchIssues();
@@ -94,6 +119,24 @@ function Dashboard() {
             fetchOptions();
         }
 
+        
+            const fetchStatus = async () => {
+                try {
+                    const response = await api.get("reportStatus");
+                    if (response.status === 200) {
+                        const filteredStatus = response.data.report_status.filter(
+                            (status) => status.id !== 5)
+                        setStatuses(filteredStatus);
+                    } else {
+                        toast.error("Error fetching status");
+                    }
+                } catch (err) {
+                    toast.error("Error fetching status");
+                }
+            };
+
+            fetchStatus();
+        
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.watchPosition(showPosition, showError);
@@ -113,12 +156,17 @@ function Dashboard() {
         getLocation();
     }, [userInfo, api]);
 
-    const customIcon = new L.Icon({
-        iconUrl: icon,
-        shadowUrl: iconShadow,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-    });
+    const customIcon = (statusID) => {
+        const isCustomIcon = statusID in statusColorMap; 
+        return L.icon({
+          iconUrl: statusColorMap[statusID] || icon, 
+          shadowUrl: iconShadow,
+          iconSize: isCustomIcon ? [50, 82] : [25, 41], 
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        });
+      };
 
     const handleChange = (event) => {
         if (event.target.files) {
@@ -159,7 +207,9 @@ function Dashboard() {
             const response = await api.post("/report", formData);
             if (response.status === 200) {
                 toast.success(t("reportSentSuccessfully"));
+                setPreviewImages([]);
                 setShowModal(false);
+                fetchIssues();
             } else {
                 toast.error(t("errorSendingReport"));
             }
@@ -173,6 +223,7 @@ function Dashboard() {
     const handleCloseIssueModal = () => {
         setIssueShowModal(false);
     };
+
     const handleViewDetails = (issue) => {
         setSelectedIssue(issue);
         setIssueShowModal(true);
@@ -180,15 +231,17 @@ function Dashboard() {
     return (
         <>
             <CustomNavbar t={t}></CustomNavbar>
+
             <Container fluid>
 
                 <MapContainer center={[41.1561925, -8.5171909]} zoom={13} scrollWheelZoom={true}>
+
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     {userPosition && (
-                        <Marker position={userPosition} icon={customIcon}>
+                        <Marker position={userPosition} icon={customIcon(50)}>
                             <Popup>
                                 {t("youAreHere")} (Lat: {userPosition[0]}, Lng: {userPosition[1]})
                             </Popup>
@@ -198,7 +251,7 @@ function Dashboard() {
                         <Marker
                             key={issue.id}
                             position={[issue.latitude, issue.longitude]}
-                            icon={customIcon}
+                            icon={customIcon(issue.report_status.id)}
                             eventHandlers={{
                                 click: (e) => {
                                     handleViewDetails(issue)
@@ -209,6 +262,18 @@ function Dashboard() {
                     ))}
                     <MapEvents />
                 </MapContainer>
+                <Form.Group controlId="report_status_id"
+                    style={{ position: "absolute", top: 80, right:50, zIndex: 1000 }}
+                >
+                    <Form.Select value={filterType} onChange={handleFilterChange}>
+                        <option value="">{t("all")}</option>
+                        {statuses.map((option) => (
+                            <option key={option.id} value={option.id}>
+                                {option.status}
+                            </option>
+                        ))}
+                    </Form.Select>
+                </Form.Group>
                 <IssueDetailsModal
                     issue={selectedIssue}
                     show={showIssueModal}

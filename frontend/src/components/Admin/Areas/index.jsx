@@ -7,28 +7,41 @@ import AreaModal from './AreaModal';
 import CustomAdminNavbar from '../AdminNavbar';
 import { useTranslation } from 'react-i18next';
 function AdminArea() {
-    const {t} = useTranslation();
-    const api = useAxiosWithToken();
-    const [areas, setAreas] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [editMode, setEditMode] = useState(false);
-    const [formData, setFormData] = useState({
-        name: "",
-        latitude: 0,
-        longitude: 0,
-        radius: 0,
-    });
-    const [selectedArea, setSelectedArea] = useState({
-        id: null,
-        name: '',
-        latitude: 0,
-        longitude: 0,
-        radius: 0,
-    });
+  const { t } = useTranslation();
+  const api = useAxiosWithToken();
+  const [areas, setAreas] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [position, setPosition] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    latitude: 0,
+    longitude: 0,
+    radius: 0,
+  });
 
-    useEffect(() => {
-        fetchAreas();
-    }, []);
+  const [selectedArea, setSelectedArea] = useState({
+    id: null,
+    name: '',
+    latitude: 0,
+    longitude: 0,
+    radius: 0,
+  });
+
+  useEffect(() => {
+    debugger;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setPosition(position);
+        },
+        (error) => {
+          console.error("Error getting geolocation:", error);
+        }
+      );
+      fetchAreas();
+    }
+  }, []);
 
   async function fetchAreas() {
     try {
@@ -40,17 +53,16 @@ function AdminArea() {
     }
   }
 
- const handleClose = () => {
-        setFormData({
-            name: "",
-            latitude: 0,
-            longitude: 0,
-            radius: 0,
-        });
-        setShowModal(false);
-        setEditMode(false);
-        setSelectedArea(null); 
-    };
+  const handleClose = () => {
+    setFormData({
+      name: "",
+      latitude: 0,
+      longitude: 0,
+      radius: 0,
+    });
+    setShowModal(false);
+    setEditMode(false);
+  };
 
   const handleEdit = (area) => {
     setSelectedArea(area);
@@ -70,7 +82,13 @@ function AdminArea() {
   };
 
   const handleCreate = () => {
-    setSelectedArea(null);
+    setSelectedArea({
+      id: null,
+      name: "",
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      radius: 0,
+    });
     setEditMode(false);
     setShowModal(true);
   };
@@ -96,47 +114,47 @@ function AdminArea() {
 
   return (
     <>
-    <CustomAdminNavbar t={t}></CustomAdminNavbar>
-    <Container>
-      <h2>Area Management</h2>
-      <Button onClick={handleCreate}>Create New Area</Button>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Radius</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {areas.map((area) => (
-            <tr key={area.id}>
-              <td>{area.id}</td>
-              <td>{area.name}</td>
-              <td>{area.latitude}</td>
-              <td>{area.longitude}</td>
-              <td>{area.radius}</td>
-              <td>
-                <Button variant="warning" onClick={() => handleEdit(area)}>Edit</Button>
-                <Button variant="danger" onClick={() => handleDelete(area.id)}>Delete</Button>
-              </td>
+      <CustomAdminNavbar t={t}></CustomAdminNavbar>
+      <Container>
+        <h2>Area Management</h2>
+        <Button className="mb-3" onClick={handleCreate}>Create New Area</Button>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Radius</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {areas.map((area) => (
+              <tr key={area.id}>
+                <td>{area.id}</td>
+                <td>{area.name}</td>
+                <td>{area.latitude}</td>
+                <td>{area.longitude}</td>
+                <td>{area.radius}</td>
+                <td>
+                  <Button variant="warning" onClick={() => handleEdit(area)}>Edit</Button>
+                  <Button variant="danger" onClick={() => handleDelete(area.id)}>Delete</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
 
-      <AreaModal
-        show={showModal}
-        onHide={handleClose}
-        editMode={editMode}
-        area={selectedArea}
-        onSubmit={handleSubmit}
-        fetchAreas={fetchAreas}
-      />
-    </Container>
+        <AreaModal
+          show={showModal}
+          onHide={handleClose}
+          editMode={editMode}
+          area={selectedArea}
+          onSubmit={handleSubmit}
+          fetchAreas={fetchAreas}
+        />
+      </Container>
     </>
   );
 }

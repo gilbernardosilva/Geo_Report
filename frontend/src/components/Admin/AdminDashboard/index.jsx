@@ -35,7 +35,6 @@ function AdminDashboard({ setToken }) {
 
     return (
         <>
-
             {error ? (
                 <ErrorHandler error={error} />
             ) : (

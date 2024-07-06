@@ -76,10 +76,12 @@ func main() {
 			{
 				adminRoutes.GET("")
 			}
+
 			userProtected := protected.Group("user")
 			{
 				userProtected.PUT("/edit/:id", controller.EditUser)
 			}
+
 			adminUser := adminRoutes.Group("/user")
 			{
 				adminUser.GET("/:id", controller.GetUser)

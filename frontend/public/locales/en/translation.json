@@ -65,7 +65,8 @@
     "role" : "Role",
     "user": "User",
     "authority": "Authority",
-    "admin": "Administrator"
+    "admin": "Administrator",
+    "all" : "All"
 
 
 

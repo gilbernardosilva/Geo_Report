@@ -57,8 +57,10 @@ func InsertReport(reportDTO dto.ReportCreatedDTO) (model.Report, error) {
 
 func AddPhotosToReport(reportDTO dto.ReportCreatedDTO, reportID uint64, update bool) error {
 	if len(reportDTO.Photos) > 0 {
+		fmt.Print(len(reportDTO.Photos))
 		var newPhotos []model.Photo
 		for _, photoString := range reportDTO.Photos {
+			fmt.Println("inserting photo")
 			newPhoto := model.Photo{
 				ReportID: reportID,
 				Image:    photoString,
@@ -66,6 +68,7 @@ func AddPhotosToReport(reportDTO dto.ReportCreatedDTO, reportID uint64, update b
 			newPhotos = append(newPhotos, newPhoto)
 		}
 
+		fmt.Println("newPhotos", newPhotos)
 		if update {
 			if err := repository.UpdatePhotos(reportID, newPhotos); err != nil {
 				log.Printf("Failed to update photos for report: %v", err)
@@ -127,17 +130,17 @@ func GetReport(id uint64) (model.Report, error) {
 	return model.Report{}, errors.New("report does not exist")
 }
 
-func GetAllReports(page, limit int, startDate, endDate time.Time, area model.Area) ([]model.Report, int64, error) {
-	return repository.GetAllReports(page, limit, startDate, endDate, &area)
+func GetAllReports(page, limit int, startDate, endDate time.Time, area model.Area, statusID uint64) ([]model.Report, int64, error) {
+	return repository.GetAllReports(page, limit, startDate, endDate, &area, statusID)
 }
 
-func GetReportsByUserID(userID uint64) ([]model.Report, error) {
+func GetReportsByUserID(userID uint64, statusID uint64) ([]model.Report, error) {
 	_, err := repository.GetUser(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	return repository.GetReportsByUserID(userID)
+	return repository.GetReportsByUserID(userID, statusID)
 }
 
 func UpdateReportStatus(reportID uint64, newStatusID uint) error {

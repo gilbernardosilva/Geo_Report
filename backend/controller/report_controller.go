@@ -158,7 +158,18 @@ func GetAllReports(c *gin.Context) {
 		}
 	}
 
-	reports, totalCount, err := service.GetAllReports(page, limit, startDate, endDate, area)
+	statusIDStr := c.Query("report_status_id")
+	var statusID uint64 = 5
+
+	if statusIDStr != "" {
+		statusID, err = strconv.ParseUint(statusIDStr, 10, 64)
+		if err != nil {
+			c.JSON(400, gin.H{"error": "Invalid status ID"})
+			return
+		}
+	}
+
+	reports, totalCount, err := service.GetAllReports(page, limit, startDate, endDate, area, statusID)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -208,7 +219,18 @@ func GetReportsByUserID(c *gin.Context) {
 		return
 	}
 
-	reports, err := service.GetReportsByUserID(userID)
+	statusIDStr := c.Query("report_status_id")
+	var statusID uint64 = 5
+
+	if statusIDStr != "" {
+		statusID, err = strconv.ParseUint(statusIDStr, 10, 64)
+		if err != nil {
+			c.JSON(400, gin.H{"error": "Invalid status ID"})
+			return
+		}
+	}
+
+	reports, err := service.GetReportsByUserID(userID, statusID)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": err.Error(),

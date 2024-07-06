@@ -47,7 +47,7 @@ func GetReport(reportID uint64) (model.Report, error) {
 	return report, nil
 }
 
-func GetAllReports(page, limit int, startDate, endDate time.Time, area *model.Area) ([]model.Report, int64, error) {
+func GetAllReports(page, limit int, startDate, endDate time.Time, area *model.Area, statusID uint64) ([]model.Report, int64, error) {
 	var reports []model.Report
 	var totalCount int64
 
@@ -57,14 +57,18 @@ func GetAllReports(page, limit int, startDate, endDate time.Time, area *model.Ar
 		Preload("ReportType").
 		Preload("Photos", func(db *gorm.DB) *gorm.DB {
 			return db.Order("photos.id")
-		}).
-		Where("report_status_id != ?", 5)
+		})
 
 	if !startDate.IsZero() {
 		query = query.Where("report_date >= ?", startDate)
 	}
 	if !endDate.IsZero() {
 		query = query.Where("report_date <= ?", endDate)
+	}
+	if statusID != 5 {
+		query = query.Where("report_status_id = ?", statusID)
+	} else {
+		query = query.Where("report_status_id != 5")
 	}
 
 	if err := query.Find(&reports).Error; err != nil {
@@ -104,9 +108,18 @@ func UpdateReportStatus(reportID uint64, newStatusID uint) error {
 	result := config.Db.Model(&model.Report{}).Where("id = ?", reportID).Update("report_status_id", newStatusID)
 	return result.Error
 }
-
 func AddPhotos(reportID uint64, photos []model.Photo) error {
 	for _, photo := range photos {
+		var existingPhoto model.Photo
+		if err := config.Db.Where("report_id = ? AND image = ?", reportID, photo.Image).First(&existingPhoto).Error; err != nil {
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
+		} else {
+			continue
+		}
+
+		// Create a new photo
 		photo.ReportID = reportID
 		if err := config.Db.Create(&photo).Error; err != nil {
 			return err
@@ -114,7 +127,6 @@ func AddPhotos(reportID uint64, photos []model.Photo) error {
 	}
 	return nil
 }
-
 func UpdatePhotos(reportID uint64, photos []model.Photo) error {
 	if err := config.Db.Where("report_id = ?", reportID).Delete(&model.Photo{}).Error; err != nil {
 		return err
@@ -131,18 +143,26 @@ func UpdatePhotos(reportID uint64, photos []model.Photo) error {
 	return nil
 }
 
-func GetReportsByUserID(userID uint64) ([]model.Report, error) {
+func GetReportsByUserID(userID uint64, statusID uint64) ([]model.Report, error) {
 	var reports []model.Report
-	err := config.Db.
+
+	fmt.Println("getting report")
+	query := config.Db.
 		Preload("User.Role").
 		Preload("Photos").
 		Preload("ReportType").
-		Preload("ReportStatus").
-		Where("user_id = ? AND report_status_id != ?", userID, 5).
-		Find(&reports).
-		Error
+		Preload("ReportStatus")
 
-	if err != nil {
+	if statusID != 5 {
+		query = query.Where("user_id = ? AND report_status_id = ?", userID, statusID)
+	} else {
+		query = query.Where("user_id = ? AND report_status_id != 5", userID)
+	}
+
+	if err := query.Find(&reports).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return []model.Report{}, nil
+		}
 		return nil, err
 	}
 

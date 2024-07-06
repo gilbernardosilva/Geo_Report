@@ -1,6 +1,17 @@
 import { Marker, Popup, useMapEvents } from "react-leaflet";
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import L from "leaflet";
+
 
 function LocationMarker({ position, setPosition, formData, setFormData }) {
+  let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+  });
+  
+  L.Marker.prototype.options.icon = DefaultIcon;
+  
   useMapEvents({
     click(e) {
       setPosition(e.latlng);
