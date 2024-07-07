@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form, Table, Container } from 'react-bootstrap';
+import { Button, Table, Container } from 'react-bootstrap';
 import { useAxiosWithToken } from '../../../utils/api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -85,8 +85,8 @@ function AdminArea() {
     setSelectedArea({
       id: null,
       name: "",
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
+      latitude: position?.coords?.latitude || 0,
+      longitude: position?.coords?.longitude || 0,
       radius: 0,
     });
     setEditMode(false);
