@@ -5,11 +5,12 @@ import CustomNavbar from './../Navbar';
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../hooks/AuthContext.jsx";
 import { useAxiosWithToken } from "../../utils/api.js"
+import CustomAuthorityNavbar from '../AuthorityNavbar/index.jsx';
 
 
 
 function Profile() {
-  const { userInfo, login} = useAuth();
+  const { userInfo, login } = useAuth();
   console.log(userInfo);
   const api = useAxiosWithToken();
   const [formData, setFormData] = useState({
@@ -59,79 +60,83 @@ function Profile() {
   const { t } = useTranslation();
   return (
     <>
-      <CustomNavbar t={t}></CustomNavbar>
+      {userInfo?.role === 0 ? (
+        <CustomNavbar t={t} />
+      ) : userInfo?.role === 1 ? (
+        <CustomAuthorityNavbar t={t} />
+      ) : null}
       <Container fluid className="dashboard-container">
         <Row className="justify-content-center">
           <Col md={6}>
-          <Card>
-            <CardHeader>
-              <h1>{t("editProfile")}</h1>
-              {error && <Alert variant="danger">{error}</Alert>}
-              {success && (
-                <Alert variant="success" onClose={() => setSuccess(null)} dismissible>
-                  {success}
-                </Alert>
-              )}
-            </CardHeader>
-            
+            <Card>
+              <CardHeader>
+                <h1>{t("editProfile")}</h1>
+                {error && <Alert variant="danger">{error}</Alert>}
+                {success && (
+                  <Alert variant="success" onClose={() => setSuccess(null)} dismissible>
+                    {success}
+                  </Alert>
+                )}
+              </CardHeader>
+
               <Form onSubmit={handleSubmit}>
-              <CardBody>
-                <Form.Group controlId="userid" className="mb-3">
-                  <Form.Control hidden
-                    type="text"
-                    value={formData.userid}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-                <Form.Group controlId="firstName" className="mb-3">
-                  <Form.Label>{t("firstName")}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
+                <CardBody>
+                  <Form.Group controlId="userid" className="mb-3">
+                    <Form.Control hidden
+                      type="text"
+                      value={formData.userid}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="firstName" className="mb-3">
+                    <Form.Label>{t("firstName")}</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
 
-                <Form.Group controlId="lastName" className="mb-3">
-                  <Form.Label>{t("lastName")}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
+                  <Form.Group controlId="lastName" className="mb-3">
+                    <Form.Label>{t("lastName")}</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
 
-                <Form.Group controlId="email" className="mb-3">
-                  <Form.Label>{t("email")}</Form.Label>
-                  <Form.Control
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
+                  <Form.Group controlId="email" className="mb-3">
+                    <Form.Label>{t("email")}</Form.Label>
+                    <Form.Control
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
 
-                <Form.Group controlId="username" className="mb-3">
-                  <Form.Label>{t("username")}</Form.Label>
-                  <Form.Control disabled
-                    type="text"
-                    value={formData.username}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
+                  <Form.Group controlId="username" className="mb-3">
+                    <Form.Label>{t("username")}</Form.Label>
+                    <Form.Control disabled
+                      type="text"
+                      value={formData.username}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
 
 
                 </CardBody>
                 <CardFooter>
-                <Button variant="primary" type="submit">
-                  {t("saveChanges")}
-                </Button>
+                  <Button variant="primary" type="submit">
+                    {t("saveChanges")}
+                  </Button>
                 </CardFooter>
-                
+
               </Form>
-            
-          </Card>
-            
-            
+
+            </Card>
+
+
           </Col>
         </Row>
       </Container>

@@ -33,12 +33,12 @@ function AuthorityDashboard({ setToken }) {
     const [statuses, setStatuses] = useState([]);
     const [filterType, setFilterType] = useState('');
     const { t } = useTranslation();
-    const [setError] = useState(null);
+    const [error,setError] = useState(null);
     const { token } = useAuth();
     const api = useAxiosWithToken();
     const [issues, setIssues] = useState([]);
     const [userPosition, setUserPosition] = useState(null);
-    const [setOptions] = useState([]);
+    const [options, setOptions] = useState([]); 
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [showIssueModal, setIssueShowModal] = useState(false);
 
