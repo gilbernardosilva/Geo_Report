@@ -15,25 +15,20 @@ ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
 RUN npm run build
 
-FROM nginx:alpine
+FROM node:14-alpine
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+WORKDIR /app
 
-RUN mkdir -p /var/cache/nginx/client_temp && \
-    chown -R appuser:appgroup /var/cache/nginx /var/run /var/log/nginx
+RUN npm install -g pm2
 
-RUN chmod -R 755 /var/cache/nginx/client_temp
+COPY package*.json ./
 
-RUN touch /var/run/nginx.pid && \
-    chown -R appuser:appgroup /var/run/nginx.pid && \
-    chmod 644 /var/run/nginx.pid
+RUN npm install --production
 
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/build ./build
 
-RUN chown -R appuser:appgroup /usr/share/nginx/html
-
-USER appuser
+COPY src/server.js .
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["pm2-runtime", "server.js"]
