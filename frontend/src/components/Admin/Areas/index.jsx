@@ -85,8 +85,8 @@ function AdminArea() {
     setSelectedArea({
       id: null,
       name: "",
-      latitude: position?.coords?.latitude || 0,
-      longitude: position?.coords?.longitude || 0,
+      latitude: position?.coords?.latitude || 41,
+      longitude: position?.coords?.longitude || -8.5,
       radius: 0,
     });
     setEditMode(false);
