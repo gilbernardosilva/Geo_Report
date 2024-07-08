@@ -59,9 +59,6 @@ func GetAllreportStatus() ([]model.ReportStatus, error) {
 
 func GetStatusCounts() (dto.ChartData, error) {
 	var chartData dto.ChartData
-	var labels []string
-	var data []int
-	var backgroundColors []string
 
 	rows, err := config.Db.Raw("SELECT report_statuses.status, COUNT(reports.id) AS report_count FROM report_statuses LEFT JOIN reports ON report_statuses.id = reports.report_status_id GROUP BY report_statuses.id").Rows()
 	if err != nil {
@@ -70,27 +67,17 @@ func GetStatusCounts() (dto.ChartData, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var statusName string
-		var reportCount int
-		if err := rows.Scan(&statusName, &reportCount); err != nil {
+		var name string
+		var count int
+
+		if err := rows.Scan(&name, &count); err != nil {
 			return chartData, err
 		}
-		labels = append(labels, statusName)
-		data = append(data, reportCount)
-		backgroundColors = append(backgroundColors, getRandomColor()) // Ensure getRandomColor is implemented
-	}
 
-	chartData = dto.ChartData{
-		Labels: labels,
-		Datasets: []dto.ReportTypeData{
-			{
-				Label:           "Total",
-				Data:            data,
-				BackgroundColor: backgroundColors,
-				HoverOffset:     4,
-			},
-		},
+		chartData.Labels = append(chartData.Labels, name)
+		chartData.Data = append(chartData.Data, count)
 	}
 
 	return chartData, nil
+
 }
