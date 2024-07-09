@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var Db *gorm.DB
@@ -41,6 +42,12 @@ func ConnectDB() {
 		panic("Failed to migrate database!")
 	}
 
+	// Check PostGIS is enabled
+	err = Db.Exec("CREATE EXTENSION IF NOT EXISTS postgis;").Error // Check if PostGIS is installed
+	if err != nil {
+		panic("Failed to enable PostGIS: " + err.Error())
+	}
+	Db.Logger = logger.Default.LogMode(logger.Info)
 }
 
 func CloseDB() {

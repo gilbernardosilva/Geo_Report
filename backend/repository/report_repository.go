@@ -70,13 +70,13 @@ func GetAllReports(page, limit int, startDate, endDate time.Time, area *model.Ar
 		query = query.Where("report_status_id != ?", 5)
 	}
 
-	if area != nil {
-		centerPoint := fmt.Sprintf("ST_MakePoint(%f, %f)", area.Longitude, area.Latitude)
-		query = query.Where("ST_DWithin(ST_MakePoint(longitude, latitude), ST_GeomFromText(?, 4326), ?)", centerPoint, area.Radius)
-	}
-
 	if err := query.Model(&model.Report{}).Count(&totalCount).Error; err != nil {
 		return nil, 0, fmt.Errorf("error counting reports: %v", err)
+	}
+
+	if area.ID != 0 {
+
+		query = query.Where("ST_DWithin(ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)", area.Longitude, area.Latitude, area.Radius)
 	}
 
 	if err := query.Offset((page - 1) * limit).Limit(limit).Find(&reports).Error; err != nil {

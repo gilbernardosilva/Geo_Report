@@ -159,7 +159,7 @@ func GetAllReports(c *gin.Context) {
 	}
 
 	statusIDStr := c.Query("report_status_id")
-	var statusID uint64 = 5
+	var statusID uint64 = 0
 
 	if statusIDStr != "" {
 		statusID, err = strconv.ParseUint(statusIDStr, 10, 64)
