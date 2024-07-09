@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CustomAdminNavbar from '../AdminNavbar/index';
 import { Chart } from "react-google-charts"
 import loading from "../../../img/loading.svg"
+import luffy from "../../../img/noreports.png"
 import { Card, CardBody, CardHeader, Col, Row } from 'react-bootstrap';
 
 export const chartOptions = {
@@ -52,11 +53,11 @@ function AdminDashboard({ setToken }) {
                 try {
                     const response = await api.get("report/types/chart");
                     if (response.status === 200) {
-                        const labels = response.data.labels;
-                        const data = response.data.data.map((count, index) => [labels[index], count]);
+                        const { labels, data } = response.data.data;
+                        const chartData = labels.map((label, index) => [label, data[index]]);
                         setReportTypeData([
                             ["Type", "Count"],
-                            ...data
+                            ...chartData
                         ]);
                     } else {
                         setError(response);
@@ -68,22 +69,20 @@ function AdminDashboard({ setToken }) {
         };
 
         const fetchStatusData = async () => {
-            if (token !== null) {
-                try {
-                    const response = await api.get("report/status/chart");
-                    if (response.status === 200) {
-                        const labels = response.data.labels;
-                        const data = response.data.data.map((count, index) => [labels[index], count]);
-                        setStatusData([
-                            ["Status", "Count"],
-                            ...data
-                        ]);
-                    } else {
-                        setError(response);
-                    }
-                } catch (error) {
-                    setError(error);
+            try {
+                const response = await api.get("report/status/chart");
+                if (response.status === 200) {
+                    const { labels, data } = response.data.data;
+                    const chartData = labels.map((label, index) => [label, data[index]]);
+                    setStatusData([
+                        ["Status", "Count"],
+                        ...chartData
+                    ]);
+                } else {
+                    console.log(response);
                 }
+            } catch (error) {
+                console.log(error);
             }
         };
 
@@ -94,7 +93,8 @@ function AdminDashboard({ setToken }) {
 
 
     const hasNoReports = (data) => {
-        return data.length > 1 && data.every(([label, count]) => count === 0);
+        console.log(data)
+        return data.length > 1 && data.slice(1).every(([label, count]) => count === 0);
     };
 
     return (
@@ -113,17 +113,20 @@ function AdminDashboard({ setToken }) {
                                         <h1>{t('typesIssues')}</h1>
                                     </CardHeader>
                                     <CardBody>
-                                        {reportTypeData.length > 0 ? (
+                                        {reportTypeData.length > 1 ? (
                                             hasNoReports(reportTypeData) ? (
-                                                <p>{t('noReports')}</p>
+                                                <div>
+                                                    <p>{t('noReports')}</p>
+                                                    <img src = {luffy} alt=':('/>
+                                                </div>
                                             ) : (
-                                                <Chart
-                                                    chartType="PieChart"
-                                                    data={reportTypeData}
-                                                    options={chartOptions}
-                                                    width={"100%"}
-                                                    height={"400px"}
-                                                />
+                                            <Chart
+                                                chartType="PieChart"
+                                                data={reportTypeData}
+                                                options={chartOptions}
+                                                width={"100%"}
+                                                height={"400px"}
+                                            />
                                             )
                                         ) : (
                                             <img src={loading} alt="Loading..." />
@@ -137,10 +140,13 @@ function AdminDashboard({ setToken }) {
                                         <h1>{t('statusIssues')}</h1>
                                     </CardHeader>
                                     <CardBody>
-                                        {statusData.length > 0 ? (
+                                        {statusData.length > 1 ? (
                                             hasNoReports(reportTypeData) ? (
-                                                <p>{t('noReports')}</p>
-                                            ) : (
+                                                <div>
+                                                    <p>{t('noReports')}</p>
+                                                    <img src = {luffy} alt=':('/>
+                                                </div>                                            
+                                                ) : (
                                                 <Chart
                                                     chartType="PieChart"
                                                     data={statusData}
