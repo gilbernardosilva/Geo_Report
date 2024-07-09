@@ -20,14 +20,12 @@ import { useAxiosWithToken } from "./../../utils/api.js";
 import CustomAuthorityNavbar from './../AuthorityNavbar';
 import PropTypes from 'prop-types';
 
-
 const statusColorMap = {
     0: iconOrange, // Pending
     1: iconBlue,   // In Progress
     2: iconGreen,  // Completed
     3: iconRed,    // Rejected
   };
-
 
 function AuthorityDashboard({ setToken }) {
     const [statuses, setStatuses] = useState([]);
@@ -97,6 +95,8 @@ function AuthorityDashboard({ setToken }) {
         fetchStatus();
         fetchData();
         fetchIssues();
+
+        
 
         const storedOptions = JSON.parse(localStorage.getItem("reportTypes"));
         if (storedOptions && storedOptions.length > 0) {

@@ -64,7 +64,8 @@
     "user": "User",
     "authority": "Authority",
     "admin": "Administrator",
-    "all" : "All"
+    "all" : "All",
+    "noReports" : "There are no reports"
 
 
 

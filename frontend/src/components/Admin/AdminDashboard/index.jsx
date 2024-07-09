@@ -93,8 +93,9 @@ function AdminDashboard({ setToken }) {
     }, [token]);
 
 
-    
-
+    const hasNoReports = (data) => {
+        return data.length > 1 && data.every(([label, count]) => count === 0);
+    };
 
     return (
         <>
@@ -113,13 +114,17 @@ function AdminDashboard({ setToken }) {
                                     </CardHeader>
                                     <CardBody>
                                         {reportTypeData.length > 0 ? (
-                                            <Chart
-                                                chartType="PieChart"
-                                                data={reportTypeData}
-                                                options={chartOptions}
-                                                width={"100%"}
-                                                height={"400px"}
-                                            />
+                                            hasNoReports(reportTypeData) ? (
+                                                <p>{t('noReports')}</p>
+                                            ) : (
+                                                <Chart
+                                                    chartType="PieChart"
+                                                    data={reportTypeData}
+                                                    options={chartOptions}
+                                                    width={"100%"}
+                                                    height={"400px"}
+                                                />
+                                            )
                                         ) : (
                                             <img src={loading} alt="Loading..." />
                                         )}
@@ -133,13 +138,17 @@ function AdminDashboard({ setToken }) {
                                     </CardHeader>
                                     <CardBody>
                                         {statusData.length > 0 ? (
-                                        <Chart
-                                            chartType="PieChart"
-                                            data={statusData}
-                                            options={chartOptions}
-                                            width={"100%"}
-                                            height={"400px"}
-                                        />
+                                            hasNoReports(reportTypeData) ? (
+                                                <p>{t('noReports')}</p>
+                                            ) : (
+                                                <Chart
+                                                    chartType="PieChart"
+                                                    data={statusData}
+                                                    options={chartOptions}
+                                                    width={"100%"}
+                                                    height={"400px"}
+                                                />
+                                            )
                                         ) : (
                                             <img src={loading} alt="Loading..." />
                                         )}
