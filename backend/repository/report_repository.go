@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"geo_report_api/config"
 	"geo_report_api/model"
-	"math"
 	"time"
 
 	"gorm.io/gorm"
@@ -64,31 +63,27 @@ func GetAllReports(page, limit int, startDate, endDate time.Time, area *model.Ar
 	if !endDate.IsZero() {
 		query = query.Where("report_date <= ?", endDate)
 	}
-	if statusID != 5 {
+
+	if statusID != 0 {
 		query = query.Where("report_status_id = ?", statusID)
 	} else {
-		query = query.Where("report_status_id != 5")
+		query = query.Where("report_status_id != ?", 5)
 	}
 
-	if err := query.Find(&reports).Error; err != nil {
-		return nil, 0, fmt.Errorf("error retrieving reports: %v", err)
-	}
-	filteredReports := make([]model.Report, 0)
 	if area != nil {
 		centerPoint := fmt.Sprintf("ST_MakePoint(%f, %f)", area.Longitude, area.Latitude)
 		query = query.Where("ST_DWithin(ST_MakePoint(longitude, latitude), ST_GeomFromText(?, 4326), ?)", centerPoint, area.Radius)
 	}
-	totalCount = int64(len(filteredReports))
 
-	startIndex := (page - 1) * limit
-	endIndex := int(math.Min(float64(startIndex+limit), float64(totalCount)))
-
-	if area.ID != 0 {
-		paginatedReports := filteredReports[startIndex:endIndex]
-		return paginatedReports, totalCount, nil
-	} else {
-		return reports, totalCount, nil
+	if err := query.Model(&model.Report{}).Count(&totalCount).Error; err != nil {
+		return nil, 0, fmt.Errorf("error counting reports: %v", err)
 	}
+
+	if err := query.Offset((page - 1) * limit).Limit(limit).Find(&reports).Error; err != nil {
+		return nil, 0, fmt.Errorf("error retrieving reports: %v", err)
+	}
+
+	return reports, totalCount, nil
 }
 
 func UpdateReport(report model.Report) error {
