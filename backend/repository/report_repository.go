@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"geo_report_api/config"
 	"geo_report_api/model"
-	"geo_report_api/utils"
 	"math"
 	"time"
 
@@ -75,17 +74,9 @@ func GetAllReports(page, limit int, startDate, endDate time.Time, area *model.Ar
 		return nil, 0, fmt.Errorf("error retrieving reports: %v", err)
 	}
 	filteredReports := make([]model.Report, 0)
-	for _, report := range reports {
-		if area != nil {
-			distance := utils.HaversineDistance(
-				area.Latitude, area.Longitude, report.Latitude, report.Longitude,
-			)
-			if distance <= area.Radius {
-				filteredReports = append(filteredReports, report)
-			}
-		} else {
-			filteredReports = append(filteredReports, report)
-		}
+	if area != nil {
+		centerPoint := fmt.Sprintf("ST_MakePoint(%f, %f)", area.Longitude, area.Latitude)
+		query = query.Where("ST_DWithin(ST_MakePoint(longitude, latitude), ST_GeomFromText(?, 4326), ?)", centerPoint, area.Radius)
 	}
 	totalCount = int64(len(filteredReports))
 
