@@ -108,15 +108,15 @@ function AdminDashboard({ setToken }) {
                     <div style={{padding: '30px'}}>
                         <Row className='d-flex'>
                             <Col className='d-flex text-center justify-content-center'>
-                                <Card>
-                                    <CardHeader>
+                                <Card className='align-items-center' style={{ width: '60vh' }}>
+                                    <CardHeader style={{ width: '60vh' }}>
                                         <h1>{t('typesIssues')}</h1>
                                     </CardHeader>
-                                    <CardBody>
+                                    <CardBody className='d-flex justify-content-center align-items-center'>
                                         {reportTypeData.length > 1 ? (
                                             hasNoReports(reportTypeData) ? (
-                                                <div>
-                                                    <p>{t('noReports')}</p>
+                                                <div style={{ height: '100%'}}>
+                                                    <h2>{t('noReports')}</h2>
                                                     <img src = {luffy} alt=':('/>
                                                 </div>
                                             ) : (
@@ -135,15 +135,15 @@ function AdminDashboard({ setToken }) {
                                 </Card>
                             </Col>
                             <Col className='d-flex text-center justify-content-center'>
-                                <Card>
-                                    <CardHeader>
+                                <Card className='align-items-center' style={{ width: '60vh' }}>
+                                    <CardHeader style={{ width: '60vh' }}>
                                         <h1>{t('statusIssues')}</h1>
                                     </CardHeader>
-                                    <CardBody>
+                                    <CardBody className='d-flex justify-content-center align-items-center' style={{ height: '400px' }}>
                                         {statusData.length > 1 ? (
                                             hasNoReports(reportTypeData) ? (
                                                 <div>
-                                                    <p>{t('noReports')}</p>
+                                                    <h2>{t('noReports')}</h2>
                                                     <img src = {luffy} alt=':('/>
                                                 </div>                                            
                                                 ) : (

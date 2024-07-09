@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import useLogin from './../../hooks/useLogin.js'
 import user_icon from './../../img/icons/person.png'
 import email_icon from './../../img/icons/email.png'
@@ -11,6 +12,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index.jsx';
+import ForgotPasswordModal from '../ForgotPasswordModal/index.jsx'
 
 
 
@@ -18,12 +20,22 @@ function Login (){
     const { email, username, setUsername, handleSubmit, isValidEmail, isValidPassword, password, action, setAction, setFirstName, setLastName, firstName, lastName, handleEmailChange, handlePasswordChange,
         handleShowPasswordModal, showPasswordModal, handleClosePasswordModal, showWrongPasswordModal, setShowWrongPasswordModal } = useLogin();
     const { t } = useTranslation();
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
 
     const handleLanguageChange = (newAction) => {
         console.log(newAction);
         setAction(newAction);
     };
+
+    const handleForgotPasswordClick = () => {
+        setShowForgotPasswordModal(true)
+    };
+
+    const handleCloseForgotPasswordModal = () => {
+        setShowForgotPasswordModal(false)
+    }
+
 
     return (
         <Container fluid className="bg-black">
@@ -86,7 +98,7 @@ function Login (){
                             </div>
                         </form>
                         {action === t('signUp') ? <div></div> :
-                            <div className="forgot-password"> {t('forgotPassword')} <span> {t('clickHere')} </span></div>}
+                            <div className="forgot-password"> {t('forgotPassword')} <span onClick={handleForgotPasswordClick}> {t('clickHere')} </span></div>}
                         <div className="submit-container">
                             <div className={action === t('login') ? "submit gray" : "submit"} onClick={action === t('signUp') ? handleSubmit : () => { setAction(t('signUp')) }}>{t('signUp')}</div>
                             <div className={action === t('signUp') ? "submit gray" : "submit"} onClick={action === t('login') ? handleSubmit : () => { setAction(t('login')) }} >{t('login')}</div>
@@ -95,6 +107,7 @@ function Login (){
                     </div>
                 </Col>
             </Row>
+            <ForgotPasswordModal show={showForgotPasswordModal} handleClose={handleCloseForgotPasswordModal} />
             <Modal show={showPasswordModal} onHide={handleClosePasswordModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>{t('passwordRequirements')}</Modal.Title>

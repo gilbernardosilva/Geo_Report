@@ -130,6 +130,7 @@ func main() {
 		{
 			public.POST("/register", controller.Register)
 			public.POST("/login", controller.Login)
+			public.POST("/forgotPassword", controller.ForgotPassword)
 		}
 
 	}
