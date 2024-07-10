@@ -92,7 +92,7 @@ function AdminIssues() {
         if (userInfo) {
             fetchIssues();
         }
-    }, [userInfo, api, currentPage, itemsPerPage, startDate, endDate, filterArea]);
+    }, [userInfo, api, currentPage, itemsPerPage, startDate, endDate, filterArea, issues]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);

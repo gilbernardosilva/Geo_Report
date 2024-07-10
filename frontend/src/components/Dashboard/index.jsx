@@ -23,9 +23,9 @@ const statusColorMap = {
     1: iconBlue,   // In Progress
     2: iconGreen,  // Completed
     3: iconRed,    // Rejected
-  };
+};
 
-  
+
 function Dashboard() {
     const [filterType, setFilterType] = useState('');
     const [previewImages, setPreviewImages] = useState([]);
@@ -77,11 +77,11 @@ function Dashboard() {
         try {
             const params = {
                 user_id: userInfo.id,
-                report_status_id : statusId
+                report_status_id: statusId
 
             };
 
-            const response = await api.get("report/user/" + userInfo.id , {params});
+            const response = await api.get("report/user/" + userInfo.id, { params });
             if (response.status === 200) {
                 setIssues(response.data.reports);
             } else {
@@ -119,24 +119,24 @@ function Dashboard() {
             fetchOptions();
         }
 
-        
-            const fetchStatus = async () => {
-                try {
-                    const response = await api.get("reportStatus");
-                    if (response.status === 200) {
-                        const filteredStatus = response.data.report_status.filter(
-                            (status) => status.id !== 5)
-                        setStatuses(filteredStatus);
-                    } else {
-                        toast.error("Error fetching status");
-                    }
-                } catch (err) {
+
+        const fetchStatus = async () => {
+            try {
+                const response = await api.get("reportStatus");
+                if (response.status === 200) {
+                    const filteredStatus = response.data.report_status.filter(
+                        (status) => status.id !== 5)
+                    setStatuses(filteredStatus);
+                } else {
                     toast.error("Error fetching status");
                 }
-            };
+            } catch (err) {
+                toast.error("Error fetching status");
+            }
+        };
 
-            fetchStatus();
-        
+        fetchStatus();
+
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.watchPosition(showPosition, showError);
@@ -157,16 +157,16 @@ function Dashboard() {
     }, [userInfo, api]);
 
     const customIcon = (statusID) => {
-        const isCustomIcon = statusID in statusColorMap; 
+        const isCustomIcon = statusID in statusColorMap;
         return L.icon({
-          iconUrl: statusColorMap[statusID] || icon, 
-          shadowUrl: iconShadow,
-          iconSize: isCustomIcon ? [50, 82] : [25, 41], 
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41],
+            iconUrl: statusColorMap[statusID] || icon,
+            shadowUrl: iconShadow,
+            iconSize: isCustomIcon ? [50, 82] : [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41],
         });
-      };
+    };
 
     const handleChange = (event) => {
         if (event.target.files) {
@@ -263,7 +263,7 @@ function Dashboard() {
                     <MapEvents />
                 </MapContainer>
                 <Form.Group controlId="report_status_id"
-                    style={{ position: "absolute", top: 80, right:50, zIndex: 1000 }}
+                    style={{ position: "absolute", top: 80, right: 50, zIndex: 1000 }}
                 >
                     <Form.Select value={filterType} onChange={handleFilterChange}>
                         <option value="">{t("all")}</option>

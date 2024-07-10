@@ -25,28 +25,28 @@ const statusColorMap = {
     1: iconBlue,   // In Progress
     2: iconGreen,  // Completed
     3: iconRed,    // Rejected
-  };
+};
 
 function AuthorityDashboard({ setToken }) {
     const [statuses, setStatuses] = useState([]);
     const [filterType, setFilterType] = useState('');
     const { t } = useTranslation();
-    const [error,setError] = useState(null);
+    const [error, setError] = useState(null);
     const { token } = useAuth();
     const api = useAxiosWithToken();
     const [issues, setIssues] = useState([]);
     const [userPosition, setUserPosition] = useState(null);
-    const [options, setOptions] = useState([]); 
+    const [options, setOptions] = useState([]);
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [showIssueModal, setIssueShowModal] = useState(false);
 
     const fetchIssues = async (statusId) => {
         try {
             const params = {
-                report_status_id : statusId
+                report_status_id: statusId
 
             };
-            const response = await api.get("admin/report", {params});
+            const response = await api.get("admin/report", { params });
             if (response.status === 200) {
                 setIssues(response.data.reports);
                 console.log(response.data.reports)
@@ -96,7 +96,7 @@ function AuthorityDashboard({ setToken }) {
         fetchData();
         fetchIssues();
 
-        
+
 
         const storedOptions = JSON.parse(localStorage.getItem("reportTypes"));
         if (storedOptions && storedOptions.length > 0) {
@@ -136,19 +136,19 @@ function AuthorityDashboard({ setToken }) {
         }
 
         getLocation();
-    }, [token, api]);
+    }, [token, api, issues]);
 
     const customIcon = (statusID) => {
-        const isCustomIcon = statusID in statusColorMap; 
+        const isCustomIcon = statusID in statusColorMap;
         return L.icon({
-          iconUrl: statusColorMap[statusID] || icon, 
-          shadowUrl: iconShadow,
-          iconSize: isCustomIcon ? [50, 82] : [25, 41], 
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41],
+            iconUrl: statusColorMap[statusID] || icon,
+            shadowUrl: iconShadow,
+            iconSize: isCustomIcon ? [50, 82] : [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41],
         });
-      };
+    };
 
 
     const handleCloseIssueModal = () => {
@@ -158,7 +158,7 @@ function AuthorityDashboard({ setToken }) {
         setSelectedIssue(issue);
         setIssueShowModal(true);
     };
-    
+
     const handleFilterChange = (event) => {
         setFilterType(event.target.value);
         fetchIssues(event.target.value);
@@ -166,8 +166,8 @@ function AuthorityDashboard({ setToken }) {
     };
 
     return (
-    <>
-    <CustomAuthorityNavbar t={t}></CustomAuthorityNavbar>
+        <>
+            <CustomAuthorityNavbar t={t}></CustomAuthorityNavbar>
             <Container fluid>
 
                 <MapContainer center={[41.1561925, -8.5171909]} zoom={13} scrollWheelZoom={true}>
@@ -197,7 +197,7 @@ function AuthorityDashboard({ setToken }) {
                     ))}
                 </MapContainer>
                 <Form.Group controlId="report_status_id"
-                    style={{ position: "absolute", top: 80, right:50, zIndex: 1000 }}
+                    style={{ position: "absolute", top: 80, right: 50, zIndex: 1000 }}
                 >
                     <Form.Select value={filterType} onChange={handleFilterChange}>
                         <option value="">{t("all")}</option>
@@ -214,7 +214,7 @@ function AuthorityDashboard({ setToken }) {
                     handleClose={handleCloseIssueModal}
                 />
             </Container>
-    </>
+        </>
     )
 }
 
