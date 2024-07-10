@@ -35,12 +35,12 @@ function AdminIssues() {
     const handleCloseEditModal = () => setShowEditModal(false);
     const handleEdit = (issue) => {
         setSelectedIssue(issue);
-        setShowEditModal(true); 
+        setShowEditModal(true);
     };
 
     const handleDelete = async (issueId) => {
         try {
-            const response = await api.put("admin/report/" + issueId)
+            const response = await api.put("admin/report/delete/" + issueId)
             if (response.status === 200) {
                 debugger;
                 await fetchIssues();

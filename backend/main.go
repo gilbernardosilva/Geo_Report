@@ -96,6 +96,7 @@ func main() {
 				adminUser.POST("/reportType", controller.CreateReportType)
 				adminUser.POST("/reportStatus", controller.CreateReportStatus)
 				adminUser.GET("", controller.GetAllReports)
+				adminUser.PUT("/delete/:id", controller.DeleteReport)
 				adminUser.PUT("/:id", controller.UpdateReportStatus)
 			}
 			// area routes

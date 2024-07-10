@@ -181,7 +181,7 @@ func GetAllReports(c *gin.Context) {
 	})
 }
 
-func UpdateReportStatus(c *gin.Context) {
+func DeleteReport(c *gin.Context) {
 	reportID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Invalid report ID"})
@@ -189,6 +189,33 @@ func UpdateReportStatus(c *gin.Context) {
 	}
 
 	err = service.UpdateReportStatus(reportID, 5)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "Report deleted successfully"})
+}
+
+func UpdateReportStatus(c *gin.Context) {
+	reportID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Invalid report ID"})
+		return
+	}
+
+	var requestBody struct {
+		StatusID uint `json:"report_status_id"`
+	}
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(400, gin.H{
+			"message": "Invalid request body",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	err = service.UpdateReportStatus(reportID, requestBody.StatusID)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
