@@ -44,8 +44,8 @@ function AppRoutes() {
       <Route path="/dashboard" element={isLoggedIn && userRole === 0 ? <Dashboard /> : <Login />} />
       <Route path="/authority" element={isLoggedIn && userRole === 1 || userRole === 2 ? <AuthorityDashboard /> : <Login />} />
       <Route path="/admin" element={isLoggedIn && userRole === 2 ? <AdminDashboard /> : <Login />} />
-      <Route path="/profile" element={isLoggedIn ? <Profile /> : <Login />} />
-      <Route path="/issues" element={isLoggedIn ? <MyIssues /> : <Login />} />
+      <Route path="/profile" element={isLoggedIn && userRole !== null? <Profile /> : <Login />} />
+      <Route path="/issues" element={isLoggedIn && userRow !== null? <MyIssues /> : <Login />} />
       <Route path="/authority/issues" element={isLoggedIn && userRole === 1 ? <AuthorityIssues /> : <Login />} />
       <Route path="/admin/users" element={isLoggedIn && userRole === 2 ? <UserManagement /> : <Login />} />
       <Route path="/admin/types" element={isLoggedIn && userRole === 2 ? <ReportTypePage /> : <Login />} />
